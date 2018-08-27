@@ -7,7 +7,7 @@ module.exports = {
   },
   modulePathIgnorePatterns: ['dist/'],
   transformIgnorePatterns: [],
-  testMatch: ['src/**/*.(ts|js)'],
+  testMatch: ['**/src/**/*.spec.(ts|js)'],
   moduleFileExtensions: ['ts', 'js'],
   globals:{
     'ts-jest':{
