@@ -6,4 +6,9 @@ const post = async (req, res) => {
   res.json({id});
 };
 
-export default {post};
+const all = async (req, res) => {
+  const items = await ItemsRepo.all();
+  res.json(items);
+};
+
+export default {post, all};
