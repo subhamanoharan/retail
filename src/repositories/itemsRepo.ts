@@ -1,9 +1,16 @@
 import getPgClient from './pg-client';
 
-const insert = async (item) => {
+interface IItem {
+  name: string;
+  mrp: number;
+  sp: number;
+}
+const insert = async (item: IItem): Promise<number> => {
   const client = getPgClient();
   await client.connect();
-  const {rows: [{id}]} = await client.query('INSERT INTO items(name) values($1) RETURNING id;', [item.name]);
+  const query = 'INSERT INTO items(name, mrp, sp) values($1, $2, $3) RETURNING id;'
+  const values = [item.name, item.mrp, item.sp];
+  const {rows: [{id}]} = await client.query(query, values);
   await client.end();
   return id;
 };
