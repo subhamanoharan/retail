@@ -35,4 +35,19 @@ describe('ItemsController', () => {
       expect(resMock).not.toHaveBeenCalled();
     });
   });
+
+  describe('list', () => {
+    it('should return all items', async () => {
+      const reqMock = jest.fn();
+      const resMock = {json: jest.fn()};
+      const items = ['item1', 'item2'];
+      (itemsServiceMock.all as any).mockResolvedValue(Promise.resolve(items));
+
+      await itemsController.all(reqMock, resMock);
+
+      expect(itemsServiceMock.all).toHaveBeenCalled();
+      expect(resMock.json).toHaveBeenCalledWith(items);
+      expect(reqMock).not.toHaveBeenCalled();
+    });
+  });
 });
