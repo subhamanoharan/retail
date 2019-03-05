@@ -4,7 +4,7 @@ import ItemsController from '../controllers/itemsController';
 
 const itemsRouter = express.Router();
 
-itemsRouter.post('/', ItemsController.post);
+itemsRouter.post('/', ItemsController.create);
 itemsRouter.get('/', ItemsController.all);
 
 export default itemsRouter;

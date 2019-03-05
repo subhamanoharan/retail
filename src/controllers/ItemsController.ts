@@ -1,19 +1,13 @@
-import * as ItemsRepo from '../repositories/itemsRepo';
+import itemsService from '../services/itemsService';
+import II from '../exceptions/invalidItemException';
 
-const post = async (req, res) => {
+const create = (req, res, next) => {
   const {name, barcode, sp} = req.body;
-  try{
-    const id = await ItemsRepo.insert({name, barcode, sp});
-    res.json({id});
-  } catch(error){
-    console.error('Error when creating item', error);
-    res.status(400).json({error});
-  }
+  return itemsService.create({name, barcode, sp})
+    .then(id => res.json({id}))
+    .catch(e => next(e));
 };
 
-const all = async (req, res) => {
-  const items = await ItemsRepo.all();
-  res.json(items);
-};
+const all = (req, res) => itemsService.all().then(items => res.json(items));
 
-export default {post, all};
+export default {create, all};

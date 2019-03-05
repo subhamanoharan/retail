@@ -18,4 +18,16 @@ const all = async () => {
   const {rows} = await query(getAllQuery);
   return rows;
 }
-export {insert, all};
+
+const findById = async (itemId): Promise<any> => {
+  const findQuery = `SELECT * from items where id=${itemId};`
+  const {rows: [item]} = await query(findQuery);
+  return item;
+}
+
+const deleteAll = () => {
+  const deleteAllQuery = 'DELETE from items;'
+  return query(deleteAllQuery);
+}
+
+export {insert, all, findById, deleteAll};
