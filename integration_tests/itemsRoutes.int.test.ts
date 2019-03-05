@@ -2,7 +2,10 @@ import * as request from 'supertest';
 
 import app from '../src/app';
 import * as itemsRepo from '../src/repositories/itemsRepo';
+import constants from '../src/constants';
 import {tearDownItems, setUpItems} from './dataHelper';
+
+const {ERRORS} = constants;
 
 describe('Items routes', () => {
   const agent = request(app);
@@ -26,8 +29,7 @@ describe('Items routes', () => {
         .post('/items')
         .send(item)
         .expect(400)
-        .then(r => expect(r.body).toEqual({errors:
-          ['duplicate key value violates unique constraint \"items_barcode_key\"']}));
+        .then(r => expect(r.body).toEqual({errors: [ERRORS.BARCODE_EXISTS(item)]}));
     });
   });
 
@@ -41,7 +43,7 @@ describe('Items routes', () => {
       const item1 = {name: 'item1', barcode: 'AB', sp: 125};
       const item2 = {name: 'item2', barcode: 'AC', sp: 123};
       const [id1, id2] = await setUpItems([item1, item2]);
-      
+
       await agent
         .get('/items')
         .expect(200)

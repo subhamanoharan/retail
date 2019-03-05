@@ -1,12 +1,17 @@
 import itemsService from './itemsService';
 import * as itemsRepoMock from '../repositories/itemsRepo';
 import InvalidItemException from './../exceptions/invalidItemException';
+import constants from '../constants';
 
 jest.mock('../repositories/itemsRepo');
+
+const {ERRORS} = constants;
 
 describe('ItemsService', () => {
   const item = {name: 'name', barcode: 'ABCD', sp: 5};
   const dummyErr = new Error('dummy');
+
+  beforeEach(() => jest.resetAllMocks())
 
   describe('create', () => {
     it('should insert item', async() => {
@@ -16,6 +21,17 @@ describe('ItemsService', () => {
 
       expect(createdId).toEqual('newId');
       expect(itemsRepoMock.insert).toHaveBeenCalledWith(item);
+    });
+
+    it('should reject with bar code exists error', async () => {
+      (itemsRepoMock.doesBarcodeExist as any).mockResolvedValue(true);
+
+      const errorThrown = await itemsService.create(item).catch(e => e);
+
+      expect(errorThrown).toBeInstanceOf(InvalidItemException);
+      expect(errorThrown.message).toEqual(ERRORS.BARCODE_EXISTS(item));
+      expect(itemsRepoMock.doesBarcodeExist).toHaveBeenCalledWith(item);
+      expect(itemsRepoMock.insert).not.toHaveBeenCalled();
     });
 
     it('should reject with InvalidItemException on error', async () => {

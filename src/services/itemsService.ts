@@ -1,10 +1,20 @@
 import * as ItemsRepo from '../repositories/itemsRepo';
 import InvalidItemException from './../exceptions/invalidItemException';
+import constants from '../constants';
 
-const create = ({name, barcode, sp}) =>
-  ItemsRepo.insert({name, barcode, sp})
+const {ERRORS} = constants;
+
+const create = async (item) => {
+  const doesBarcodeExist = await ItemsRepo.doesBarcodeExist(item);
+  const {name, barcode, sp} = item;
+
+  if(doesBarcodeExist)
+    return Promise.reject(new InvalidItemException(ERRORS.BARCODE_EXISTS(item)));
+
+  return ItemsRepo.insert({name, barcode, sp})
     .then(id => id)
     .catch((err) => Promise.reject(new InvalidItemException(err.message)));
+}
 
 const all = () => ItemsRepo.all()
   .then(items => items.map(({id, name, barcode, sp}) => ({id, name, barcode, sp})));

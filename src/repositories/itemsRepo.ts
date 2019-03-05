@@ -30,4 +30,10 @@ const deleteAll = () => {
   return query(deleteAllQuery);
 }
 
-export {insert, all, findById, deleteAll};
+const doesBarcodeExist = async (item) => {
+  const existsQuery = `select exists(SELECT 1 from items where barcode='${item.barcode}');`
+  const {rows: [{exists}]} = await query(existsQuery);
+  return exists;
+}
+
+export {insert, all, findById, deleteAll, doesBarcodeExist};
