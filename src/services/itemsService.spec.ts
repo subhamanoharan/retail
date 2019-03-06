@@ -1,9 +1,11 @@
 import itemsService from './itemsService';
 import * as itemsRepoMock from '../repositories/itemsRepo';
+import itemValidatorMock from './validators/itemValidator';
 import InvalidItemException from './../exceptions/invalidItemException';
 import constants from '../constants';
 
 jest.mock('../repositories/itemsRepo');
+jest.mock('./validators/itemValidator');
 
 const {ERRORS} = constants;
 
@@ -16,6 +18,7 @@ describe('ItemsService', () => {
   describe('create', () => {
     it('should insert item', async() => {
       (itemsRepoMock.insert as any).mockResolvedValue(Promise.resolve('newId'));
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
 
       const createdId = await itemsService.create(item);
 
@@ -23,19 +26,19 @@ describe('ItemsService', () => {
       expect(itemsRepoMock.insert).toHaveBeenCalledWith(item);
     });
 
-    it('should reject with bar code exists error', async () => {
-      (itemsRepoMock.doesBarcodeExist as any).mockResolvedValue(true);
+    it('should reject with item validation error', async () => {
+      (itemValidatorMock.validate as any).mockRejectedValue(dummyErr);
 
       const errorThrown = await itemsService.create(item).catch(e => e);
 
-      expect(errorThrown).toBeInstanceOf(InvalidItemException);
-      expect(errorThrown.message).toEqual(ERRORS.BARCODE_EXISTS(item));
-      expect(itemsRepoMock.doesBarcodeExist).toHaveBeenCalledWith(item);
+      expect(errorThrown).toEqual(dummyErr);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item);
       expect(itemsRepoMock.insert).not.toHaveBeenCalled();
     });
 
     it('should reject with InvalidItemException on error', async () => {
       (itemsRepoMock.insert as any).mockRejectedValue(dummyErr);
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
 
       const errorThrown = await itemsService.create(item).catch(e => e);
 

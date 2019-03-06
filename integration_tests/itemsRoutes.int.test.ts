@@ -31,6 +31,14 @@ describe('Items routes', () => {
         .expect(400)
         .then(r => expect(r.body).toEqual({errors: [ERRORS.BARCODE_EXISTS(item)]}));
     });
+
+    it('should return 400 on invalid price', () => {
+      return agent
+        .post('/items')
+        .send({...item, barcode: 'barcode_invalid_price', sp: 'invalid'})
+        .expect(400)
+        .then(r => expect(r.body).toEqual({errors: [ERRORS.INVALID_PRICE]}));
+    });
   });
 
   describe('list', () => {

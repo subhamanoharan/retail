@@ -1,5 +1,4 @@
 import itemsService from '../services/itemsService';
-import II from '../exceptions/invalidItemException';
 
 const create = (req, res, next) => {
   const {name, barcode, sp} = req.body;

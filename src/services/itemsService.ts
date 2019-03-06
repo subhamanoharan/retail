@@ -1,19 +1,13 @@
 import * as ItemsRepo from '../repositories/itemsRepo';
 import InvalidItemException from './../exceptions/invalidItemException';
-import constants from '../constants';
-
-const {ERRORS} = constants;
+import itemValidator from './validators/itemValidator';
 
 const create = async (item) => {
-  const doesBarcodeExist = await ItemsRepo.doesBarcodeExist(item);
   const {name, barcode, sp} = item;
-
-  if(doesBarcodeExist)
-    return Promise.reject(new InvalidItemException(ERRORS.BARCODE_EXISTS(item)));
-
-  return ItemsRepo.insert({name, barcode, sp})
+  return itemValidator.validate(item)
+    .then(() => ItemsRepo.insert({name, barcode, sp})
+      .catch((err) => Promise.reject(new InvalidItemException(err.message))))
     .then(id => id)
-    .catch((err) => Promise.reject(new InvalidItemException(err.message)));
 }
 
 const all = () => ItemsRepo.all()
