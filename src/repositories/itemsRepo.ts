@@ -36,4 +36,9 @@ const doesBarcodeExist = async (item) => {
   return exists;
 }
 
-export {insert, all, findById, deleteAll, doesBarcodeExist};
+const remove = (id) => {
+  const delQuery = `DELETE FROM items where id='${id}';`
+  return query(delQuery);
+};
+
+export {insert, all, findById, deleteAll, doesBarcodeExist, remove};

@@ -9,4 +9,10 @@ const create = (req, res, next) => {
 
 const all = (req, res) => itemsService.all().then(items => res.json(items));
 
-export default {create, all};
+const remove = (req, res) => {
+  const {itemId} = req.params;
+  return itemsService.remove(itemId)
+    .then(() => res.send());
+}
+
+export default {create, all, remove};

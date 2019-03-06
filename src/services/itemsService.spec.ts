@@ -60,4 +60,16 @@ describe('ItemsService', () => {
       expect(itemsRepoMock.all).toHaveBeenCalled();
     });
   });
+
+
+  describe('remove', () => {
+    const itemId = 123;
+    it('should remove item', async () => {
+      (itemsRepoMock.remove as any).mockResolvedValue(true);
+
+      await itemsService.remove(itemId);
+
+      expect(itemsRepoMock.remove).toHaveBeenCalledWith(itemId);
+    });
+  });
 });

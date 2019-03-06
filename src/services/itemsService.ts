@@ -13,4 +13,6 @@ const create = async (item) => {
 const all = () => ItemsRepo.all()
   .then(items => items.map(({id, name, barcode, sp}) => ({id, name, barcode, sp})));
 
-export default {create, all};
+const remove = (itemId) => ItemsRepo.remove(itemId);
+
+export default {create, all, remove};

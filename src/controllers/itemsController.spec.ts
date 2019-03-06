@@ -50,4 +50,18 @@ describe('ItemsController', () => {
       expect(reqMock).not.toHaveBeenCalled();
     });
   });
+
+  describe('remove', () => {
+    it('should remove the item', async () => {
+      const itemId = 2;
+      const reqMock = {params: {itemId}};
+      const resMock = {send: jest.fn()};
+      (itemsServiceMock.remove as any).mockResolvedValue(Promise.resolve());
+
+      await itemsController.remove(reqMock, resMock);
+
+      expect(itemsServiceMock.remove).toHaveBeenCalledWith(itemId);
+      expect(resMock.send).toHaveBeenCalled();
+    });
+  });
 });

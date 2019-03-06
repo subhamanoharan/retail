@@ -58,4 +58,16 @@ describe('Items routes', () => {
         .then(r => expect(r.body).toEqual([{id: id1, ...item1}, {id: id2, ...item2}]));
     });
   });
+
+  describe('delete', () => {
+    it('should delete item when it exists', async () => {
+      const [itemToDeleteId] = await setUpItems([{name: 'itemToDel', sp: 12, barcode: 'ITEM_TO_DEL'}])
+      await agent.delete(`/items/${itemToDeleteId}`).expect(200);
+      const itemFound = await itemsRepo.findById(itemToDeleteId);
+      expect(itemFound).not.toBeDefined();
+    });
+    it('should ignore when item does not exist', async () => {
+      await agent.delete('/items/0').expect(200);
+    });
+  });
 });
