@@ -13,7 +13,7 @@ const insert = async (item: IItem): Promise<number> => {
   return id;
 };
 
-const update = async (itemId, item: IItem): Promise<number> => {
+const update = async (itemId, item: IItem): Promise<void> => {
   const updateQuery = 'UPDATE items set name=$1, barcode=$2, sp=$3 where id=$4;'
   const values = [item.name, item.barcode, item.sp, itemId];
   await query(updateQuery, values);

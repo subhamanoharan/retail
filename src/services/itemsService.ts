@@ -1,19 +1,22 @@
 import * as ItemsRepo from '../repositories/itemsRepo';
 import InvalidItemException from './../exceptions/invalidItemException';
 import itemValidator from './validators/itemValidator';
+import itemFormatter from './itemFormatter';
 
 const create = async (item) => {
   const {name, barcode, sp} = item;
-  return itemValidator.validate(item)
-    .then(() => ItemsRepo.insert({name, barcode, sp})
+  const formattedItem = itemFormatter({name, barcode, sp})
+  return itemValidator.validate(formattedItem)
+    .then(() => ItemsRepo.insert(formattedItem)
       .catch((err) => Promise.reject(new InvalidItemException(err.message))))
     .then(id => id)
 }
 
 const update = async (itemId, item) => {
   const {name, barcode, sp} = item;
-  return itemValidator.validate(item, itemId)
-    .then(() => ItemsRepo.update(itemId, {name, barcode, sp})
+  const formattedItem = itemFormatter({name, barcode, sp})
+  return itemValidator.validate(formattedItem, itemId)
+    .then(() => ItemsRepo.update(itemId, formattedItem)
       .catch((err) => Promise.reject(new InvalidItemException(err.message))))
 }
 

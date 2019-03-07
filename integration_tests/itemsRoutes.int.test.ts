@@ -32,6 +32,14 @@ describe('Items routes', () => {
         .then(r => expect(r.body).toEqual({errors: [ERRORS.BARCODE_EXISTS(item)]}));
     });
 
+    it('should return 400 on duplicate barcode with different case', () => {
+      return agent
+        .post('/items')
+        .send({...item, barcode: 'BarCode'})
+        .expect(400)
+        .then(r => expect(r.body).toEqual({errors: [ERRORS.BARCODE_EXISTS(item)]}));
+    });
+
     it('should return 400 on invalid price', () => {
       return agent
         .post('/items')
@@ -53,7 +61,7 @@ describe('Items routes', () => {
         .send(newItemData)
         .expect(200);
       const updatedItem = await itemsRepo.findById(itemId);
-      expect(updatedItem).toEqual({id: itemId, ...newItemData});
+      expect(updatedItem).toEqual({id: itemId, ...newItemData, barcode: newItemData.barcode.toLowerCase()});
     });
 
     it('should return 400 on invalid name', async () => {

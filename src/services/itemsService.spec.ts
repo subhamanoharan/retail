@@ -23,7 +23,7 @@ describe('ItemsService', () => {
       const createdId = await itemsService.create(item);
 
       expect(createdId).toEqual('newId');
-      expect(itemsRepoMock.insert).toHaveBeenCalledWith(item);
+      expect(itemsRepoMock.insert).toHaveBeenCalledWith({...item, barcode: 'abcd'});
     });
 
     it('should reject with item validation error', async () => {
@@ -32,7 +32,7 @@ describe('ItemsService', () => {
       const errorThrown = await itemsService.create(item).catch(e => e);
 
       expect(errorThrown).toEqual(dummyErr);
-      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith({...item, barcode: 'abcd'});
       expect(itemsRepoMock.insert).not.toHaveBeenCalled();
     });
 
@@ -44,7 +44,7 @@ describe('ItemsService', () => {
 
       expect(errorThrown).toBeInstanceOf(InvalidItemException);
       expect(errorThrown.message).toEqual(dummyErr.message);
-      expect(itemsRepoMock.insert).toHaveBeenCalledWith(item);
+      expect(itemsRepoMock.insert).toHaveBeenCalledWith({...item, barcode: 'abcd'});
     });
   });
   describe('update', () => {
@@ -55,8 +55,8 @@ describe('ItemsService', () => {
 
       await itemsService.update(itemId, item);
 
-      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item, itemId);
-      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, item);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith({...item, barcode: 'abcd'}, itemId);
+      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, {...item, barcode: 'abcd'});
     });
 
     it('should reject with item validation error', async () => {
@@ -65,7 +65,7 @@ describe('ItemsService', () => {
       const errorThrown = await itemsService.update(itemId, item).catch(e => e);
 
       expect(errorThrown).toEqual(dummyErr);
-      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item, itemId);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith({...item, barcode: 'abcd'}, itemId);
       expect(itemsRepoMock.update).not.toHaveBeenCalled();
     });
 
@@ -77,8 +77,8 @@ describe('ItemsService', () => {
 
       expect(errorThrown).toBeInstanceOf(InvalidItemException);
       expect(errorThrown.message).toEqual(dummyErr.message);
-      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item, itemId);
-      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, item);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith({...item, barcode: 'abcd'}, itemId);
+      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, {...item, barcode: 'abcd'});
     });
   });
 
