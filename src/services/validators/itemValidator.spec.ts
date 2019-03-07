@@ -9,6 +9,7 @@ jest.mock('./nameValidator');
 
 describe('Item Validator', () => {
   const item = {name: 'some', sp: 23, barcode: 'AV'};
+  const itemId = 12;
   const dummyErr = new Error('dummy');
 
   beforeEach(() => jest.resetAllMocks())
@@ -22,7 +23,19 @@ describe('Item Validator', () => {
 
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).toHaveBeenCalledWith(item);
-    expect(barcodeValidatorMock).toHaveBeenCalledWith(item);
+    expect(barcodeValidatorMock).toHaveBeenCalledWith(item, undefined);
+  })
+
+  it('should accept itemId optionally', async () => {
+    nameValidatorMock.mockResolvedValue(true);
+    priceValidatorMock.mockResolvedValue(true);
+    barcodeValidatorMock.mockResolvedValue(true);
+
+    await itemValidator.validate(item, itemId);
+
+    expect(nameValidatorMock).toHaveBeenCalledWith(item);
+    expect(priceValidatorMock).toHaveBeenCalledWith(item);
+    expect(barcodeValidatorMock).toHaveBeenCalledWith(item, itemId);
   })
 
   it('should reject on name errors', async () => {
@@ -59,6 +72,6 @@ describe('Item Validator', () => {
     expect(errThr).toEqual(dummyErr);
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).toHaveBeenCalledWith(item);
-    expect(barcodeValidatorMock).toHaveBeenCalledWith(item);
+    expect(barcodeValidatorMock).toHaveBeenCalledWith(item, undefined);
   });
 });

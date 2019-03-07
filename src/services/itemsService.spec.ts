@@ -47,6 +47,40 @@ describe('ItemsService', () => {
       expect(itemsRepoMock.insert).toHaveBeenCalledWith(item);
     });
   });
+  describe('update', () => {
+    const itemId = 123;
+    it('should update item', async() => {
+      (itemsRepoMock.update as any).mockResolvedValue();
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
+
+      await itemsService.update(itemId, item);
+
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item, itemId);
+      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, item);
+    });
+
+    it('should reject with item validation error', async () => {
+      (itemValidatorMock.validate as any).mockRejectedValue(dummyErr);
+
+      const errorThrown = await itemsService.update(itemId, item).catch(e => e);
+
+      expect(errorThrown).toEqual(dummyErr);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item, itemId);
+      expect(itemsRepoMock.update).not.toHaveBeenCalled();
+    });
+
+    it('should reject with InvalidItemException on error', async () => {
+      (itemsRepoMock.update as any).mockRejectedValue(dummyErr);
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
+
+      const errorThrown = await itemsService.update(itemId, item).catch(e => e);
+
+      expect(errorThrown).toBeInstanceOf(InvalidItemException);
+      expect(errorThrown.message).toEqual(dummyErr.message);
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith(item, itemId);
+      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, item);
+    });
+  });
 
   describe('list', () => {
     it('should get all items', async() => {

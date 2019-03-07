@@ -17,7 +17,7 @@ describe('Barcode validator', () => {
     const result = await barcodeValidator(item);
 
     expect(result).toBe(true);
-    expect(itemsRepoMock.doesBarcodeExist).toHaveBeenCalledWith(item);
+    expect(itemsRepoMock.getItemIdForBarcode).toHaveBeenCalledWith(item.barcode);
   });
 
   it('should reject if barcode is invalid', async () => {
@@ -29,14 +29,38 @@ describe('Barcode validator', () => {
     expect(itemsRepoMock.doesBarcodeExist).not.toHaveBeenCalled();
   });
 
-  it('should reject if barcode exists', async () => {
+  it('should resolve if barcode exists and is its own', async () => {
     const item = {barcode: 'ABCD'};
-    (itemsRepoMock.doesBarcodeExist as any).mockResolvedValue(true);
+    const itemId = 12;
+    (itemsRepoMock.getItemIdForBarcode as any).mockResolvedValue(itemId);
+
+    const result = await barcodeValidator(item, itemId);
+
+    expect(result).toBe(true);
+    expect(itemsRepoMock.getItemIdForBarcode).toHaveBeenCalledWith(item.barcode);
+  });
+
+  it('should reject if barcode exists for another item', async () => {
+    const item = {barcode: 'ABCD'};
+    const itemId = 12;
+
+    (itemsRepoMock.getItemIdForBarcode as any).mockResolvedValue(13);
+
+    const errorThrown = await barcodeValidator(item, itemId).catch(e => e);
+
+    expect(errorThrown).toBeInstanceOf(InvalidItemException);
+    expect(errorThrown.message).toEqual(ERRORS.BARCODE_EXISTS(item));
+    expect(itemsRepoMock.getItemIdForBarcode).toHaveBeenCalledWith(item.barcode);
+  });
+
+  it('should reject if barcode exists and current item does not exist yet', async () => {
+    const item = {barcode: 'ABCD'};
+    (itemsRepoMock.getItemIdForBarcode as any).mockResolvedValue(13);
 
     const errorThrown = await barcodeValidator(item).catch(e => e);
 
     expect(errorThrown).toBeInstanceOf(InvalidItemException);
     expect(errorThrown.message).toEqual(ERRORS.BARCODE_EXISTS(item));
-    expect(itemsRepoMock.doesBarcodeExist).toHaveBeenCalledWith(item);
+    expect(itemsRepoMock.getItemIdForBarcode).toHaveBeenCalledWith(item.barcode);
   });
 });

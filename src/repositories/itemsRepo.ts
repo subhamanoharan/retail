@@ -13,6 +13,13 @@ const insert = async (item: IItem): Promise<number> => {
   return id;
 };
 
+const update = async (itemId, item: IItem): Promise<number> => {
+  const updateQuery = 'UPDATE items set name=$1, barcode=$2, sp=$3 where id=$4;'
+  const values = [item.name, item.barcode, item.sp, itemId];
+  await query(updateQuery, values);
+  return Promise.resolve();
+};
+
 const all = async () => {
   const getAllQuery = 'SELECT * from items;'
   const {rows} = await query(getAllQuery);
@@ -36,9 +43,15 @@ const doesBarcodeExist = async (item) => {
   return exists;
 }
 
+const getItemIdForBarcode = async (barcode: string) => {
+  const getItemIdQuery = `SELECT id from items where barcode='${barcode}' limit 1;`
+  const {rows: [item]} = await query(getItemIdQuery);
+  return item ? item.id : item;
+}
+
 const remove = (id) => {
   const delQuery = `DELETE FROM items where id='${id}';`
   return query(delQuery);
 };
 
-export {insert, all, findById, deleteAll, doesBarcodeExist, remove};
+export {insert, all, findById, deleteAll, doesBarcodeExist, remove, update, getItemIdForBarcode};

@@ -41,6 +41,33 @@ describe('Items routes', () => {
     });
   });
 
+  describe('Update', () => {
+    afterEach(() => tearDownItems());
+
+    it('should update existing item', async () => {
+      const itemToUpdate = {name: 'itemToUpdate', barcode: 'itemToUpdate', sp: 12};
+      const newItemData = {name: 'itemToUpdate', barcode: 'itemToUpdate', sp: 15};
+      const [itemId] = await setUpItems([itemToUpdate]);
+      await agent
+        .put(`/items/${itemId}`)
+        .send(newItemData)
+        .expect(200);
+      const updatedItem = await itemsRepo.findById(itemId);
+      expect(updatedItem).toEqual({id: itemId, ...newItemData});
+    });
+
+    it('should return 400 on invalid name', async () => {
+      const itemToUpdate = {name: 'itemToUpdateWithInvalid', barcode: 'itemToUpdateWithInvalid', sp: 12};
+      const newItemData = {name: 12, barcode: 'itemToUpdateWithInvalid', sp: 15};
+      const [itemId] = await setUpItems([itemToUpdate]);
+      return agent
+        .put(`/items/${itemId}`)
+        .send(newItemData)
+        .expect(400)
+        .then(r => expect(r.body).toEqual({errors: [ERRORS.INVALID_NAME]}));
+    });
+  });
+
   describe('list', () => {
 
     beforeEach(() => tearDownItems());

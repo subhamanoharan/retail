@@ -36,6 +36,38 @@ describe('ItemsController', () => {
     });
   });
 
+  describe('update', () => {
+    const newItemData = {name: 'newName', barcode: '12', sp: 12};
+    const itemId = 12;
+
+    it('should update item', async () => {
+      const reqMock = {body: newItemData, params: {itemId}};
+      const resMock = {send: jest.fn()};
+      const nextMock = jest.fn();
+
+      (itemsServiceMock.update as any).mockResolvedValue(Promise.resolve());
+
+      await itemsController.update(reqMock, resMock, nextMock);
+
+      expect(itemsServiceMock.update).toHaveBeenCalledWith(itemId, newItemData);
+      expect(resMock.send).toHaveBeenCalled();
+      expect(nextMock).not.toHaveBeenCalled();
+    });
+
+    it('should call next with error', async () => {
+      const reqMock = {body: newItemData, params: {itemId}};
+      const resMock = jest.fn();
+      const nextMock = jest.fn();
+      (itemsServiceMock.update as any).mockRejectedValue(dummyErr);
+
+      await itemsController.update(reqMock, resMock, nextMock);
+
+      expect(itemsServiceMock.update).toHaveBeenCalledWith(itemId, newItemData);
+      expect(nextMock).toHaveBeenCalledWith(dummyErr);
+      expect(resMock).not.toHaveBeenCalled();
+    });
+  });
+
   describe('list', () => {
     it('should return all items', async () => {
       const reqMock = jest.fn();

@@ -15,4 +15,12 @@ const remove = (req, res) => {
     .then(() => res.send());
 }
 
-export default {create, all, remove};
+const update = (req, res, next) => {
+  const {name, barcode, sp} = req.body;
+  const { itemId } = req.params;
+  return itemsService.update(itemId, {name, barcode, sp})
+    .then(() => res.send())
+    .catch(error => next(error));
+};
+
+export default {create, all, remove, update};
