@@ -3,14 +3,12 @@ import * as bodyParser from 'body-parser';
 
 import ItemsRouter from './routes/itemsRoutes';
 import errorHandler from './services/errorHandler';
+import cors from './middlewares/cors';
 
 const app = express()
 
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-  res.set("Access-Control-Allow-Origin", "http://localhost:3001");
-  next();
-});
+app.use(cors);
 
 app.get('/', (req, res) => res.send('Hello World!'))
 app.use('/items', ItemsRouter);
