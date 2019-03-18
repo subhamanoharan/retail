@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "build": "cat tsconfig.json && tsc --version && tsc -p tsconfig.json",
+    "build": "ls src/ && tsc --version && tsc -p tsconfig.json",
     "start": "node ./dist/index.js && node dist/index.js",
     "lint": "ts-node node_modules/tslint/lib/tslint-cli verbose 'src/**/*.ts'",
     "test": "./node_modules/.bin/jest src/",
