@@ -1,4 +1,4 @@
-import itemsService from '../services/itemsService';
+import itemsService from './../services/itemsService';
 
 const create = (req, res, next) => {
   const {name, barcode, sp} = req.body;
