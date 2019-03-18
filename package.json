@@ -10,8 +10,7 @@
     "test": "./node_modules/.bin/jest src/",
     "int-test": "npm run migrate:test && cross-env NODE_ENV=test ./node_modules/.bin/jest integration_tests/ --runInBand",
     "migrate": "node node_modules/db-migrate/bin/db-migrate",
-    "migrate:test": "node node_modules/db-migrate/bin/db-migrate up -e test",
-    "postinstall": "npm run build"
+    "migrate:test": "node node_modules/db-migrate/bin/db-migrate up -e test"
   },
   "author": "",
   "license": "ISC",
