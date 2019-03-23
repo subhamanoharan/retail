@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "postinstall": "cd retail-frontend && npm run install",
+    "postinstall": "cd retail-frontend && npm install",
     "build": "npm run build:fe && npm run build:be",
     "build:be": "tsc --version && tsc -p tsconfig.json",
     "build:fe": "cd retail-frontend && npm run build:prod",
