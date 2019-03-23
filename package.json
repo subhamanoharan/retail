@@ -16,6 +16,7 @@
     "migrate": "node node_modules/db-migrate/bin/db-migrate",
     "migrate:test": "node node_modules/db-migrate/bin/db-migrate up -e test"
   },
+  "cacheDirectories": ["retail-frontend/node_modules", "node_modules"],
   "author": "",
   "license": "ISC",
   "dependencies": {
