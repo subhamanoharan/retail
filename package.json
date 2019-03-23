@@ -9,7 +9,7 @@
     "build:be": "tsc --version && tsc -p tsconfig.json",
     "build:fe": "cd retail-frontend && npm run build:prod",
     "start": "npm run start:be",
-    "start:be": "node dist/index.js",
+    "start:be": "node ./dist/index.js",
     "lint": "ts-node node_modules/tslint/lib/tslint-cli verbose 'src/**/*.ts'",
     "test": "./node_modules/.bin/jest src/",
     "int-test": "npm run migrate:test && cross-env NODE_ENV=test ./node_modules/.bin/jest integration_tests/ --runInBand",
