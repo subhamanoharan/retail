@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
 
-import AddNewItem from './AddManualItemForm';
+import AddNewItem from './addManualItemForm';
 import ImmutableCart from '../../models/immutableCart';
 import BillDataTable from '../dataTable/billDataTable';
 import BillService from '../../services/billService';
