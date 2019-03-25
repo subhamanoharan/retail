@@ -48,6 +48,7 @@
     "@material-ui/core": "^3.8.1",
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
+    "esc-pos-encoder": "^1.2.0",
     "mui-datatables": "^2.0.0-beta.56",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

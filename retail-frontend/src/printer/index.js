@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 
 import Button from '@material-ui/core/Button';
+import {sendText} from './driver';
 
 export default class PrintDemo extends Component {
   constructor(props) {
@@ -13,13 +14,18 @@ export default class PrintDemo extends Component {
   blah(){
     const setup = (d) => {
 		    return d.open()
-		      .then(() => d.selectConfiguration(1))
-	        .then(() => d.claimInterface(0))
+		      .then(() => {
+            console.log('OPened');
+            return d.selectConfiguration(1)
+          })
+	        .then(() => {
+            console.log('claiming Interface');
+            return d.claimInterface(d.configuration.interfaces[0].interfaceNumber)
+          })
        };
-     navigator.usb.requestDevice({ filters: [{ vendorId: '32902' }] })
-      .then(() =>   navigator.usb.getDevices())
+     navigator.usb.requestDevice({ filters: [{ vendorId: 1110 }] })
+      .then(() =>  navigator.usb.getDevices())
       .then(devices => {
-        console.log('Found  devices', devices)
         if (devices.length > 0) {
           this.device = devices[0];
           return setup(this.device);
@@ -31,11 +37,8 @@ export default class PrintDemo extends Component {
   }
 
   print(){
-    console.log('Printing......')
-    var encoder = new TextEncoder();
-    var data = encoder.encode('Demo  TEST---');
-    this.device.transferOut(1, data)
-      .then(() => { console.log('Printing over'); })
+    sendText(this.device, 'Demo  TEST---')
+      .then((r) => { console.log('Printing over', r); })
       .catch(error => { console.log(error); })
   }
 
