@@ -5,7 +5,7 @@ import MUIDataTable from 'mui-datatables';
 import CustomSelectionToolbar from './customSelectionToolbar';
 import CustomToolbar from './customToolbar';
 import BarCodeManager from '../barCodeManager';
-import PrintDemo from '../../printer';
+import PrintButton from '../printButton';
 
 export default class ItemsDataTable extends React.Component {
   constructor(props){
@@ -49,7 +49,7 @@ export default class ItemsDataTable extends React.Component {
     return (
       <div onMouseDown={(e) => e.preventDefault() }>
         <BarCodeManager onItemScanned={this.onAddItem} masterList={this.props.masterList}/>
-        <PrintDemo/>
+        <PrintButton/>
         <MUIDataTable
           data={datatableService.generateData(items)}
           columns={datatableService.getColumns()}

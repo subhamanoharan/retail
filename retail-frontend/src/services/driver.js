@@ -1,6 +1,6 @@
 import EscPosEncoder from 'esc-pos-encoder';
 
-export const sendText = (device, str) => {
+export const sendText = (device) => {
   const encoder = new EscPosEncoder();
 
   const result = encoder
