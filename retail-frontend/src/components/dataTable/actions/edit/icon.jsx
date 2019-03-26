@@ -19,7 +19,7 @@ export default class EditItemIcon extends React.Component {
   }
 
   onEditItemSuccess(){
-    // this.hideForm();
+    this.hideForm();
     this.props.refreshItems();
   }
 
