@@ -13,8 +13,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { withSnackbar } from 'notistack';
 
-export default class ItemForm extends React.Component {
+class ItemForm extends React.Component {
   constructor(props) {
       super(props);
       const item = props.item;
@@ -46,7 +47,10 @@ export default class ItemForm extends React.Component {
     const {name, sp, barcode} = this.state;
     this.props.onSubmit({name, sp: Number(sp), barcode})
       .then(this.props.onSuccess)
-      .catch((error) => error && this.setState({error}))
+      .catch((errors) => {
+        if(errors)
+          errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))
+        });
   }
 
   hideModal(event){
@@ -55,7 +59,6 @@ export default class ItemForm extends React.Component {
   }
 
   render() {
-    const {error} = this.state;
     return(
       <Dialog
         open
@@ -100,3 +103,5 @@ export default class ItemForm extends React.Component {
     </Dialog>);
    }
 }
+
+export default withSnackbar(ItemForm);

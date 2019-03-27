@@ -4,8 +4,9 @@ import MUIDataTable from 'mui-datatables';
 
 import CustomSelectionToolbar from './customSelectionToolbar';
 import CustomToolbar from './customToolbar';
+import { withSnackbar } from 'notistack';
 
-export default class ItemsDataTable extends React.Component {
+class ItemsDataTable extends React.Component {
   constructor(props){
     super(props);
     this.state = {items: []};
@@ -18,7 +19,12 @@ export default class ItemsDataTable extends React.Component {
 
   fetchItems(){
     const {service} = this.props;
-    return service.list().then((items) => this.setState({items}));
+    return service.list()
+      .then((items) => this.setState({items}))
+      .catch((errors) => {
+        if(errors)
+          errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))
+        });
   }
 
   render() {
@@ -48,3 +54,4 @@ export default class ItemsDataTable extends React.Component {
     );
   }
 }
+export default withSnackbar(ItemsDataTable);

@@ -54,6 +54,7 @@
     "axios": "^0.18.0",
     "esc-pos-encoder": "^1.2.0",
     "mui-datatables": "^2.0.0-beta.56",
+    "notistack": "^0.5.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
