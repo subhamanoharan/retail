@@ -7,7 +7,7 @@ import { withSnackbar } from 'notistack';
 
 import EditItemIcon from './actions/edit/icon';
 
-class CustomDataTableSelectionToolbar extends React.Component {
+export class CustomDataTableSelectionToolbar extends React.Component {
   constructor(props){
     super(props);
     this.onDeleteItems = this.onDeleteItems.bind(this);
