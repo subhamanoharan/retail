@@ -16,4 +16,12 @@ export default class BillService {
     this.cart =  this.cart.deleteItem({barcode, sp, name, quantity, id})
     return Promise.resolve();
   }
+
+  getTotal(){
+    return this.cart.getTotal();
+  }
+
+  getTotalNoOfItems(){
+    return this.cart.getTotalNoOfItems();
+  }
 }

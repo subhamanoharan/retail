@@ -15,6 +15,10 @@ class BillDataTableService {
   getColumns(){
     return [
       {
+        name: "No.",
+        options: {filter: false, sort: false}
+      },
+      {
         name: "Item",
         options: {filter: false, sort: false}
       },
@@ -31,7 +35,7 @@ class BillDataTableService {
   }
 
   generateData(items){
-    return items.map((item) => [item.name, item.sp, item.quantity, priceCalculator([item])]);
+    return items.map((item, i) => [i+1, item.name, item.sp, item.quantity, priceCalculator([item])]);
   }
 }
 

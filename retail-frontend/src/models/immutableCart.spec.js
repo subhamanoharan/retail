@@ -94,4 +94,12 @@ describe('ImmutableCart', () => {
       expect(i2).toEqual({...item2, quantity: item2.quantity + 3});
     });
   });
+
+  it('getTotal', () => {
+    expect(immutableCart.getTotal()).toEqual(25);
+  });
+
+  it('getTotalNoOfItems', () => {
+    expect(immutableCart.getTotalNoOfItems()).toEqual(20);
+  });
 });

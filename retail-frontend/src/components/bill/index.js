@@ -1,4 +1,5 @@
 import React, { Component} from 'react';
+import { withSnackbar } from 'notistack';
 
 import AddNewItem from './addManualItemForm';
 import ImmutableCart from '../../models/immutableCart';
@@ -6,7 +7,6 @@ import BillDataTable from '../dataTable/billDataTable';
 import BillService from '../../services/billService';
 import billDataTableService from '../../services/billDataTableService';
 import itemsService from './../../services/itemsService';
-import { withSnackbar } from 'notistack';
 
 class Bill extends Component {
   constructor(props){
@@ -25,12 +25,12 @@ class Bill extends Component {
 
   render() {
     return (
-        <BillDataTable
-          service={new BillService(new ImmutableCart([]))}
-          datatableService={billDataTableService}
-          addForm={AddNewItem}
-          masterList={this.state.masterList}
-        />
+      <BillDataTable
+        service={new BillService(new ImmutableCart([]))}
+        datatableService={billDataTableService}
+        addForm={AddNewItem}
+        masterList={this.state.masterList}
+      />
     );
   }
 }

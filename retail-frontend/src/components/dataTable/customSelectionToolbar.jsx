@@ -3,20 +3,25 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import P from 'bluebird';
+import { withSnackbar } from 'notistack';
 
 import EditItemIcon from './actions/edit/icon';
 
-export default class CustomDataTableSelectionToolbar extends React.Component {
+class CustomDataTableSelectionToolbar extends React.Component {
   constructor(props){
     super(props);
     this.onDeleteItems = this.onDeleteItems.bind(this);
   }
 
-  onDeleteItems(){
+  onDeleteItems() {
     const {items, refreshItems, selectedRows: {data}, service} = this.props;
     const itemsToDelete = data.map(({index}) => items[index]);
-    P.map(itemsToDelete, (i) => service.delete(i))
+    return P.map(itemsToDelete, (i) => service.delete(i))
       .then(refreshItems)
+      .catch((errors) => {
+        if(errors)
+          errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))
+      })
   }
 
   render() {
@@ -41,3 +46,5 @@ export default class CustomDataTableSelectionToolbar extends React.Component {
     );
   }
 }
+
+export default withSnackbar(CustomDataTableSelectionToolbar);

@@ -1,4 +1,5 @@
 import CartItem from './cartItem';
+import priceCalculator from '../services/priceCalculator';
 
 export default class ImmutableCart {
   constructor(items) {
@@ -35,5 +36,13 @@ export default class ImmutableCart {
 
   getItems() {
     return this.items.map(i => ({...i}))
+  }
+
+  getTotal() {
+    return priceCalculator(this.items);
+  }
+
+  getTotalNoOfItems() {
+    return this.items.reduce((acc, item) => acc + item.quantity, 0);
   }
 }

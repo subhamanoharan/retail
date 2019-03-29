@@ -6,6 +6,7 @@ import CustomSelectionToolbar from './customSelectionToolbar';
 import CustomToolbar from './customToolbar';
 import BarCodeManager from '../barCodeManager';
 import PrintButton from '../printButton';
+import SummaryCard from '../summaryCard';
 
 export default class ItemsDataTable extends React.Component {
   constructor(props){
@@ -48,6 +49,7 @@ export default class ItemsDataTable extends React.Component {
       />
     return (
       <div onMouseDown={(e) => e.preventDefault() }>
+        <SummaryCard service={service}/>
         <BarCodeManager onItemScanned={this.onAddItem} masterList={this.props.masterList}/>
         <PrintButton/>
         <MUIDataTable
