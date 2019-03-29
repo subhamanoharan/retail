@@ -1,20 +1,31 @@
 import React, { Component} from 'react';
 import { withSnackbar } from 'notistack';
 
+import DataTable from '../dataTable';
 import AddNewItem from './addManualItemForm';
 import ImmutableCart from '../../models/immutableCart';
-import BillDataTable from '../dataTable/billDataTable';
 import BillService from '../../services/billService';
 import billDataTableService from '../../services/billDataTableService';
 import itemsService from './../../services/itemsService';
+import BarCodeManager from '../barCodeManager';
+import PrintButton from '../printButton';
+import SummaryCard from '../summaryCard';
 
 class Bill extends Component {
   constructor(props){
     super(props);
-    this.state = {masterList: []};
+    this.state = {masterList: [], items: []};
+    this.service = new BillService(new ImmutableCart([]));
+    this.fetchItems = this.fetchItems.bind(this);
+    this.onAddItem = this.onAddItem.bind(this);
   }
 
   componentDidMount(){
+    this.fetchMasterList();
+    this.fetchItems();
+  }
+
+  fetchMasterList(){
     itemsService.list()
       .then((masterList) => this.setState({masterList}))
       .catch((errors) => {
@@ -23,14 +34,29 @@ class Bill extends Component {
         });
   }
 
+  fetchItems(){
+    this.setState({items: this.service.list()})
+  }
+
+  onAddItem({barcode, sp, name, id}, quantity){
+    this.service.add({barcode, sp, name, quantity, id});
+    this.fetchItems();
+  }
+
   render() {
     return (
-      <BillDataTable
-        service={new BillService(new ImmutableCart([]))}
-        datatableService={billDataTableService}
-        addForm={AddNewItem}
-        masterList={this.state.masterList}
-      />
+      <div>
+        <PrintButton/>
+        <SummaryCard service={this.service}/>
+        <BarCodeManager onItemScanned={this.onAddItem} masterList={this.state.masterList}/>
+        <DataTable
+          items={this.state.items}
+          service={this.service}
+          datatableService={billDataTableService}
+          addForm={AddNewItem}
+          fetchItems={this.fetchItems}
+        />
+      </div>
     );
   }
 }

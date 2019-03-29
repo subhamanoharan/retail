@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 export default ({service}) => (
   <Card>
     <CardContent>
-    <Grid container spacing={12}>
+    <Grid container>
       <Grid item xs={6}>
         <Typography variant="h5" component="h2">{`No.of items: ${service.getTotalNoOfItems()}`}</Typography>
       </Grid>
