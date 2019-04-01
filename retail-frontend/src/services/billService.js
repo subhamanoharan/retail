@@ -17,6 +17,10 @@ export default class BillService {
     return Promise.resolve();
   }
 
+  clear(){
+    this.cart = this.cart.clear();
+  }
+
   getTotal(){
     return this.cart.getTotal();
   }

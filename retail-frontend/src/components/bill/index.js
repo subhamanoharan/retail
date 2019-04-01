@@ -17,6 +17,7 @@ export class Bill extends Component {
     this.state = {masterList: [], items: []};
     this.service = new BillService(new ImmutableCart([]));
     this.fetchItems = this.fetchItems.bind(this);
+    this.clearItems = this.clearItems.bind(this);
     this.onAddItem = this.onAddItem.bind(this);
   }
 
@@ -37,6 +38,11 @@ export class Bill extends Component {
     this.setState({items: this.service.list()})
   }
 
+  clearItems(){
+    this.service.clear();
+    this.fetchItems();
+  }
+
   onAddItem({barcode, sp, name, id}, quantity){
     this.service.add({barcode, sp, name, quantity, id});
     this.fetchItems();
@@ -45,7 +51,7 @@ export class Bill extends Component {
   render() {
     return (
       <div>
-        <Header/>
+        <Header clearItems={this.clearItems}/>
         <SummaryCard service={this.service}/>
         <BarCodeManager onItemScanned={this.onAddItem} masterList={this.state.masterList}/>
         <DataTable

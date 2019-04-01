@@ -98,6 +98,11 @@ describe('ImmutableCart', () => {
   it('getTotal', () => {
     expect(immutableCart.getTotal()).toEqual(25);
   });
+  
+  it('clearCart', () => {
+    const cleanCart = immutableCart.clear();
+    expect(cleanCart.getItems()).toEqual([]);
+  });
 
   it('getTotalNoOfItems', () => {
     expect(immutableCart.getTotalNoOfItems()).toEqual(20);

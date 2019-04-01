@@ -51,6 +51,15 @@ describe('Bill', () => {
     });
   });
 
+  it('should pass appropriate props to Header', () => {
+    wrapper.setState({items: ['i1']})
+    const {clearItems} = wrapper.find(Header).props();
+
+    clearItems();
+
+    expect(wrapper.state().items).toEqual([]);
+  });
+
   it('should add and refresh items', () => {
     const {onItemScanned} = wrapper.find(BarCodeManager).props();
 

@@ -6,6 +6,10 @@ export default class ImmutableCart {
     this.items = items.map(item => new CartItem({...item}));
   }
 
+  clear(){
+    return new ImmutableCart([]);
+  }
+
   _incrementItemQuantity(item, quanity){
     const newQuantity = quanity + item.quantity;
     return this.updateItemByCode({...item, quantity: newQuantity});
