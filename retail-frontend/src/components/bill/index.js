@@ -8,7 +8,7 @@ import BillService from '../../services/billService';
 import billDataTableService from '../../services/billDataTableService';
 import itemsService from './../../services/itemsService';
 import BarCodeManager from '../barCodeManager';
-import PrintButton from '../printButton';
+import Header from '../header';
 import SummaryCard from '../summaryCard';
 
 export class Bill extends Component {
@@ -45,7 +45,7 @@ export class Bill extends Component {
   render() {
     return (
       <div>
-        <PrintButton/>
+        <Header/>
         <SummaryCard service={this.service}/>
         <BarCodeManager onItemScanned={this.onAddItem} masterList={this.state.masterList}/>
         <DataTable

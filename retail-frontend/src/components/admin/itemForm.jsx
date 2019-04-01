@@ -75,6 +75,7 @@ class ItemForm extends React.Component {
             fullWidth
             onChange={this.handleChange('name')}
             required
+            autoFocus
           />
           <TextField
             id="sp"

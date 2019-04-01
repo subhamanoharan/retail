@@ -8,9 +8,9 @@ import BillService from '../../services/billService';
 import billDataTableService from '../../services/billDataTableService';
 import itemsServiceMock from './../../services/itemsService';
 import BarCodeManager from '../barCodeManager';
-import PrintButton from '../printButton';
+import Header from '../header';
 import SummaryCard from '../summaryCard';
-import {default as Bill, Bill as BillS} from './index';
+import Bill from './index';
 
 jest.mock('notistack', () => ({withSnackbar: jest.fn((a) => a)}));
 jest.mock('./../../services/itemsService', () => ({list: jest.fn()}));
@@ -33,8 +33,8 @@ describe('Bill', () => {
     expect(wrapper.state().masterList).toEqual('masterList');
   });
 
-  it('should contain PrintButton, SummaryCard, DataTable and BarCodeManager', () => {
-    expect(wrapper.exists(PrintButton)).toEqual(true)
+  it('should contain Header, SummaryCard, DataTable and BarCodeManager', () => {
+    expect(wrapper.exists(Header)).toEqual(true)
     expect(wrapper.exists(SummaryCard)).toEqual(true)
     expect(wrapper.exists(BarCodeManager)).toEqual(true)
     expect(wrapper.exists(DataTable)).toEqual(true)
