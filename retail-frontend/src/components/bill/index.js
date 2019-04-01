@@ -11,7 +11,7 @@ import BarCodeManager from '../barCodeManager';
 import PrintButton from '../printButton';
 import SummaryCard from '../summaryCard';
 
-class Bill extends Component {
+export class Bill extends Component {
   constructor(props){
     super(props);
     this.state = {masterList: [], items: []};
@@ -21,16 +21,15 @@ class Bill extends Component {
   }
 
   componentDidMount(){
-    this.fetchMasterList();
-    this.fetchItems();
+    return this.fetchMasterList();
   }
 
   fetchMasterList(){
-    itemsService.list()
+    return itemsService.list()
       .then((masterList) => this.setState({masterList}))
       .catch((errors) => {
         if(errors)
-          errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))
+          return errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))
         });
   }
 
