@@ -48,6 +48,7 @@ describe('UsersService', () => {
       expect(usersRepoMock.findById).toHaveBeenCalledWith(user.id);
     });
   });
+
   describe('get', () => {
     it('should get user by id', async () => {
       (usersRepoMock.findById as any).mockResolvedValue(user);
@@ -66,4 +67,15 @@ describe('UsersService', () => {
       expect(usersRepoMock.findById).toHaveBeenCalledWith(user.id);
     });
   });
+
+  describe('remove', () => {
+    const userId = 123;
+    it('should remove user', async () => {
+      (usersRepoMock.remove as any).mockResolvedValue(true);
+
+      await usersService.remove(userId);
+
+      expect(usersRepoMock.remove).toHaveBeenCalledWith(userId);
+    });
+  });  
 });

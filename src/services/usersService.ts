@@ -20,4 +20,6 @@ const get = async (userId): Promise<IUser> => {
   return user || Promise.reject(new UserDoesNotExistException());
 };
 
-export default {authenticate, findById, get};
+const remove = (userId) => usersRepo.remove(userId);
+
+export default {authenticate, findById, get, remove};

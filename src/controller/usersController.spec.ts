@@ -98,4 +98,18 @@ describe('UsersController', () => {
       expect(nextMock).toHaveBeenCalledWith('error');
     });
   });
+
+  describe('remove', () => {
+    it('should remove the user', async () => {
+      const userId = 12;
+      const reqMock = {params: {userId}};
+      const resMock = {send: jest.fn()};
+      (usersServiceMock.remove as any).mockResolvedValue(Promise.resolve());
+
+      await usersController.remove(reqMock, resMock);
+
+      expect(usersServiceMock.remove).toHaveBeenCalledWith(userId);
+      expect(resMock.send).toHaveBeenCalled();
+    });
+  });
 });

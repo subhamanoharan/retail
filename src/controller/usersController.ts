@@ -32,4 +32,7 @@ const get = (req, res, next) => {
     .catch((e) => next(e));
 };
 
-export default {login, logout, get };
+const remove = (req, res) =>
+  usersService.remove(req.params.userId).then(() => res.send());
+
+export default {login, logout, get, remove };

@@ -10,7 +10,8 @@ export default {
     MISSING_AUTH: 'Missing Authorization Header',
     INVALID_AUTH_ERROR: 'Invalid Authentication Credentials',
     UNAUTHORISED: 'You need to login to continue!',
-    USER_NOT_FOUND: 'This user does not exist!'
+    USER_NOT_FOUND: 'This user does not exist!',
+    FORBIDDEN: 'You do not have the required permissions!'
   },
   NAME_MAX_LENGTH: 255,
   OPEN_ROUTES: ["/api/users/authenticate"],
