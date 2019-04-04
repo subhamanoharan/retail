@@ -6,5 +6,12 @@ export default {
     INVALID_BARCODE: 'Please enter a valid barcode',
     INVALID_NAME: 'Please enter a valid name with a maximum of 255 characters'
   },
-  NAME_MAX_LENGTH: 255
+  USER_ROUTE_ERRORS:{
+    MISSING_AUTH: 'Missing Authorization Header',
+    INVALID_AUTH_ERROR: 'Invalid Authentication Credentials',
+    UNAUTHORISED: 'You need to login to continue!',
+    USER_NOT_FOUND: 'This user does not exist!'
+  },
+  NAME_MAX_LENGTH: 255,
+  OPEN_ROUTES: ["/api/users/authenticate"]
 }

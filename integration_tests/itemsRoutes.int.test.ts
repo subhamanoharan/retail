@@ -16,7 +16,7 @@ describe('Items routes', () => {
   describe('Create', () => {
     it('should add a item', async () => {
       const createdItemId = await agent
-        .post('/items')
+        .post('/api/items')
         .send(item)
         .expect(200)
         .then(r => r.body.id);
@@ -26,7 +26,7 @@ describe('Items routes', () => {
 
     it('should return 400 on duplicate barcode', () => {
       return agent
-        .post('/items')
+        .post('/api/items')
         .send(item)
         .expect(400)
         .then(r => expect(r.body).toEqual({errors: [ERRORS.BARCODE_EXISTS(item)]}));
@@ -34,7 +34,7 @@ describe('Items routes', () => {
 
     it('should return 400 on duplicate barcode with different case', () => {
       return agent
-        .post('/items')
+        .post('/api/items')
         .send({...item, barcode: 'BarCode'})
         .expect(400)
         .then(r => expect(r.body).toEqual({errors: [ERRORS.BARCODE_EXISTS(item)]}));
@@ -42,7 +42,7 @@ describe('Items routes', () => {
 
     it('should return 400 on invalid price', () => {
       return agent
-        .post('/items')
+        .post('/api/items')
         .send({...item, barcode: 'barcode_invalid_price', sp: 'invalid'})
         .expect(400)
         .then(r => expect(r.body).toEqual({errors: [ERRORS.INVALID_PRICE]}));
@@ -57,7 +57,7 @@ describe('Items routes', () => {
       const newItemData = {name: 'itemToUpdate', barcode: 'itemToUpdate', sp: 15};
       const [itemId] = await setUpItems([itemToUpdate]);
       await agent
-        .put(`/items/${itemId}`)
+        .put(`/api/items/${itemId}`)
         .send(newItemData)
         .expect(200);
       const updatedItem = await itemsRepo.findById(itemId);
@@ -69,7 +69,7 @@ describe('Items routes', () => {
       const newItemData = {name: 12, barcode: 'itemToUpdateWithInvalid', sp: 15};
       const [itemId] = await setUpItems([itemToUpdate]);
       return agent
-        .put(`/items/${itemId}`)
+        .put(`/api/items/${itemId}`)
         .send(newItemData)
         .expect(400)
         .then(r => expect(r.body).toEqual({errors: [ERRORS.INVALID_NAME]}));
@@ -88,7 +88,7 @@ describe('Items routes', () => {
       const [id1, id2] = await setUpItems([item1, item2]);
 
       await agent
-        .get('/items')
+        .get('/api/items')
         .expect(200)
         .then(r => expect(r.body).toEqual([{id: id1, ...item1}, {id: id2, ...item2}]));
     });
@@ -97,12 +97,12 @@ describe('Items routes', () => {
   describe('delete', () => {
     it('should delete item when it exists', async () => {
       const [itemToDeleteId] = await setUpItems([{name: 'itemToDel', sp: 12, barcode: 'ITEM_TO_DEL'}])
-      await agent.delete(`/items/${itemToDeleteId}`).expect(200);
+      await agent.delete(`/api/items/${itemToDeleteId}`).expect(200);
       const itemFound = await itemsRepo.findById(itemToDeleteId);
       expect(itemFound).not.toBeDefined();
     });
     it('should ignore when item does not exist', async () => {
-      await agent.delete('/items/0').expect(200);
+      await agent.delete('/api/items/0').expect(200);
     });
   });
 });
