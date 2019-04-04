@@ -8,7 +8,7 @@ export const setUpItems = (items) =>
 export const tearDownItems = () => itemsRepo.deleteAll();
 
 export const setUpUsers = (users) =>
-  P.mapSeries(users, u => usersRepo.create({name: u.name, password: u.password}));
+  P.mapSeries(users, u => usersRepo.create({name: u.name, password: u.password, role: u.role}));
 
 export const tearDownUsers = (userIds) =>
   P.mapSeries(userIds, u => usersRepo.remove(u));

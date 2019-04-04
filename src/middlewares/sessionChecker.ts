@@ -16,7 +16,7 @@ export default async (req, res, next) => {
   const userInSession: IUserSession = req.session.user;
   if(lodash.isEmpty(userInSession)) return sendUnauthorizedResponse();
   return usersService.findById(userInSession.id)
-    .then((userFound) => req.user = userFound)
+    .then((userFound: IUserSession) => req.user = userFound)
     .then(() => next())
     .catch(sendUnauthorizedResponse);
 }

@@ -1,9 +1,10 @@
 import {query} from './pg-client';
-import {IUser} from '../interfaces';
+import {IUserCreds, IUser} from '../interfaces';
 
-const create = async (user: IUser): Promise<number> => {
-  const insertQuery = `INSERT INTO users(name, password) values ($1, crypt($2, gen_salt('bf'))) RETURNING id;`
-  const values = [user.name, user.password];
+const create = async (user): Promise<number> => {
+  const insertQuery = `INSERT INTO users(name, password, role_id)
+   values ($1, crypt($2, gen_salt('bf')), (SELECT id from roles where name=$3)) RETURNING id;`
+  const values = [user.name, user.password, user.role];
   const {rows: [{id}]} = await query(insertQuery, values);
   return id;
 };
@@ -13,15 +14,16 @@ const remove = (id) => {
   return query(delQuery);
 };
 
-const find = async ({name, password}: IUser): Promise<any> => {
+const find = async ({name, password}: IUserCreds): Promise<any> => {
   const findQuery = `SELECT u.id, u.name from users u where u.name='${name}'
    and u.password = crypt('${password}', u.password);`
   const {rows: [user]} = await query(findQuery);
   return user;
 }
 
-const findById = async (userId): Promise<any> => {
-  const findQuery = `SELECT u.id, u.name from users u where u.id=${userId};`
+const findById = async (userId): Promise<IUser> => {
+  const findQuery = `SELECT u.id, u.name, r.name as role from users u, roles r
+   where u.id=${userId} and r.id=u.role_id;`
   const {rows: [user]} = await query(findQuery);
   return user;
 }

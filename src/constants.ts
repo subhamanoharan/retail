@@ -13,5 +13,9 @@ export default {
     USER_NOT_FOUND: 'This user does not exist!'
   },
   NAME_MAX_LENGTH: 255,
-  OPEN_ROUTES: ["/api/users/authenticate"]
+  OPEN_ROUTES: ["/api/users/authenticate"],
+  ROLES: {
+    USER: 'user',
+    ADMIN: 'admin'
+  }
 }
