@@ -139,4 +139,31 @@ describe('UsersController', () => {
       expect(nextMock).toHaveBeenCalledWith({error: 'error'});
     });
   });
+
+  describe('update', () => {
+    const userDataToUpdate = {name: 'userDataToUpdate', password: 'userDataToUpdatePwd', role: ROLES.USER};
+    const userId = 12;
+    const reqMock = {body: {...userDataToUpdate}, params: {userId}};
+
+    it('should create user', async () => {
+      const resMock = {send: jest.fn()};
+      (usersServiceMock.update as any).mockResolvedValue();
+
+      await usersController.update(reqMock, resMock);
+
+      expect(usersServiceMock.update).toHaveBeenCalledWith(userId, userDataToUpdate);
+      expect(resMock.send).toHaveBeenCalled();
+    });
+
+    it('should call next with errors', async () => {
+      const resMock = {};
+      const nextMock = jest.fn();
+      (usersServiceMock.update as any).mockRejectedValue({error: 'error'});
+
+      await usersController.update(reqMock, resMock, nextMock);
+
+      expect(usersServiceMock.update).toHaveBeenCalledWith(userId, userDataToUpdate);
+      expect(nextMock).toHaveBeenCalledWith({error: 'error'});
+    });
+  });
 });

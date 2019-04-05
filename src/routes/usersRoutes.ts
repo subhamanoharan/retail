@@ -9,6 +9,7 @@ usersRouter.post('/authenticate', UsersController.login);
 usersRouter.post('/logout', UsersController.logout);
 usersRouter.get('/me', UsersController.get);
 usersRouter.post('/', isAdmin, UsersController.create);
+usersRouter.put('/:userId', isAdmin, UsersController.update);
 usersRouter.delete('/:userId', isAdmin, UsersController.remove);
 
 export default usersRouter;

@@ -26,4 +26,7 @@ const remove = (userId) => usersRepo.remove(userId);
 const create = ({name, password, role}) => usersRepo.create({name, password, role})
   .catch((e) => Promise.reject(new UserDbException(e.message)));
 
-export default {authenticate, findById, get, remove, create};
+const update = (userId, {name, password, role}) => usersRepo.update(userId, {name, password, role})
+  .catch((e) => Promise.reject(new UserDbException(e.message)));
+
+export default {authenticate, findById, get, remove, create, update };

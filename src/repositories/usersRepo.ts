@@ -9,6 +9,13 @@ const create = async (user): Promise<number> => {
   return id;
 };
 
+const update = async (userId, user) => {
+  const updateQuery = `UPDATE users set name=$1, password=crypt($2, gen_salt('bf')),
+    role_id=(SELECT id from roles where name=$3) where id=$4;`;
+  const values = [user.name, user.password, user.role, userId];
+  await query(updateQuery, values);
+};
+
 const remove = (id) => {
   const delQuery = `DELETE FROM users where id='${id}';`
   return query(delQuery);
@@ -28,4 +35,4 @@ const findById = async (userId): Promise<IUser> => {
   return user;
 }
 
-export { create, remove, find, findById };
+export { create, remove, find, findById, update };

@@ -32,6 +32,13 @@ const create = (req, res, next) => {
     .catch(error => next(error));
 };
 
+const update = (req, res, next) => {
+  const { name, role, password } = req.body;
+  return usersService.update(req.params.userId, { name, role, password })
+    .then(() => res.send())
+    .catch(error => next(error));
+};
+
 const get = (req, res, next) => {
   const {id: userId} = req.user;
   return usersService.get(userId)
@@ -42,4 +49,4 @@ const get = (req, res, next) => {
 const remove = (req, res) =>
   usersService.remove(req.params.userId).then(() => res.send());
 
-export default {login, logout, get, remove, create };
+export default {login, logout, get, remove, create, update };

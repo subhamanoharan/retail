@@ -14,13 +14,16 @@ describe('Users routes', () => {
   const anotherUser = {name: 'anotherUser1', password: 'anotherUser1pwd', role: ROLES.USER};
   const userToDelete = {name: 'userToDelete1', password: 'userToDelete1pwd', role: ROLES.USER};
   const admin = {name: 'admin1', password: 'admin1pwd', role: ROLES.ADMIN};
+  const userToUpdate = {name: 'userToUpdate1', password: 'userToUpdate1pwd', role: ROLES.USER};
+  const userToBeAdmin = {name: 'userToBeAdmin1', password: 'userToBeAdmin1pwd', role: ROLES.USER};
 
   const LOGIN_ROUTE = '/api/users/authenticate';
   const LOGOUT_ROUTE = '/api/users/logout';
   const GET_MY_DETAILS = '/api/users/me';
 
   beforeAll(async () => {
-    userIds = await setUpUsers([user, anotherUser, userToDelete, admin]);
+    userIds = await setUpUsers([user, anotherUser, userToDelete, admin,
+      userToUpdate, userToBeAdmin]);
   });
 
   afterAll(() => tearDownUsers(userIds));
@@ -141,5 +144,49 @@ describe('Users routes', () => {
     });
 
     afterEach(() => tearDownUsers([createdUserId]));
+  });
+
+  describe('put /users/id', () => {
+    it('should allow updates of name, role and password', async () => {
+      await agent.post(LOGIN_ROUTE).auth(admin.name, admin.password).expect(200);
+      const newUserData = {name: 'newName', role: ROLES.USER, password: 'newPwd'};
+      await agent
+        .put(`/api/users/${userIds[4]}`)
+        .send(newUserData)
+        .expect(200);
+      const updatedUser = await usersRepo.find(newUserData);
+      expect(updatedUser).toEqual({id: userIds[4], name: newUserData.name});
+    });
+
+    it('should change privileges on role changes', async () => {
+      const userRoleChangeAgent = request.agent(app);
+      await agent.post(LOGIN_ROUTE).auth(admin.name, admin.password).expect(200);
+      await userRoleChangeAgent.post(LOGIN_ROUTE)
+        .auth(userToBeAdmin.name, userToBeAdmin.password)
+        .expect(200);
+      await userRoleChangeAgent.delete('/api/users/0').expect(403);
+      await agent
+        .put(`/api/users/${userIds[5]}`)
+        .send({...userToBeAdmin, role: ROLES.ADMIN})
+        .expect(200);
+        await userRoleChangeAgent.delete('/api/users/0').expect(200);
+    });
+
+    it('should return 403 Forbidden for normal users', async () => {
+      await agent.post(LOGIN_ROUTE).auth(user.name, user.password).expect(200);
+      return agent
+        .put(`/api/users/${userIds[5]}`)
+        .expect(403)
+        .then(r => expect(r.body).toEqual({errors: [FORBIDDEN]}));
+    });
+
+    it('should return 400 for error data', async () => {
+      await agent.post(LOGIN_ROUTE).auth(admin.name, admin.password).expect(200);
+      return agent
+        .put(`/api/users/${userIds[5]}`)
+        .send({...userToBeAdmin, role: 'invalid'})
+        .expect(400)
+        .then(r => expect(r.body).toEqual({errors: ["null value in column \"role_id\" violates not-null constraint"]}));
+    })
   });
 });
