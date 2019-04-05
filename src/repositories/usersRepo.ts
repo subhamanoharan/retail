@@ -14,7 +14,7 @@ const remove = (id) => {
   return query(delQuery);
 };
 
-const find = async ({name, password}: IUserCreds): Promise<any> => {
+const find = async ({name, password}: IUserCreds): Promise<IUserSession> => {
   const findQuery = `SELECT u.id, u.name from users u where u.name='${name}'
    and u.password = crypt('${password}', u.password);`
   const {rows: [user]} = await query(findQuery);

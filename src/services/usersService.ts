@@ -1,7 +1,8 @@
-import {IUserCreds, IUser, IUserSession} from '../interfaces';
+import {IUserCreds, IUser} from '../interfaces';
 import constants from '../constants';
 import * as usersRepo from '../repositories/usersRepo';
 import UserDoesNotExistException from '../exceptions/userDoesNotExistException';
+import UserDbException from '../exceptions/userDbException';
 
 const {USER_ROUTE_ERRORS: {INVALID_AUTH_ERROR}} = constants;
 
@@ -10,9 +11,9 @@ const authenticate = async (userCreds: IUserCreds) => {
   return user ? Promise.resolve(user): Promise.reject(new Error(INVALID_AUTH_ERROR));
 };
 
-const findById = async (userId): Promise<IUserSession> => {
+const findById = async (userId): Promise<IUser> => {
   const user = await usersRepo.findById(userId);
-  return user ? {id: user.id, name: user.name} : Promise.reject({});
+  return user ? {id: user.id, name: user.name, role: user.role} : Promise.reject({});
 };
 
 const get = async (userId): Promise<IUser> => {
@@ -22,4 +23,7 @@ const get = async (userId): Promise<IUser> => {
 
 const remove = (userId) => usersRepo.remove(userId);
 
-export default {authenticate, findById, get, remove};
+const create = ({name, password, role}) => usersRepo.create({name, password, role})
+  .catch((e) => Promise.reject(new UserDbException(e.message)));
+
+export default {authenticate, findById, get, remove, create};

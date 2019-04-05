@@ -25,6 +25,13 @@ const logout = (req, res) => {
   res.send();
 }
 
+const create = (req, res, next) => {
+  const { name, role, password } = req.body;
+  return usersService.create({ name, role, password })
+    .then((id) => res.json({id}))
+    .catch(error => next(error));
+};
+
 const get = (req, res, next) => {
   const {id: userId} = req.user;
   return usersService.get(userId)
@@ -35,4 +42,4 @@ const get = (req, res, next) => {
 const remove = (req, res) =>
   usersService.remove(req.params.userId).then(() => res.send());
 
-export default {login, logout, get, remove };
+export default {login, logout, get, remove, create };

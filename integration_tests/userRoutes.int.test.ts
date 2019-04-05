@@ -13,13 +13,14 @@ describe('Users routes', () => {
   const user = {name: 'user1', password: 'user1pwd', role: ROLES.USER};
   const anotherUser = {name: 'anotherUser1', password: 'anotherUser1pwd', role: ROLES.USER};
   const userToDelete = {name: 'userToDelete1', password: 'userToDelete1pwd', role: ROLES.USER};
+  const admin = {name: 'admin1', password: 'admin1pwd', role: ROLES.ADMIN};
 
   const LOGIN_ROUTE = '/api/users/authenticate';
   const LOGOUT_ROUTE = '/api/users/logout';
   const GET_MY_DETAILS = '/api/users/me';
 
   beforeAll(async () => {
-    userIds = await setUpUsers([user, anotherUser, userToDelete]);
+    userIds = await setUpUsers([user, anotherUser, userToDelete, admin]);
   });
 
   afterAll(() => tearDownUsers(userIds));
@@ -71,11 +72,15 @@ describe('Users routes', () => {
 
   describe('delete /api/users', () => {
     it('should delete logged in user and invalidate his session', async () => {
+      const adminAgent = request.agent(app);
       const userToDeleteAgent = request.agent(app);
       await userToDeleteAgent.post(LOGIN_ROUTE)
         .auth(userToDelete.name, userToDelete.password)
         .expect(200);
-      await userToDeleteAgent.delete(`/api/users/${userIds[2]}`).expect(200);
+      await adminAgent.post(LOGIN_ROUTE)
+        .auth(admin.name, admin.password)
+        .expect(200);
+      await adminAgent.delete(`/api/users/${userIds[2]}`).expect(200);
       const userInDb = await usersRepo.findById(userIds[2]);
       expect(userInDb).toBeUndefined();
       return userToDeleteAgent.get(GET_MY_DETAILS).expect(401);
@@ -90,5 +95,51 @@ describe('Users routes', () => {
         .expect(403)
         .then(r => expect(r.body).toEqual({errors: [FORBIDDEN]}));
     });
+  });
+
+  describe('create /users', () => {
+    const newUser = {name: 'userToCreate', password: 'userToCreatePwd'};
+    let createdUserId;
+
+    it('should create user', async () => {
+      await agent.post(LOGIN_ROUTE).auth(admin.name, admin.password).expect(200);
+      createdUserId = await agent
+        .post('/api/users')
+        .send({role: ROLES.USER, ...newUser})
+        .expect(200)
+        .then(r => r.body.id);
+      const createdUser = await usersRepo.find(newUser);
+      expect(createdUser).toEqual({ id: createdUserId, name: newUser.name});
+    });
+
+    it('should throw error when invalid role is passed', async () => {
+      await agent.post(LOGIN_ROUTE).auth(admin.name, admin.password).expect(200);
+      await agent
+        .post('/api/users')
+        .send({role: 'blah', ...newUser})
+        .expect(400)
+        .then(r => expect(r.body).toEqual({errors:
+          ["null value in column \"role_id\" violates not-null constraint"]}));
+    });
+
+    it('should throw error when duplicate name is passed', async () => {
+      await agent.post(LOGIN_ROUTE).auth(admin.name, admin.password).expect(200);
+      await agent
+        .post('/api/users')
+        .send({role: ROLES.ADMIN, ...admin})
+        .expect(400)
+        .then(r => expect(r.body).toEqual({errors:
+          ["duplicate key value violates unique constraint \"users_name_key\""]}));
+    });
+
+    it('should return 403 Forbidden for normal users', async () => {
+      await agent.post(LOGIN_ROUTE).auth(user.name, user.password).expect(200);
+      return agent
+        .post('/api/users')
+        .expect(403)
+        .then(r => expect(r.body).toEqual({errors: [FORBIDDEN]}));
+    });
+
+    afterEach(() => tearDownUsers([createdUserId]));
   });
 });

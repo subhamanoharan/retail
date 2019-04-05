@@ -6,7 +6,7 @@ import constants from '../constants';
 jest.mock('../services/usersService');
 jest.mock('../services/credsExtractor');
 
-const {USER_ROUTE_ERRORS} = constants;
+const {USER_ROUTE_ERRORS, ROLES} = constants;
 
 describe('UsersController', () => {
   const nonArrowFn = function() { return this; };
@@ -110,6 +110,33 @@ describe('UsersController', () => {
 
       expect(usersServiceMock.remove).toHaveBeenCalledWith(userId);
       expect(resMock.send).toHaveBeenCalled();
+    });
+  });
+
+  describe('create', () => {
+    const newUser = {name: 'userToCreate', password: 'userToCreatePwd', role: ROLES.USER};
+
+    it('should create user', async () => {
+      const reqMock = {body: {...newUser}};
+      const resMock = {json: jest.fn()};
+      (usersServiceMock.create as any).mockResolvedValue(Promise.resolve('newId'));
+
+      await usersController.create(reqMock, resMock);
+
+      expect(usersServiceMock.create).toHaveBeenCalledWith(newUser);
+      expect(resMock.json).toHaveBeenCalledWith({id: 'newId'});
+    });
+
+    it('should call next with errors', async () => {
+      const reqMock = {body: {...newUser}};
+      const resMock = {status: jest.fn(nonArrowFn), json: jest.fn(nonArrowFn)};
+      const nextMock = jest.fn();
+      (usersServiceMock.create as any).mockRejectedValue({error: 'error'});
+
+      await usersController.create(reqMock, resMock, nextMock);
+
+      expect(usersServiceMock.create).toHaveBeenCalledWith(newUser);
+      expect(nextMock).toHaveBeenCalledWith({error: 'error'});
     });
   });
 });

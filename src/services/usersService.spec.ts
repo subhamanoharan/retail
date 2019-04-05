@@ -2,6 +2,7 @@ import usersService from './usersService';
 import constants from '../constants';
 import * as usersRepoMock from '../repositories/usersRepo';
 import UserDoesNotExistException from '../exceptions/userDoesNotExistException';
+import UserDbException from '../exceptions/userDbException';
 
 const {USER_ROUTE_ERRORS: {INVALID_AUTH_ERROR}} = constants;
 
@@ -77,5 +78,28 @@ describe('UsersService', () => {
 
       expect(usersRepoMock.remove).toHaveBeenCalledWith(userId);
     });
-  });  
+  });
+  describe('create', () => {
+    it('should create user', async () => {
+      const user = {name: 'blah', password: 'password', role: 'role'};
+      (usersRepoMock.create as any).mockResolvedValue(123);
+
+      const id = await usersService.create(user);
+
+      expect(usersRepoMock.create).toHaveBeenCalledWith(user);
+      expect(id).toEqual(123);
+    });
+
+    it('should throw db error', async () => {
+      const user = {name: 'blah', password: 'password', role: 'role'};
+      (usersRepoMock.create as any).mockRejectedValue(new Error('dummy'));
+
+      const errorThrown = await usersService.create(user).catch(e => e);
+
+      expect(usersRepoMock.create).toHaveBeenCalledWith(user);
+      expect(errorThrown).toEqual(expect.any(UserDbException));
+      expect(errorThrown.message).toEqual('dummy');
+    });
+
+  })
 });

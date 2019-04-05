@@ -1,5 +1,5 @@
 import * as lodash from 'lodash';
-import {IUserSession} from '../interfaces';
+import {IUserSession, IUser} from '../interfaces';
 import usersService from './../services/usersService';
 import UnauthorisedUserException from '../exceptions/unauthorisedUserException';
 import constants from '../constants';
@@ -16,7 +16,7 @@ export default async (req, res, next) => {
   const userInSession: IUserSession = req.session.user;
   if(lodash.isEmpty(userInSession)) return sendUnauthorizedResponse();
   return usersService.findById(userInSession.id)
-    .then((userFound: IUserSession) => req.user = userFound)
+    .then((userFound: IUser) => req.user = userFound)
     .then(() => next())
     .catch(sendUnauthorizedResponse);
 }
