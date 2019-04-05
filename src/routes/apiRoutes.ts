@@ -5,7 +5,8 @@ import sessionChecker from '../middlewares/sessionChecker';
 
 const apiRouter = express.Router();
 
+apiRouter.use(sessionChecker);
 apiRouter.use('/items', ItemsRouter);
-apiRouter.use('/users', sessionChecker, UsersRouter);
+apiRouter.use('/users', UsersRouter);
 
 export default apiRouter;
