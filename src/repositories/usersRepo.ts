@@ -1,5 +1,5 @@
 import {query} from './pg-client';
-import {IUserCreds, IUser} from '../interfaces';
+import {IUserCreds, IUser, IUserSession} from '../interfaces';
 
 const create = async (user): Promise<number> => {
   const insertQuery = `INSERT INTO users(name, password, role_id)
