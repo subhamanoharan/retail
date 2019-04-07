@@ -11,5 +11,9 @@ export default {
       LOGIN: '/users/authenticate',
       LOGOUT: '/users/logout'
     }
+  },
+  ROLES: {
+    USER: 'user',
+    ADMIN: 'admin'
   }
 }
