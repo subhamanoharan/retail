@@ -6,4 +6,8 @@ export default class CartItem {
     this.sp = sp;
     this.id = id;
   }
+
+  price(){
+    return Number(this.quantity * this.sp).toFixed(2);
+  }
 }

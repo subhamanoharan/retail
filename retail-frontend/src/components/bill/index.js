@@ -51,7 +51,7 @@ export class Bill extends Component {
   render() {
     return (
       <div>
-        <Header clearItems={this.clearItems}/>
+        <Header clearItems={this.clearItems} service={this.service}/>
         <SummaryCard service={this.service}/>
         <BarCodeManager onItemScanned={this.onAddItem} masterList={this.state.masterList}/>
         <DataTable

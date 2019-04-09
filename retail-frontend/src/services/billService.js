@@ -1,3 +1,5 @@
+import LineGenerator from '../models/printing/lineGenerator';
+
 export default class BillService {
   constructor(cart){
     this.cart = cart;
@@ -27,5 +29,9 @@ export default class BillService {
 
   getTotalNoOfItems(){
     return this.cart.getTotalNoOfItems();
+  }
+
+  getLinesToPrint(){
+    return new LineGenerator(this.cart).generate();
   }
 }

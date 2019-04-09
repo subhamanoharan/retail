@@ -21,8 +21,8 @@ class PrinterService {
     }
   }
 
-  print(){
-    return sendText(this.device)
+  print(lines){
+    return sendText(this.device, lines)
       .then((r) => { console.log('Printing over', r); })
       .catch(error => { console.log(error); })
   }

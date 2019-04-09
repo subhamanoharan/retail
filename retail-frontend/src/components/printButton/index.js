@@ -16,9 +16,11 @@ export default class PrintButton extends Component {
   }
 
   render(){
+    const {billService} = this.props;
+    const lines = billService.getLinesToPrint();
     return (
         this.state.isPaired ?
-          <Button onClick={() => PrinterService.print()} color="primary" variant="contained">Print</Button>
+          <Button onClick={() => PrinterService.print(lines)} color="primary" variant="contained">Print</Button>
           : <Button onClick={this.pair} color="primary" variant="contained">Pair</Button>
     );
   }
