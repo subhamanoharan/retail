@@ -1,4 +1,4 @@
-import LineGenerator from '../models/printing/lineGenerator';
+import lineGeneratorService from './printing/lineGenerator';
 
 export default class BillService {
   constructor(cart){
@@ -32,6 +32,6 @@ export default class BillService {
   }
 
   getLinesToPrint(){
-    return new LineGenerator(this.cart).generate();
+    return lineGeneratorService.generate(this.cart);
   }
 }

@@ -42,6 +42,10 @@ export default class ImmutableCart {
     return this.items.map(i => ({...i}))
   }
 
+  getCartItems(){
+    return this.getItems().map(i => new CartItem(i)); 
+  }
+
   getTotal() {
     return priceCalculator(this.items);
   }

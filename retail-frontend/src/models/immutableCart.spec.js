@@ -1,5 +1,6 @@
 import deepFreeze from 'deep-freeze';
 import ImmutableCart from './immutableCart';
+import CartItem from './cartItem';
 
 describe('ImmutableCart', () => {
   const item1 = {name: 'a1', quantity: 15, barcode: '123', sp: 1};
@@ -98,7 +99,7 @@ describe('ImmutableCart', () => {
   it('getTotal', () => {
     expect(immutableCart.getTotal()).toEqual(25);
   });
-  
+
   it('clearCart', () => {
     const cleanCart = immutableCart.clear();
     expect(cleanCart.getItems()).toEqual([]);
@@ -106,5 +107,9 @@ describe('ImmutableCart', () => {
 
   it('getTotalNoOfItems', () => {
     expect(immutableCart.getTotalNoOfItems()).toEqual(20);
+  });
+
+  it('getCartItems', () => {
+    expect(immutableCart.getCartItems()).toEqual([expect.any(CartItem), expect.any(CartItem)]);
   });
 });

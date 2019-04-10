@@ -1,14 +1,15 @@
 import lodash from 'lodash';
 
-import CartItem from '../cartItem';
-import IdColumn from './columns/idColumn';
-import NameColumn from './columns/nameColumn';
-import PriceColumn from './columns/priceColumn';
-import {replaceFrom} from './stringUtility';
+import IdColumn from '../../models/printing/columns/idColumn';
+import NameColumn from '../../models/printing/columns/nameColumn';
+import PriceColumn from '../../models/printing/columns/priceColumn';
+import {replaceFrom, splitByLength} from '../../models/stringUtility';
+import constants from '../../constants';
 
-export default class LineGenerator {
-  constructor(cart, MAX_LIMIT = 32){
-    this.cart = cart;
+const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT} = constants;
+
+export class LineGenerator {
+  constructor(MAX_LIMIT = PRINTING_MAX_LIMIT){
     this.MAX_LIMIT = MAX_LIMIT;
   }
 
@@ -40,14 +41,26 @@ export default class LineGenerator {
     return [...linesWithName];
   }
 
-  generate(){
-    const items = this.cart.getItems();
-    const cartItems = items.map(i => new CartItem(i));
+  getSeparatorLine(){
+    return new Array(this.MAX_LIMIT + 1).join('-');
+  }
+
+  getDefaultLines(){
+    return [STORE_NAME, ...ADDRESS]
+      .reduce((acc, l) => [...acc, ...splitByLength(l, this.MAX_LIMIT)],[])
+      .map(l => lodash.trim(l))
+      .map(l => lodash.pad(l, this.MAX_LIMIT))
+  }
+
+  generate(cart){
+    const cartItems = cart.getCartItems();
     const maxIdColumnLength = String(cartItems.length).length;
     const maxPriceColumnLength = lodash.max(cartItems.map((ci) => new PriceColumn(ci).getLength()));
     const SPACES = 2;
     const maxNameColumnLength = this.MAX_LIMIT - (maxIdColumnLength + maxPriceColumnLength + SPACES);
     return cartItems.reduce((acc, ci, index) =>
-      [...acc, ...this.fill(index + 1, ci, maxIdColumnLength, maxPriceColumnLength, maxNameColumnLength)], []);
+      [...acc, ...this.fill(index + 1, ci, maxIdColumnLength, maxPriceColumnLength, maxNameColumnLength)], this.getDefaultLines());
   }
 }
+
+export default new LineGenerator();

@@ -1,4 +1,4 @@
-import {splitByLength} from '../stringUtility';
+import {splitByLength} from '../../stringUtility';
 
 export default class NameColumn {
   constructor(cartItem){

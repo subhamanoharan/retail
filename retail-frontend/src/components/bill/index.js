@@ -19,6 +19,7 @@ export class Bill extends Component {
     this.fetchItems = this.fetchItems.bind(this);
     this.clearItems = this.clearItems.bind(this);
     this.onAddItem = this.onAddItem.bind(this);
+    this.generatePrintLines = this.generatePrintLines.bind(this);
   }
 
   componentDidMount(){
@@ -48,10 +49,14 @@ export class Bill extends Component {
     this.fetchItems();
   }
 
+  generatePrintLines(){
+    return this.service.getLinesToPrint();
+  }
+
   render() {
     return (
       <div>
-        <Header clearItems={this.clearItems} service={this.service}/>
+        <Header clearItems={this.clearItems} generatePrintLines={this.generatePrintLines}/>
         <SummaryCard service={this.service}/>
         <BarCodeManager onItemScanned={this.onAddItem} masterList={this.state.masterList}/>
         <DataTable

@@ -8,9 +8,10 @@ import Header from './index';
 describe('<Header/>', () => {
   let wrapper;
   const clearItemsMock = jest.fn();
+  const generatePrintLinesMock = jest.fn();
 
   beforeEach(() => {
-    wrapper = shallow(<Header clearItems={clearItemsMock}/>);
+    wrapper = shallow(<Header clearItems={clearItemsMock} generatePrintLines={generatePrintLinesMock}/>);
   });
 
   it('should have print and clear button', () => {
@@ -20,5 +21,9 @@ describe('<Header/>', () => {
 
   it('should pass appropriate props to clearButton', () => {
     expect(wrapper.find(ClearButton).props()).toEqual({clearItems: clearItemsMock});
+  });
+
+  it('should pass appropriate props to printButton', () => {
+    expect(wrapper.find(PrintButton).props()).toEqual({generatePrintLines: generatePrintLinesMock});
   });
 });

@@ -53,11 +53,33 @@ describe('Bill', () => {
 
   it('should pass appropriate props to Header', () => {
     wrapper.setState({items: ['i1']})
+    const {clearItems, generatePrintLines} = wrapper.find(Header).props();
+
+    expect(clearItems).toBeDefined();
+    expect(generatePrintLines).toBeDefined();
+  });
+
+  it('should pass clearItems prop to Header', () => {
+    wrapper.setState({items: ['i1']})
     const {clearItems} = wrapper.find(Header).props();
 
     clearItems();
 
     expect(wrapper.state().items).toEqual([]);
+  });
+
+  it('should pass generatePrintLines prop to Header', () => {
+    const {onItemScanned} = wrapper.find(BarCodeManager).props();
+
+    onItemScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12}, 3);
+    const {generatePrintLines} = wrapper.find(Header).props();
+
+    expect(generatePrintLines()).toEqual([
+      expect.any(String),
+      expect.any(String),
+      expect.any(String),
+      '1 name                      3.00',
+    ]);
   });
 
   it('should add and refresh items', () => {
