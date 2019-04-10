@@ -20,12 +20,10 @@ export default ({items, service, datatableService, addForm, editForm, fetchItems
       addForm={addForm}
     />
   return (
-    <div onMouseDown={(e) => e.preventDefault()}>
-      <MUIDataTable
-        data={datatableService.generateData(items)}
-        columns={datatableService.getColumns()}
-        options={datatableService.generateOptions(selectionBar, addForm && toolBarToShow)}
-      />
-    </div>
+    <MUIDataTable
+      data={datatableService.generateData(items)}
+      columns={datatableService.getColumns()}
+      options={datatableService.generateOptions(selectionBar, addForm && toolBarToShow)}
+    />
   );
 }
