@@ -109,6 +109,10 @@ describe('ImmutableCart', () => {
     expect(immutableCart.getTotalNoOfItems()).toEqual(20);
   });
 
+  it('getTotalNoOfTypeOfItems', () => {
+    expect(immutableCart.getTotalNoOfTypeOfItems()).toEqual(2);
+  });
+
   it('getCartItems', () => {
     expect(immutableCart.getCartItems()).toEqual([expect.any(CartItem), expect.any(CartItem)]);
   });

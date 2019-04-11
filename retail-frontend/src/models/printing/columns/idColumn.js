@@ -1,23 +1,17 @@
 import lodash from 'lodash';
+import {replaceFrom} from '../../stringUtility';
 
 export default class IdColumn {
-  constructor(id){
-    this.id = id;
+  constructor(cart){
+    this.maxLength = String(cart.getTotalNoOfTypeOfItems()).length;
   }
 
-  value(){
-    return this.id;
+  setStartIndex(previousColumn){
+    this.startIndex = previousColumn ? (previousColumn.startIndex + previousColumn.maxLength + 1) : 0;
   }
 
-  getLength(){
-    return String(this.id).length;
-  }
-
-  prettify(limit){
-    return lodash.padStart(this.id, limit);
-  }
-
-  canWrap(){
-    return false;
+  getFormattedLine(index, line){
+    const value = lodash.padStart(index + 1, this.maxLength);
+    return replaceFrom(line, value, this.startIndex);
   }
 }

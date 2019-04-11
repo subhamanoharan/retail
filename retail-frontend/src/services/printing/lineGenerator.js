@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import IdColumn from '../../models/printing/columns/idColumn';
 import NameColumn from '../../models/printing/columns/nameColumn';
 import PriceColumn from '../../models/printing/columns/priceColumn';
-import {replaceFrom, splitByLength} from '../../models/stringUtility';
+import {splitByLength} from '../../models/stringUtility';
 import constants from '../../constants';
 
 const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT} = constants;
@@ -13,36 +13,20 @@ export class LineGenerator {
     this.MAX_LIMIT = MAX_LIMIT;
   }
 
-  setId(index, maxIdColumnLength){
-    const line = new Array(this.MAX_LIMIT + 1).join(' ');
-    const idColumnValue = new IdColumn(index).prettify(maxIdColumnLength);
-    return replaceFrom(line, idColumnValue, 0);
-  }
-
-  setPrice(ci, maxPriceColumnLength, line){
-    const priceColumnValue = new PriceColumn(ci).prettify(maxPriceColumnLength);
-    return replaceFrom(line, priceColumnValue, line.length - maxPriceColumnLength);
-  }
-
-  setName(ci, maxNameColumnLength, line, startIndex){
-    const nameColumnValues = new NameColumn(ci).prettify(maxNameColumnLength);
-    return nameColumnValues.reduce((acc, ncv, i) => {
-      if(i===0)
-        return [replaceFrom(line, ncv, startIndex)]
-      const emptyLine = new Array(this.MAX_LIMIT + 1).join(' ');
-      return [...acc, replaceFrom(emptyLine, ncv, startIndex)]
-    }, [])
-  }
-
-  fill(index, ci, maxIdColumnLength, maxPriceColumnLength, maxNameColumnLength){
-    const lineWithId = this.setId(index, maxIdColumnLength);
-    const lineWithPrice = this.setPrice(ci, maxPriceColumnLength, lineWithId);
-    const linesWithName = this.setName(ci, maxNameColumnLength, lineWithPrice, maxIdColumnLength + 1);
+  fill(index, idColumn, priceColumn, nameColumn){
+    const line = this.getBlankLine();
+    const lineWithId = idColumn.getFormattedLine(index, line);
+    const lineWithPrice = priceColumn.getFormattedLine(index, lineWithId);
+    const linesWithName = nameColumn.getFormattedLines(index, lineWithPrice);
     return [...linesWithName];
   }
 
   getSeparatorLine(){
     return new Array(this.MAX_LIMIT + 1).join('-');
+  }
+
+  getBlankLine(){
+    return new Array(this.MAX_LIMIT + 1).join(' ');
   }
 
   getDefaultLines(){
@@ -53,13 +37,19 @@ export class LineGenerator {
   }
 
   generate(cart){
-    const cartItems = cart.getCartItems();
-    const maxIdColumnLength = String(cartItems.length).length;
-    const maxPriceColumnLength = lodash.max(cartItems.map((ci) => new PriceColumn(ci).getLength()));
     const SPACES = 2;
-    const maxNameColumnLength = this.MAX_LIMIT - (maxIdColumnLength + maxPriceColumnLength + SPACES);
+    const cartItems = cart.getCartItems();
+    const idColumn = new IdColumn(cart);
+    const priceColumn = new PriceColumn(cart);
+
+    const maxNameColumnLength = this.MAX_LIMIT - (idColumn.maxLength + priceColumn.maxLength + SPACES);
+    const nameColumn = new NameColumn(cart, maxNameColumnLength);
+
+    [idColumn, nameColumn, priceColumn]
+      .forEach((c, i, array) => c.setStartIndex(array[i-1]))
+
     return cartItems.reduce((acc, ci, index) =>
-      [...acc, ...this.fill(index + 1, ci, maxIdColumnLength, maxPriceColumnLength, maxNameColumnLength)], this.getDefaultLines());
+      [...acc, ...this.fill(index, idColumn, priceColumn, nameColumn)], this.getDefaultLines());
   }
 }
 
