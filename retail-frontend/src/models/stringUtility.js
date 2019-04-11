@@ -9,3 +9,6 @@ export const splitByLength = (input, length) => {
     .map((chunk) => chunk.join(''))
     .map(s => s.padEnd(length));
 }
+
+export const prettyPrintNumber = (i) =>
+  Number.isInteger(i) ? `${i}` : `${Number(i).toFixed(2)}`;

@@ -11,17 +11,16 @@ describe('CartItemLineGenerator', () => {
     const cartItem1 = {name: 'Marie', sp: 12, quantity: 2};
     const cartItem2 = {name: 'Sunfeast', sp: 12.5, quantity: 11};
     const cart = new Cart([cartItem1, cartItem2]);
-    const lineGenerator = new LineGenerator(15);
+    const lineGenerator = new LineGenerator(25);
     expect(lineGenerator.generate(cart)).toEqual(
       [
-        'M.S.Gurusamy St',
-        '     ores      ',
-        '124, Kamarajar ',
-        '     Salai     ',
-        'Madurai-625009 ',
-        '1 Marie   24.00',
-        '2 Sunfea 137.50',
-        '  st           ',
+        '   M.S.Gurusamy Stores   ',
+        '  124, Kamarajar Salai   ',
+        '     Madurai-625009      ',
+        '-------------------------',
+        '1 Marie       12*2  24.00',
+        '2 Sunfeas 12.50*11 137.50',
+        '  t                      '
       ]
     )
   });
