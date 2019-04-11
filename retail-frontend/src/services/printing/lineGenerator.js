@@ -4,7 +4,7 @@ import IdColumn from '../../models/printing/columns/idColumn';
 import NameColumn from '../../models/printing/columns/nameColumn';
 import PriceColumn from '../../models/printing/columns/priceColumn';
 import PriceCalculationColumn from '../../models/printing/columns/priceCalculationColumn';
-import {splitByLength} from '../../models/stringUtility';
+import {splitByLength, prettyPrintNumber} from '../../models/stringUtility';
 import constants from '../../constants';
 
 const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT} = constants;
@@ -38,6 +38,10 @@ export class LineGenerator {
       .map(l => lodash.pad(l, this.MAX_LIMIT))
   }
 
+  getTotalLine(cart){
+    return lodash.padStart(prettyPrintNumber(cart.getTotal()), this.MAX_LIMIT);
+  }
+
   generate(cart){
     const SPACE_BETWEEN_COLUMNS = 3;
     const cartItems = cart.getCartItems();
@@ -51,10 +55,11 @@ export class LineGenerator {
 
     [idColumn, nameColumn, priceCalculationColumn, priceColumn]
       .forEach((c, i, array) => c.setStartIndex(array[i-1]))
-
-    return cartItems.reduce((acc, ci, index) =>
-      [...acc, ...this.fill(index, idColumn, nameColumn, priceCalculationColumn, priceColumn)],
-      this.getDefaultLines());
+    const defaultStartLines = this.getDefaultLines();
+    const itemLines = cartItems.reduce((acc, ci, index) =>
+      [...acc, ...this.fill(index, idColumn, nameColumn, priceCalculationColumn, priceColumn)], []);
+    const endLines = [this.getSeparatorLine(), this.getTotalLine(cart)]
+    return [...defaultStartLines, ...itemLines, ...endLines]
   }
 }
 
