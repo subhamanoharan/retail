@@ -40,7 +40,7 @@ export default class AddManualItemForm extends React.Component {
     event.preventDefault();
     this.setState({error: ''});
     const {name, sp, quantity } = this.state;
-    this.props.onSubmit({name, sp: Number(sp), quantity, barcode: uuid()})
+    this.props.onSubmit({name, sp: Number(sp), quantity: Number(quantity), barcode: uuid()})
       .then(this.props.onSuccess)
       .catch((error) => error && this.setState({error}))
   }
@@ -76,7 +76,7 @@ export default class AddManualItemForm extends React.Component {
             value={this.state.sp}
             fullWidth
             type="number"
-            inputProps={{min: "1"}}
+            inputProps={{min: 1, step: 0.01, max: 10000}}
             required
             onChange={this.handleChange('sp')}
           />
@@ -86,7 +86,7 @@ export default class AddManualItemForm extends React.Component {
             value={this.state.quantity}
             fullWidth
             type="number"
-            inputProps={{min: "1"}}
+            inputProps={{min: 1, max: 10000}}
             required
             onChange={this.handleChange('quantity')}
           />

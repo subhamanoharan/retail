@@ -83,7 +83,7 @@ class ItemForm extends React.Component {
             value={this.state.sp}
             fullWidth
             type="number"
-            inputProps={{min: "1"}}
+            inputProps={{min: 1, step: 0.01, max: 10000}}
             required
             onChange={this.handleChange('sp')}
           />
