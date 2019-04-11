@@ -1,11 +1,10 @@
 import {splitByLength, replaceFrom} from '../../stringUtility';
 
 export default class NameColumn {
-  constructor(cart, maxLength, startIndex){
-    this.names = cart.getCartItems().map(({name}) => name);
+  constructor(cartItems, maxLength){
+    this.names = cartItems.map(({name}) => name);
     this.maxLength = maxLength;
   }
-
 
   setStartIndex(previousColumn){
     this.startIndex = previousColumn ? (previousColumn.startIndex + previousColumn.maxLength + 1) : 0;

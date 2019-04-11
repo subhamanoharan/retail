@@ -2,8 +2,8 @@ import lodash from 'lodash';
 import {replaceFrom} from '../../stringUtility';
 
 export default class IdColumn {
-  constructor(cart){
-    this.maxLength = String(cart.getTotalNoOfTypeOfItems()).length;
+  constructor(cartItems){
+    this.maxLength = String(cartItems.length).length;
   }
 
   setStartIndex(previousColumn){

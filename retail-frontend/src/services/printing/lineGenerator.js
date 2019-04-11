@@ -41,13 +41,13 @@ export class LineGenerator {
   generate(cart){
     const SPACE_BETWEEN_COLUMNS = 3;
     const cartItems = cart.getCartItems();
-    const idColumn = new IdColumn(cart);
-    const priceColumn = new PriceColumn(cart);
-    const priceCalculationColumn = new PriceCalculationColumn(cart);
+    const idColumn = new IdColumn(cartItems);
+    const priceColumn = new PriceColumn(cartItems);
+    const priceCalculationColumn = new PriceCalculationColumn(cartItems);
 
     const maxNameColumnLength = this.MAX_LIMIT - (idColumn.maxLength +
       priceColumn.maxLength + priceCalculationColumn.maxLength + SPACE_BETWEEN_COLUMNS);
-    const nameColumn = new NameColumn(cart, maxNameColumnLength);
+    const nameColumn = new NameColumn(cartItems, maxNameColumnLength);
 
     [idColumn, nameColumn, priceCalculationColumn, priceColumn]
       .forEach((c, i, array) => c.setStartIndex(array[i-1]))
