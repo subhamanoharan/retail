@@ -2,7 +2,7 @@ import React, { Component} from 'react';
 import Button from '@material-ui/core/Button';
 import { withSnackbar } from 'notistack';
 
-import PrinterService from '../../services/PrinterService';
+import PrinterService from '../../services/printerService';
 
 class PrintButton extends Component {
   constructor(props){

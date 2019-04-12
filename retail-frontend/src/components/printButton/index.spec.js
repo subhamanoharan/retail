@@ -2,11 +2,11 @@ import React, { Component} from 'react';
 import Button from '@material-ui/core/Button';
 import { shallow } from 'enzyme';
 
-import PrinterServiceMock from '../../services/PrinterService';
+import PrinterServiceMock from '../../services/printerService';
 import PrintButton from './index';
 
 jest.mock('notistack', () => ({withSnackbar: jest.fn((a) => a)}));
-jest.mock('../../services/PrinterService');
+jest.mock('../../services/printerService');
 
 describe('<PrintButton/>', () => {
   let wrapper;
