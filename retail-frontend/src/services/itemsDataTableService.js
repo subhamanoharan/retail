@@ -2,9 +2,9 @@ class ItemsDataTableService {
 
   generateOptions(selectionBar, toolbar){
     return {
-      filterType: 'checkbox', search: false, pagination: false,
+      filterType: 'checkbox', pagination: false,
       filter: false, viewColumns: false, print: false, download: false,
-      serverSide: true,
+      search: true,
       customToolbar: toolbar,
       customToolbarSelect:selectionBar
     };
@@ -14,14 +14,14 @@ class ItemsDataTableService {
     return [
       {
         name: "Name",
-        options: {filter: false, sort: false}
+        options: {filter: false, sort: false, searchable: true}
       },
       {
         name: "Price",
-        options: {filter: false, sort: false}
+        options: {filter: false, sort: false, searchable: true}
       },{
         name: "Barcode",
-        options: {filter: false, sort: false}
+        options: {filter: false, sort: false, searchable: true}
       }];
   }
 
