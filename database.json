@@ -12,5 +12,6 @@
     "password": "postgres",
     "host": "localhost",
     "database": "retail_test"
-  }
+  },
+  "production": {"ENV": "DATABASE_URL"}
 }
