@@ -1,10 +1,10 @@
 import barcodeValidator from './barcodeValidator';
-import constants from '../../constants';
-import InvalidItemException from './../../exceptions/invalidItemException';
+import constants from '../../../constants';
+import InvalidItemException from './../../../exceptions/invalidItemException';
 
-import * as itemsRepoMock from '../../repositories/itemsRepo';
+import * as itemsRepoMock from '../../../repositories/itemsRepo';
 
-jest.mock('../../repositories/itemsRepo');
+jest.mock('../../../repositories/itemsRepo');
 
 const {ERRORS} = constants;
 

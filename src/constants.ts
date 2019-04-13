@@ -13,6 +13,9 @@ export default {
     USER_NOT_FOUND: 'This user does not exist!',
     FORBIDDEN: 'You do not have the required permissions!'
   },
+  CATEGORY_ROUTE_ERRORS: {
+    CATEGORY_EXISTS: (category) => `Category "${category.name}"  already exists!`
+  },
   NAME_MAX_LENGTH: 255,
   OPEN_ROUTES: ["/api/users/authenticate"],
   ROLES: {

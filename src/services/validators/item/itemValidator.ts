@@ -1,4 +1,4 @@
-import {IItem} from '../../interfaces';
+import {IItem} from '../../../interfaces';
 import barcodeValidator from './barcodeValidator';
 import priceValidator from './priceValidator';
 import nameValidator from './nameValidator';

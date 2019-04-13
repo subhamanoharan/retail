@@ -1,6 +1,6 @@
 import priceValidator from './priceValidator';
-import constants from '../../constants';
-import InvalidItemException from './../../exceptions/invalidItemException';
+import constants from '../../../constants';
+import InvalidItemException from './../../../exceptions/invalidItemException';
 
 const {ERRORS} = constants;
 
@@ -20,7 +20,7 @@ describe('Price validator', () => {
     expect(errorThrown).toBeInstanceOf(InvalidItemException);
     expect(errorThrown.message).toEqual(ERRORS.INVALID_PRICE);
   });
-  
+
   it('should reject if price is negative', async () => {
     const item = {sp: -12};
     const errorThrown = await priceValidator(item).catch(e => e);

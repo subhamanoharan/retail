@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 
-import * as ItemsRepo from '../../repositories/itemsRepo';
-import InvalidItemException from './../../exceptions/invalidItemException';
-import constants from '../../constants';
+import * as ItemsRepo from '../../../repositories/itemsRepo';
+import InvalidItemException from './../../../exceptions/invalidItemException';
+import constants from '../../../constants';
 
 const {ERRORS} = constants;
 

@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
-import InvalidItemException from './../../exceptions/invalidItemException';
-import constants from '../../constants';
+import InvalidItemException from './../../../exceptions/invalidItemException';
+import constants from '../../../constants';
 
 const {ERRORS, NAME_MAX_LENGTH} = constants;
 

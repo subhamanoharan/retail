@@ -1,6 +1,6 @@
 import * as ItemsRepo from '../repositories/itemsRepo';
 import InvalidItemException from './../exceptions/invalidItemException';
-import itemValidator from './validators/itemValidator';
+import itemValidator from './validators/item/itemValidator';
 import itemFormatter from './itemFormatter';
 
 const create = async (item) => {

@@ -1,11 +1,11 @@
 import itemsService from './itemsService';
 import * as itemsRepoMock from '../repositories/itemsRepo';
-import itemValidatorMock from './validators/itemValidator';
+import itemValidatorMock from './validators/item/itemValidator';
 import InvalidItemException from './../exceptions/invalidItemException';
 import constants from '../constants';
 
 jest.mock('../repositories/itemsRepo');
-jest.mock('./validators/itemValidator');
+jest.mock('./validators/item/itemValidator');
 
 const {ERRORS} = constants;
 

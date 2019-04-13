@@ -38,7 +38,7 @@ describe('Items routes', () => {
         .expect(200)
         .then(r => r.body.id);
       const createdItem = await itemsRepo.findById(createdItemId);
-      expect(createdItem).toEqual({id: createdItemId, ...item});
+      expect(createdItem).toEqual({id: createdItemId, ...item, by_weight: null, category_id: null});
     });
 
     it('should return 400 on duplicate barcode', () => {
@@ -85,7 +85,8 @@ describe('Items routes', () => {
         .send(newItemData)
         .expect(200);
       const updatedItem = await itemsRepo.findById(itemId);
-      expect(updatedItem).toEqual({id: itemId, ...newItemData, barcode: newItemData.barcode.toLowerCase()});
+      expect(updatedItem).toEqual({id: itemId, ...newItemData,
+        barcode: newItemData.barcode.toLowerCase(), by_weight: null, category_id: null});
     });
 
     it('should return 400 on invalid name', async () => {

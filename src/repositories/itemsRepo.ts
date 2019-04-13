@@ -4,11 +4,14 @@ interface IItem {
   name: string;
   barcode: string;
   sp: number;
+  byWeight?: boolean;
+  category?: string;
 }
 
 const insert = async (item: IItem): Promise<number> => {
-  const insertQuery = 'INSERT INTO items(name, barcode, sp) values($1, $2, $3) RETURNING id;'
-  const values = [item.name, item.barcode, item.sp];
+  const insertQuery = `INSERT INTO items(name, barcode, sp, by_weight, category_id)
+   values($1, $2, $3, $4, (select id from categories where name=$5)) RETURNING id;`
+  const values = [item.name, item.barcode, item.sp, item.byWeight, item.category];
   const {rows: [{id}]} = await query(insertQuery, values);
   return id;
 };
