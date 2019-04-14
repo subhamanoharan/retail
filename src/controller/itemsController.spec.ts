@@ -5,6 +5,7 @@ jest.mock('../services/itemsService');
 
 describe('ItemsController', () => {
   const item = {name: 'name', barcode: 'ABCD', sp: 5};
+  const itemByWeight = {name: 'name', barcode: 'ABCD', sp: 5, byWeight: true, category: 'Rice'};
   const dummyErr = new Error('dummy');
 
   describe('create', () => {
@@ -18,6 +19,20 @@ describe('ItemsController', () => {
       await itemsController.create(reqMock, resMock, nextMock);
 
       expect(itemsServiceMock.create).toHaveBeenCalledWith(item);
+      expect(resMock.json).toHaveBeenCalledWith({id: 'newId'});
+      expect(nextMock).not.toHaveBeenCalled();
+    });
+
+    it('should create item sold by weight', async () => {
+      const reqMock = {body: itemByWeight};
+      const resMock = {json: jest.fn()};
+      const nextMock = jest.fn();
+
+      (itemsServiceMock.create as any).mockResolvedValue(Promise.resolve('newId'));
+
+      await itemsController.create(reqMock, resMock, nextMock);
+
+      expect(itemsServiceMock.create).toHaveBeenCalledWith(itemByWeight);
       expect(resMock.json).toHaveBeenCalledWith({id: 'newId'});
       expect(nextMock).not.toHaveBeenCalled();
     });

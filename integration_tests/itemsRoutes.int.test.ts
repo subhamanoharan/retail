@@ -3,7 +3,9 @@ import * as request from 'supertest';
 import app from '../src/app';
 import * as itemsRepo from '../src/repositories/itemsRepo';
 import constants from '../src/constants';
-import {tearDownItems, setUpItems, setUpUsers, tearDownUsers} from './dataHelper';
+import {tearDownItems, setUpItems,
+  setUpCategories, tearDownCategories,
+  setUpUsers, tearDownUsers} from './dataHelper';
 
 const {ERRORS, ROLES, USER_ROUTE_ERRORS: {FORBIDDEN}} = constants;
 
@@ -27,6 +29,7 @@ describe('Items routes', () => {
 
   afterAll(async () => {
     await tearDownUsers(userIds);
+    await tearDownCategories();
     await tearDownItems();
   });
 
@@ -63,6 +66,45 @@ describe('Items routes', () => {
         .send({...item, barcode: 'barcode_invalid_price', sp: 'invalid'})
         .expect(400)
         .then(r => expect(r.body).toEqual({errors: [ERRORS.INVALID_PRICE]}));
+    });
+
+    describe('item sold by weight', () => {
+      const category = {name: 'Rice'};
+      const itemSoldByWeight = {name: 'some item', barcode: 'barcode-by-weight',
+        sp: 123, byWeight: true, category: category.name};
+      let categoryId;
+
+      beforeAll(async() => {
+        [categoryId] = await setUpCategories([category]);
+      });
+
+      it('should add item', async () => {
+        const createdItemId = await agent
+          .post('/api/items')
+          .send(itemSoldByWeight)
+          .expect(200)
+          .then(r => r.body.id);
+        const createdItem = await itemsRepo.findById(createdItemId);
+        expect(createdItem).toEqual({id: createdItemId,
+          name: 'some item', barcode: 'barcode-by-weight', sp: 123,
+          by_weight: true, category_id: categoryId});
+      });
+
+      it('should return 400 on invalid category', () => {
+        return agent
+          .post('/api/items')
+          .send({...itemSoldByWeight, barcode: 'barcode-by-wt-invalid-category', category: null})
+          .expect(400)
+          .then(r => expect(r.body).toEqual({errors: [ERRORS.INVALID_CATEGORY]}));
+      });
+
+      it('should return 400 when category is passed but item is not sold by weight', () => {
+        return agent
+          .post('/api/items')
+          .send({...itemSoldByWeight, barcode: 'barcode-by-wt-no-category', byWeight: false})
+          .expect(400)
+          .then(r => expect(r.body).toEqual({errors: [ERRORS.CATEGORY_NOT_ALLOWED]}));
+      });
     });
 
     it('should return 403 Forbidden for other users', () => {

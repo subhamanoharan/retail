@@ -1,8 +1,8 @@
 import itemsService from './../services/itemsService';
 
 const create = (req, res, next) => {
-  const {name, barcode, sp} = req.body;
-  return itemsService.create({name, barcode, sp})
+  const {name, barcode, sp, byWeight, category} = req.body;
+  return itemsService.create({name, barcode, sp, byWeight, category})
     .then(id => res.json({id}))
     .catch(e => next(e));
 };

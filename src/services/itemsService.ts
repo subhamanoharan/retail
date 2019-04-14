@@ -4,8 +4,8 @@ import itemValidator from './validators/item/itemValidator';
 import itemFormatter from './itemFormatter';
 
 const create = async (item) => {
-  const {name, barcode, sp} = item;
-  const formattedItem = itemFormatter({name, barcode, sp})
+  const {name, barcode, sp, byWeight, category} = item;
+  const formattedItem = itemFormatter({name, barcode, sp, byWeight, category})
   return itemValidator.validate(formattedItem)
     .then(() => ItemsRepo.insert(formattedItem)
       .catch((err) => Promise.reject(new InvalidItemException(err.message))))

@@ -2,6 +2,8 @@ export interface IItem {
   name: string;
   sp: number;
   barcode: string;
+  category?: string;
+  byWeight?: boolean;
 }
 
 export interface IUserCreds {

@@ -2,13 +2,16 @@ import itemValidator from './itemValidator';
 import barcodeValidatorMock from './barcodeValidator';
 import priceValidatorMock from './priceValidator';
 import nameValidatorMock from './nameValidator';
+import itemByWeightValidatorMock from './itemByWeightValidator';
 
 jest.mock('./barcodeValidator');
 jest.mock('./priceValidator');
 jest.mock('./nameValidator');
+jest.mock('./itemByWeightValidator');
 
 describe('Item Validator', () => {
   const item = {name: 'some', sp: 23, barcode: 'AV'};
+  const itemSoldByWeight = {name: 'some', sp: 23, barcode: 'AV', byWeight: true, category: 'Rice'};
   const itemId = 12;
   const dummyErr = new Error('dummy');
 
@@ -23,7 +26,22 @@ describe('Item Validator', () => {
 
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).toHaveBeenCalledWith(item);
+    expect(itemByWeightValidatorMock).toHaveBeenCalledWith(item);
     expect(barcodeValidatorMock).toHaveBeenCalledWith(item, undefined);
+  })
+
+  it('should validate name, sp, barcode, category for item sold by weight', async () => {
+    nameValidatorMock.mockResolvedValue(true);
+    priceValidatorMock.mockResolvedValue(true);
+    itemByWeightValidatorMock.mockResolvedValue(true);
+    barcodeValidatorMock.mockResolvedValue(true);
+
+    await itemValidator.validate(itemSoldByWeight);
+
+    expect(nameValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
+    expect(priceValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
+    expect(itemByWeightValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
+    expect(barcodeValidatorMock).toHaveBeenCalledWith(itemSoldByWeight, undefined);
   })
 
   it('should accept itemId optionally', async () => {
@@ -36,6 +54,7 @@ describe('Item Validator', () => {
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).toHaveBeenCalledWith(item);
     expect(barcodeValidatorMock).toHaveBeenCalledWith(item, itemId);
+    expect(itemByWeightValidatorMock).toHaveBeenCalledWith(item);
   })
 
   it('should reject on name errors', async () => {
@@ -46,6 +65,7 @@ describe('Item Validator', () => {
     expect(errThr).toEqual(dummyErr);
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).not.toHaveBeenCalled();
+    expect(itemByWeightValidatorMock).not.toHaveBeenCalled();
     expect(barcodeValidatorMock).not.toHaveBeenCalled();
   });
 
@@ -59,6 +79,22 @@ describe('Item Validator', () => {
     expect(errThr).toEqual(dummyErr);
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).toHaveBeenCalledWith(item);
+    expect(itemByWeightValidatorMock).not.toHaveBeenCalled();
+    expect(barcodeValidatorMock).not.toHaveBeenCalled();
+  });
+
+  it('should reject on item sold by weight errors', async () => {
+    nameValidatorMock.mockResolvedValue(true);
+    priceValidatorMock.mockResolvedValue(true);
+    itemByWeightValidatorMock.mockRejectedValue(dummyErr);
+    barcodeValidatorMock.mockResolvedValue(true);
+
+    const errThr = await itemValidator.validate(itemSoldByWeight).catch(e => e);
+
+    expect(errThr).toEqual(dummyErr);
+    expect(nameValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
+    expect(priceValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
+    expect(itemByWeightValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
     expect(barcodeValidatorMock).not.toHaveBeenCalled();
   });
 
@@ -72,6 +108,7 @@ describe('Item Validator', () => {
     expect(errThr).toEqual(dummyErr);
     expect(nameValidatorMock).toHaveBeenCalledWith(item);
     expect(priceValidatorMock).toHaveBeenCalledWith(item);
+    expect(itemByWeightValidatorMock).toHaveBeenCalledWith(item);
     expect(barcodeValidatorMock).toHaveBeenCalledWith(item, undefined);
   });
 });

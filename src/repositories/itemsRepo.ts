@@ -1,12 +1,5 @@
 import {query} from './pg-client';
-
-interface IItem {
-  name: string;
-  barcode: string;
-  sp: number;
-  byWeight?: boolean;
-  category?: string;
-}
+import {IItem} from '../interfaces';
 
 const insert = async (item: IItem): Promise<number> => {
   const insertQuery = `INSERT INTO items(name, barcode, sp, by_weight, category_id)

@@ -11,6 +11,7 @@ const {ERRORS} = constants;
 
 describe('ItemsService', () => {
   const item = {name: 'name', barcode: 'ABCD', sp: 5};
+  const itemSoldByWt = {name: 'name', barcode: 'ABCD', sp: 5, byWeight: true, category: 'Rice'};
   const dummyErr = new Error('dummy');
 
   beforeEach(() => jest.resetAllMocks())
@@ -24,6 +25,16 @@ describe('ItemsService', () => {
 
       expect(createdId).toEqual('newId');
       expect(itemsRepoMock.insert).toHaveBeenCalledWith({...item, barcode: 'abcd'});
+    });
+
+    it('should insert item sold by weight', async() => {
+      (itemsRepoMock.insert as any).mockResolvedValue(Promise.resolve('newId'));
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
+
+      const createdId = await itemsService.create(itemSoldByWt);
+
+      expect(createdId).toEqual('newId');
+      expect(itemsRepoMock.insert).toHaveBeenCalledWith({...itemSoldByWt, barcode: 'abcd'});
     });
 
     it('should reject with item validation error', async () => {

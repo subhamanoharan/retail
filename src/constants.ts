@@ -4,7 +4,9 @@ export default {
     Please try another barcode or edit the existing item`,
     INVALID_PRICE: 'Please enter a valid number for price',
     INVALID_BARCODE: 'Please enter a valid barcode',
-    INVALID_NAME: 'Please enter a valid name with a maximum of 255 characters'
+    INVALID_NAME: 'Please enter a valid name with a maximum of 255 characters',
+    INVALID_CATEGORY: 'Please choose a valid category',
+    CATEGORY_NOT_ALLOWED: 'Only items sold by weight can be grouped into categories'
   },
   USER_ROUTE_ERRORS:{
     MISSING_AUTH: 'Missing Authorization Header',
