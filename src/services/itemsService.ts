@@ -13,8 +13,8 @@ const create = async (item) => {
 }
 
 const update = async (itemId, item) => {
-  const {name, barcode, sp} = item;
-  const formattedItem = itemFormatter({name, barcode, sp})
+  const {name, barcode, sp, byWeight, category} = item;
+  const formattedItem = itemFormatter({name, barcode, sp, byWeight, category})
   return itemValidator.validate(formattedItem, itemId)
     .then(() => ItemsRepo.update(itemId, formattedItem)
       .catch((err) => Promise.reject(new InvalidItemException(err.message))))

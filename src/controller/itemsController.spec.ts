@@ -53,6 +53,7 @@ describe('ItemsController', () => {
 
   describe('update', () => {
     const newItemData = {name: 'newName', barcode: '12', sp: 12};
+    const newItemByWeightData = {...newItemData, byWeight: true, category: 'newCat'};
     const itemId = 12;
 
     it('should update item', async () => {
@@ -65,6 +66,20 @@ describe('ItemsController', () => {
       await itemsController.update(reqMock, resMock, nextMock);
 
       expect(itemsServiceMock.update).toHaveBeenCalledWith(itemId, newItemData);
+      expect(resMock.send).toHaveBeenCalled();
+      expect(nextMock).not.toHaveBeenCalled();
+    });
+
+    it('should update item sold by weight', async () => {
+      const reqMock = {body: newItemByWeightData, params: {itemId}};
+      const resMock = {send: jest.fn()};
+      const nextMock = jest.fn();
+
+      (itemsServiceMock.update as any).mockResolvedValue(Promise.resolve());
+
+      await itemsController.update(reqMock, resMock, nextMock);
+
+      expect(itemsServiceMock.update).toHaveBeenCalledWith(itemId, newItemByWeightData);
       expect(resMock.send).toHaveBeenCalled();
       expect(nextMock).not.toHaveBeenCalled();
     });

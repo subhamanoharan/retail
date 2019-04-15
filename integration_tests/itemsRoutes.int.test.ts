@@ -15,11 +15,15 @@ describe('Items routes', () => {
   const item = {name: 'some item', barcode: 'barcode', sp: 123};
   const admin = {name: 'adminItems1', password: 'adminItems1pwd', role: ROLES.ADMIN};
   const user = {name: 'userItems1', password: 'userItems1pwd', role: ROLES.USER};
+  const category = {name: 'catUpdateItemByWeight'};
+
   let userIds;
+  let categoryId;
   const LOGIN_ROUTE = '/api/users/authenticate';
 
   beforeAll(async () => {
     userIds = await setUpUsers([admin, user]);
+    [categoryId] = await setUpCategories([category]);
   });
 
   beforeEach(async () => {
@@ -116,6 +120,7 @@ describe('Items routes', () => {
   });
 
   describe('Update', () => {
+
     afterEach(() => tearDownItems());
 
     it('should update existing item', async () => {
@@ -129,6 +134,18 @@ describe('Items routes', () => {
       const updatedItem = await itemsRepo.findById(itemId);
       expect(updatedItem).toEqual({id: itemId, ...newItemData,
         barcode: newItemData.barcode.toLowerCase(), by_weight: null, category_id: null});
+    });
+
+    it('should update existing item to item by weight', async () => {
+      const itemToUpdate = {name: 'itemToUpdate', barcode: 'itemToUpdateToWt', sp: 12};
+      const [itemId] = await setUpItems([itemToUpdate]);
+      await agent
+        .put(`/api/items/${itemId}`)
+        .send({...itemToUpdate, byWeight: true, category: category.name, sp: 23.5})
+        .expect(200);
+      const updatedItem = await itemsRepo.findById(itemId);
+      expect(updatedItem).toEqual({id: itemId,name: itemToUpdate.name, sp: 23.5,
+        barcode: itemToUpdate.barcode.toLowerCase(), by_weight: true, category_id: categoryId});
     });
 
     it('should return 400 on invalid name', async () => {
@@ -147,6 +164,37 @@ describe('Items routes', () => {
         .put(`/api/items/1`)
         .expect(403)
         .then(r => expect(r.body).toEqual({errors: [FORBIDDEN]}));
+    });
+
+    describe('item sold by weight', () => {
+      it('should update item sold by weight', async () => {
+        const itemToUpdate = {name: 'itemToUpdate', barcode: 'itemToUpdate1', sp: 12,
+          byWeight: true, category: category.name};
+        const [itemId] = await setUpItems([itemToUpdate]);
+        await agent
+          .put(`/api/items/${itemId}`)
+          .send({...itemToUpdate, sp: 15})
+          .expect(200);
+        const updatedItem = await itemsRepo.findById(itemId);
+        expect(updatedItem).toEqual({
+          id: itemId, name: itemToUpdate.name, sp: 15,
+          barcode: itemToUpdate.barcode.toLowerCase(), by_weight: true, category_id: categoryId});
+      })
+
+      it('should update item to not sold by weight', async () => {
+        const itemToUpdate = {name: 'itemToUpdate', barcode: 'itemToUpdate2', sp: 12,
+          byWeight: true, category: category.name};
+        const [itemId] = await setUpItems([itemToUpdate]);
+        await agent
+          .put(`/api/items/${itemId}`)
+          .send({name: 'itemToUpdate', barcode: 'itemToUpdate2', sp: 12, byWeight: false})
+          .expect(200);
+
+        const updatedItem = await itemsRepo.findById(itemId);
+        expect(updatedItem).toEqual({
+          id: itemId, name: itemToUpdate.name, sp: itemToUpdate.sp,
+          barcode: itemToUpdate.barcode.toLowerCase(), by_weight: false, category_id: null});
+      })
     });
   });
 

@@ -16,9 +16,9 @@ const remove = (req, res) => {
 }
 
 const update = (req, res, next) => {
-  const {name, barcode, sp} = req.body;
+  const {name, barcode, sp, byWeight, category} = req.body;
   const { itemId } = req.params;
-  return itemsService.update(itemId, {name, barcode, sp})
+  return itemsService.update(itemId, {name, barcode, sp, byWeight, category})
     .then(() => res.send())
     .catch(error => next(error));
 };

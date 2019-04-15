@@ -70,6 +70,16 @@ describe('ItemsService', () => {
       expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, {...item, barcode: 'abcd'});
     });
 
+    it('should update item sold by weight', async() => {
+      (itemsRepoMock.update as any).mockResolvedValue();
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
+
+      await itemsService.update(itemId, itemSoldByWt);
+
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith({...itemSoldByWt, barcode: 'abcd'}, itemId);
+      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, {...itemSoldByWt, barcode: 'abcd'});
+    });
+
     it('should reject with item validation error', async () => {
       (itemValidatorMock.validate as any).mockRejectedValue(dummyErr);
 
