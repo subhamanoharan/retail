@@ -55,7 +55,7 @@ describe('CategoriesService', () => {
 
       await categoriesService.update(categoryId, categoryToUpdate);
 
-      expect(categoryValidatorMock.validate).toHaveBeenCalledWith(categoryToUpdate, categoryId);
+      expect(categoryValidatorMock.validate).toHaveBeenCalledWith(categoryToUpdate);
       expect(categoriesRepoMock.update).toHaveBeenCalledWith(categoryId, categoryToUpdate);
     });
 
@@ -65,7 +65,7 @@ describe('CategoriesService', () => {
       const errorThrown = await categoriesService.update(categoryId, category).catch(e => e);
 
       expect(errorThrown).toEqual(dummyErr);
-      expect(categoryValidatorMock.validate).toHaveBeenCalledWith(category, categoryId);
+      expect(categoryValidatorMock.validate).toHaveBeenCalledWith(category);
       expect(categoriesRepoMock.update).not.toHaveBeenCalled();
     });
 
@@ -77,7 +77,7 @@ describe('CategoriesService', () => {
 
       expect(errorThrown).toBeInstanceOf(InvalidCategoryException);
       expect(errorThrown.message).toEqual(dummyErr.message);
-      expect(categoryValidatorMock.validate).toHaveBeenCalledWith(category, categoryId);
+      expect(categoryValidatorMock.validate).toHaveBeenCalledWith(category);
       expect(categoriesRepoMock.update).toHaveBeenCalledWith(categoryId, category);
     });
   });

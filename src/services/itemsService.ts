@@ -21,7 +21,8 @@ const update = async (itemId, item) => {
 }
 
 const all = () => ItemsRepo.all()
-  .then(items => items.map(({id, name, barcode, sp}) => ({id, name, barcode, sp})));
+  .then(items => items.map(({id, name, barcode, sp, by_weight, category}) =>
+    ({id, name, barcode, sp, ...(by_weight ? {byWeight: by_weight, category} : {})})));
 
 const remove = (itemId) => ItemsRepo.remove(itemId);
 

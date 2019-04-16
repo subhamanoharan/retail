@@ -202,17 +202,19 @@ describe('Items routes', () => {
 
     beforeEach(() => tearDownItems());
 
-    afterEach(() => tearDownItems());
-
     it('should list all items', async () => {
       const item1 = {name: 'item1', barcode: 'AB', sp: 125};
       const item2 = {name: 'item2', barcode: 'AC', sp: 123};
-      const [id1, id2] = await setUpItems([item1, item2]);
+      const item3 = {name: 'item3', barcode: 'AD', sp: 124, byWeight: true, category: category.name};
+      const [id1, id2, id3] = await setUpItems([item1, item2, item3]);
 
       await userAgent
         .get('/api/items')
         .expect(200)
-        .then(r => expect(r.body).toEqual([{id: id1, ...item1}, {id: id2, ...item2}]));
+        .then(r => expect(r.body).toEqual([
+          {id: id1, ...item1},
+          {id: id2, ...item2},
+          {id: id3, ...item3}]));
     });
   });
 
@@ -223,6 +225,15 @@ describe('Items routes', () => {
       const itemFound = await itemsRepo.findById(itemToDeleteId);
       expect(itemFound).not.toBeDefined();
     });
+
+    it('should delete item sold by weight when it exists', async () => {
+      const [itemToDeleteId] = await setUpItems([
+        {name: 'itemToDel', sp: 12, barcode: 'ITEM_TO_DEL_BY_WT', byWeight: true, category: category.name}])
+      await agent.delete(`/api/items/${itemToDeleteId}`).expect(200);
+      const itemFound = await itemsRepo.findById(itemToDeleteId);
+      expect(itemFound).not.toBeDefined();
+    });
+
     it('should ignore when item does not exist', async () => {
       await agent.delete('/api/items/0').expect(200);
     });

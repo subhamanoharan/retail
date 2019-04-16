@@ -14,7 +14,7 @@ const create = async (category) => {
 const update = async (categoryId, category) => {
   const {name} = category;
   const formattedCategory = categoryFormatter({name})
-  return categoryValidator.validate(formattedCategory, categoryId)
+  return categoryValidator.validate(formattedCategory)
     .then(() => CategoriesRepo.update(categoryId, formattedCategory)
       .catch((err) => Promise.reject(new InvalidCategoryException(err.message))))
 }

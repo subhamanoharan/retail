@@ -7,7 +7,7 @@ const insert = async (category): Promise<number> => {
   return id;
 };
 
-const update = async (categoryId, category): Promise<number> => {
+const update = async (categoryId, category): Promise<any> => {
   const insertQuery = `UPDATE categories set name=$1 where id=$2;`
   const values = [category.name, categoryId];
   await query(insertQuery, values);

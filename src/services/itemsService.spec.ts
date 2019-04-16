@@ -105,13 +105,17 @@ describe('ItemsService', () => {
 
   describe('list', () => {
     it('should get all items', async() => {
-      const item1 = {id:1, name: 'name1', barcode: 'ABCD1', sp: 5};
-      const item2 = {id:2, name: 'name2', barcode: 'ABCD2', sp: 5};
-      (itemsRepoMock.all as any).mockResolvedValue(Promise.resolve([item1, item2]));
+      const item1 = {id:1, name: 'name1', barcode: 'ABCD1', sp: 5, by_weight: null, category: null};
+      const item2 = {id:2, name: 'name2', barcode: 'ABCD2', sp: 5, by_weight: null, category: null};
+      const item3 = {id:2, name: 'name2', barcode: 'ABCD3', sp: 5, by_weight: true, category: 'Rice'};
+      (itemsRepoMock.all as any).mockResolvedValue(Promise.resolve([item1, item2, item3]));
 
       const itemsFound = await itemsService.all();
 
-      expect(itemsFound).toEqual([item1, item2]);
+      const expectedItem1 = {id:1, name: 'name1', barcode: 'ABCD1', sp: 5};
+      const expectedItem2 = {id:2, name: 'name2', barcode: 'ABCD2', sp: 5};
+      const expectedItem3 = {id:2, name: 'name2', barcode: 'ABCD3', sp: 5, byWeight: true, category: 'Rice'};
+      expect(itemsFound).toEqual([expectedItem1, expectedItem2, expectedItem3]);
       expect(itemsRepoMock.all).toHaveBeenCalled();
     });
   });
