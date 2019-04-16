@@ -28,11 +28,13 @@ describe('BillDataTableService', () => {
   it('should generate data', () => {
     const items = [
       {name: 'item1', sp: 12, quantity: 2},
-      {name: 'item2', sp: 10, quantity: 3}
+      {name: 'item2', sp: 10, quantity: 3},
+      {name: 'item3', sp: 10, quantity: 3, byWeight: true, weight: 5}
     ];
     expect(billDataTableService.generateData(items)).toEqual([
-      [1, 'item1', 12, 2, 24],
-      [2, 'item2', 10, 3, 30]
+      [1, 'item1', 12, '2', 24],
+      [2, 'item2', 10, '3', 30],
+      [3, 'item3', 10, '5 * 3', 150]
     ]);
   });
 

@@ -19,6 +19,7 @@ export class Bill extends Component {
     this.fetchItems = this.fetchItems.bind(this);
     this.clearItems = this.clearItems.bind(this);
     this.onAddItem = this.onAddItem.bind(this);
+    this.onItemByWeightScanned = this.onItemByWeightScanned.bind(this);
     this.generatePrintLines = this.generatePrintLines.bind(this);
   }
 
@@ -44,8 +45,13 @@ export class Bill extends Component {
     this.fetchItems();
   }
 
-  onAddItem({barcode, sp, name, id, byWeight}, quantity){
-    this.service.add({barcode, sp, name, quantity, id, byWeight});
+  onAddItem({barcode, sp, name, id}, quantity){
+    this.service.add({barcode, sp, name, quantity, id});
+    this.fetchItems();
+  }
+
+  onItemByWeightScanned({barcode, sp, name, id, byWeight}, weight, units){
+    this.service.add({barcode, sp, name, id, byWeight, weight, quantity: units});
     this.fetchItems();
   }
 
@@ -58,7 +64,7 @@ export class Bill extends Component {
       <div>
         <Header clearItems={this.clearItems} generatePrintLines={this.generatePrintLines}/>
         <SummaryCard service={this.service}/>
-        <BarCodeManager onItemScanned={this.onAddItem} masterList={this.state.masterList}/>
+        <BarCodeManager onItemScanned={this.onAddItem} onItemByWeightScanned={this.onItemByWeightScanned} masterList={this.state.masterList}/>
         <DataTable
           items={this.state.items}
           service={this.service}

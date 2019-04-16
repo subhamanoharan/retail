@@ -1,5 +1,4 @@
 import cartItemFactory from './cartItemFactory';
-import priceCalculator from '../services/priceCalculator';
 
 export default class ImmutableCart {
   constructor(items) {
@@ -10,19 +9,15 @@ export default class ImmutableCart {
     return new ImmutableCart([]);
   }
 
-  _incrementItemQuantity(item, quanity){
-    const newQuantity = quanity + item.quantity;
-    return this.updateItemByCode({...item, quantity: newQuantity});
-  }
-
-  updateItemByCode(item) {
-    const updatedItems = this.items.map(i => i.barcode === item.barcode ? item : i);
-    return new ImmutableCart(updatedItems);
-  }
-
-  findItemByCode(barcode){
-    const matchingItem = this.items.find(i => i.barcode === barcode);
-    return matchingItem ? {...matchingItem} : matchingItem;
+  addItem(item, quantity = 1) {
+    const itemToAdd = cartItemFactory({...item, quantity});
+    const existingItem = this.findMatch(itemToAdd);
+    if(existingItem){
+      const updatedItems = this.items.map(i => i.matches(itemToAdd) ?
+        {...i, quantity: i.quantity + itemToAdd.quantity} : i);
+      return new ImmutableCart(updatedItems);
+    }
+    return new ImmutableCart([...this.items, itemToAdd]);
   }
 
   deleteItem(item) {
@@ -30,12 +25,8 @@ export default class ImmutableCart {
     return new ImmutableCart(updatedItems);
   }
 
-  addItem(item, quantity = 1) {
-    const existingItem = this.findItemByCode(item.barcode);
-    if(existingItem && !existingItem.byWeight)
-      return this._incrementItemQuantity(existingItem, quantity);
-    else
-      return new ImmutableCart([...this.items, {...item, quantity}]);
+  findMatch(itemToAdd){
+    return this.items.find(i => i.matches(itemToAdd));
   }
 
   getItems() {
@@ -47,10 +38,10 @@ export default class ImmutableCart {
   }
 
   getTotal() {
-    return priceCalculator(this.items);
+    return this.items.reduce((acc, item) => acc + item.price(), 0);
   }
 
   getTotalNoOfItems() {
-    return this.items.reduce((acc, item) => acc + (item.byWeight ? 1 : item.quantity), 0);
+    return this.items.reduce((acc, item) => acc + item.quantity, 0);
   }
 }

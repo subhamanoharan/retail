@@ -22,8 +22,8 @@ export default class BarCodeManager extends Component {
       alert(`No matching item for scanned barcode: ${code}`);
   }
 
-  onWeightEntered(value){
-    this.props.onItemScanned(this.state.matchingItem, value);
+  onWeightEntered(weight, units){
+    this.props.onItemByWeightScanned(this.state.matchingItem, weight, units);
     this.hideWeightInput();
   }
 

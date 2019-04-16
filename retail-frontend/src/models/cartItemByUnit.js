@@ -7,7 +7,15 @@ export default class CartItemByUnit {
     this.id = id;
   }
 
+  getNoOfUnits(){
+    return `${this.quantity}`;
+  }
+
   price(){
     return this.quantity * this.sp;
+  }
+
+  matches(item){
+    return this.barcode === item.barcode;
   }
 }

@@ -12,39 +12,6 @@ describe('ImmutableCart', () => {
 
   const immutableCart = new ImmutableCart(initialItems);
 
-  describe('findItemByCode', () => {
-    it('should return matching item', () => {
-      expect(immutableCart.findItemByCode('123')).toEqual(item1);
-    });
-    it('should return undefined when there is no match', () => {
-      expect(immutableCart.findItemByCode('125')).toBeUndefined();
-    });
-  });
-
-  describe('updateItemByCode', () => {
-    it('should update item if it exists', () => {
-      const updatedItem1 = {...item1, quantity: 20};
-
-      const updatedCart = immutableCart.updateItemByCode(updatedItem1);
-      const items = updatedCart.getItems();
-
-      expect(items).toHaveLength(2)
-      const [i1, i2] = items;
-      expect(i1).toEqual(updatedItem1);
-      expect(i2).toEqual(item2);
-    });
-
-    it('should ignore if it does not exist', () => {
-      const updatedItems = immutableCart.updateItemByCode({barcode: 'blah'});
-      const items = updatedItems.items;
-
-      expect(items).toHaveLength(2)
-      const [i1, i2] = items;
-      expect(i1).toEqual(item1);
-      expect(i2).toEqual(item2);
-    });
-  });
-
   describe('deleteItem', () =>{
     it('should delete item', () => {
       const item3 = {name: 'a3', barcode: '125', sp: 5};
@@ -60,6 +27,7 @@ describe('ImmutableCart', () => {
       expect(i2).toEqual(item2);
     });
   });
+
   describe('addItem', () =>{
     it('should add a new item', () => {
       const item3 = {name: 'a3', barcode: '125', sp: 5};
@@ -73,36 +41,6 @@ describe('ImmutableCart', () => {
       expect(i1).toEqual(item1);
       expect(i2).toEqual(item2);
       expect(i3).toEqual(expectedItem3);
-    });
-
-    it('should add a new item by weight', () => {
-      const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true};
-      const expectedItem3 = {...item3, quantity: 12.5};
-
-      const cartAfterAdding = immutableCart.addItem(item3, 12.5);
-      const items = cartAfterAdding.getItems();
-
-      expect(items).toHaveLength(3)
-      const [i1, i2, i3] = items;
-      expect(i1).toEqual(item1);
-      expect(i2).toEqual(item2);
-      expect(i3).toEqual(expectedItem3);
-    });
-
-
-    it('should add another item by weight', () => {
-      const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true};
-      const expectedItem3 = {...item3, quantity: 12.5};
-      const expectedItem4 = {...item3, quantity: 15};
-      const cartAfterAdding = immutableCart.addItem(item3, 12.5).addItem(item3, 15);
-      const items = cartAfterAdding.getItems();
-
-      expect(items).toHaveLength(4)
-      const [i1, i2, i3, i4] = items;
-      expect(i1).toEqual(item1);
-      expect(i2).toEqual(item2);
-      expect(i3).toEqual(expectedItem3);
-      expect(i4).toEqual(expectedItem4);
     });
 
     it('should update quantity of existing item by 1 by default', () => {
@@ -124,10 +62,81 @@ describe('ImmutableCart', () => {
       expect(i1).toEqual(item1);
       expect(i2).toEqual({...item2, quantity: item2.quantity + 3});
     });
+
+    describe('item by weight', () => {
+      it('should add a new item by weight', () => {
+        const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 12.5};
+        const expectedItem3 = {...item3, quantity: 12};
+
+        const cartAfterAdding = immutableCart.addItem(item3, 12);
+        const items = cartAfterAdding.getItems();
+
+        expect(items).toHaveLength(3)
+        const [i1, i2, i3] = items;
+        expect(i1).toEqual(item1);
+        expect(i2).toEqual(item2);
+        expect(i3).toEqual(expectedItem3);
+      });
+
+      it('should add another item by weight when weight differs', () => {
+        const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 10};
+        const item4 = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 15};
+        const expectedItem3 = {...item3, quantity: 1};
+        const expectedItem4 = {...item4, quantity: 1};
+        const cartAfterAdding = immutableCart.addItem(item3).addItem(item4);
+        const items = cartAfterAdding.getItems();
+
+        expect(items).toHaveLength(4)
+        const [i1, i2, i3, i4] = items;
+        expect(i1).toEqual(item1);
+        expect(i2).toEqual(item2);
+        expect(i3).toEqual(expectedItem3);
+        expect(i4).toEqual(expectedItem4);
+      });
+
+      it('should add another item by weight when weight is same but barcode differs', () => {
+        const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 10};
+        const item4 = {name: 'a3', barcode: '129', sp: 5, byWeight: true, weight: 10};
+        const expectedItem3 = {...item3, quantity: 1};
+        const expectedItem4 = {...item4, quantity: 1};
+        const cartAfterAdding = immutableCart.addItem(item3).addItem(item4);
+        const items = cartAfterAdding.getItems();
+
+        expect(items).toHaveLength(4)
+        const [i1, i2, i3, i4] = items;
+        expect(i1).toEqual(item1);
+        expect(i2).toEqual(item2);
+        expect(i3).toEqual(expectedItem3);
+        expect(i4).toEqual(expectedItem4);
+      });
+
+      it('should update quantity of  item by weight when weight is the same', () => {
+        const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 10};
+        const item4 = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 10};
+        const expectedItem3 = {...item3, quantity: 14};
+        const cartAfterAdding = immutableCart.addItem(item3).addItem(item4, 13);
+        const items = cartAfterAdding.getItems();
+
+        expect(items).toHaveLength(3)
+        const [i1, i2, i3] = items;
+        expect(i1).toEqual(item1);
+        expect(i2).toEqual(item2);
+        expect(i3).toEqual(expectedItem3);
+      });
+    });
   });
 
-  it('getTotal', () => {
-    expect(immutableCart.getTotal()).toEqual(25);
+  describe('getTotal', () => {
+    it('when there are items by unit', () => {
+      expect(immutableCart.getTotal()).toEqual(25);
+    });
+
+    it('when there are items by weight', () => {
+      const itemByWeight = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 10.2};
+      const cartAfterAdding = immutableCart.addItem(itemByWeight, 11);
+
+      expect(cartAfterAdding.getTotal()).toEqual(586);
+    });
   });
 
   it('clearCart', () => {
@@ -135,8 +144,17 @@ describe('ImmutableCart', () => {
     expect(cleanCart.getItems()).toEqual([]);
   });
 
-  it('getTotalNoOfItems', () => {
-    expect(immutableCart.getTotalNoOfItems()).toEqual(20);
+  describe('getTotalNoOfItems', () => {
+    it('when there are items by unit', () => {
+      expect(immutableCart.getTotalNoOfItems()).toEqual(20);
+    });
+
+    it('when there are items by weight', () => {
+      const itemByWeight = {name: 'a3', barcode: '125', sp: 5, byWeight: true, weight: 10.2};
+      const cartAfterAdding = immutableCart.addItem(itemByWeight, 11);
+
+      expect(cartAfterAdding.getTotalNoOfItems()).toEqual(31);
+    });
   });
 
   it('getCartItems', () => {

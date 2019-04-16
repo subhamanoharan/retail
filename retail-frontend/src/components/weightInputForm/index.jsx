@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 export default class WeightInputForm extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {g: 0, kg: 0};
+      this.state = {g: 0, kg: 0, units: 1};
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.hideModal = this.hideModal.bind(this);
@@ -24,10 +24,11 @@ export default class WeightInputForm extends React.Component {
    }
 
   handleSubmit(event){
-    const value = Number(this.state.kg) + (Number(this.state.g) / 1000);
+    const {g, kg, units} = this.state;
+    const value = Number(kg) + (Number(g) / 1000);
     event.preventDefault();
     if(value>0)
-      this.props.onSubmit(value)
+      this.props.onSubmit(value, Number(units))
     else
       this.setState({error: true});
   }
@@ -38,7 +39,7 @@ export default class WeightInputForm extends React.Component {
   }
 
   render() {
-    const {error} = this.state;
+    const {error, g, kg, units} = this.state;
     return(
       <Dialog
         open
@@ -51,7 +52,7 @@ export default class WeightInputForm extends React.Component {
           <TextField
             id="weightInKg"
             label="kg"
-            value={this.state.kg}
+            value={kg}
             type="number"
             inputProps={{min: 0, step: 1, max: 10000}}
             required
@@ -61,11 +62,21 @@ export default class WeightInputForm extends React.Component {
           <TextField
             id="weightIng"
             label="g"
-            value={this.state.g}
+            value={g}
             type="number"
             inputProps={{min: 0, step: 1, max: 999}}
             required
             onChange={this.handleChange('g')}
+          />
+          <TextField
+            id="units"
+            label="Units"
+            value={units}
+            fullWidth
+            type="number"
+            inputProps={{min: 1, step: 1, max: 500}}
+            required
+            onChange={this.handleChange('units')}
           />
         </DialogContent>
         <DialogActions>

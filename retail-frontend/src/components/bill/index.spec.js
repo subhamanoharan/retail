@@ -47,6 +47,7 @@ describe('Bill', () => {
   it('should pass appropriate props to BarCodeManager', () => {
     expect(wrapper.find(BarCodeManager).props()).toEqual({
       onItemScanned: expect.anything(),
+      onItemByWeightScanned: expect.anything(),
       masterList
     });
   });
@@ -96,12 +97,12 @@ describe('Bill', () => {
   });
 
   it('should add item by weight and refresh items', () => {
-    const {onItemScanned} = wrapper.find(BarCodeManager).props();
+    const {onItemByWeightScanned} = wrapper.find(BarCodeManager).props();
 
-    onItemScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12, byWeight: true}, 3.5);
+    onItemByWeightScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12, byWeight: true}, 3.5, 12);
 
     expect(wrapper.state().items).toEqual([
-      {barcode: 'barcode', name: 'name', sp: 1, quantity: 3.5, id: 12, byWeight: true}
+      {barcode: 'barcode', name: 'name', sp: 1, quantity: 12, weight: 3.5, id: 12, byWeight: true}
     ]);
   });
 

@@ -1,4 +1,4 @@
-import priceCalculator from './priceCalculator';
+import cartItemFactory from '../models/cartItemFactory';
 
 class BillDataTableService {
 
@@ -35,7 +35,9 @@ class BillDataTableService {
   }
 
   generateData(items){
-    return items.map((item, i) => [i+1, item.name, item.sp, item.quantity, priceCalculator([item])]);
+    return items
+      .map(cartItemFactory)
+      .map((item, i) => [i+1, item.name, item.sp, item.getNoOfUnits(), item.price()]);
   }
 }
 
