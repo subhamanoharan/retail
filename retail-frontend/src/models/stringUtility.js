@@ -12,3 +12,13 @@ export const splitByLength = (input, length) => {
 
 export const prettyPrintNumber = (i) =>
   Number.isInteger(i) ? `${i}` : `${Number(i).toFixed(2)}`;
+
+export const prettyPrintWeight = (i) => {
+  if(Number.isInteger(i)) return `${i} kg`;
+
+  const kg = Math.floor(i);
+  const g = i - kg;
+  if(kg === 0) return `${g*1000} g`;
+
+  return `${Number(i).toFixed(3)} kg`;
+};

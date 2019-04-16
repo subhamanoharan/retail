@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Grid from "@material-ui/core/Grid";
 
 export default class WeightInputForm extends React.Component {
   constructor(props) {
@@ -46,28 +47,34 @@ export default class WeightInputForm extends React.Component {
         aria-labelledby="form-dialog-title"
       >
       <DialogTitle id="form-dialog-title">Weight</DialogTitle>
-      {error && <Typography color="error" align="center">Please enter a value</Typography>}
+      {error && <Typography color="error" align="center">Please enter a weight</Typography>}
       <form onSubmit={this.handleSubmit}>
         <DialogContent>
-          <TextField
-            id="weightInKg"
-            label="kg"
-            value={kg}
-            type="number"
-            inputProps={{min: 0, step: 1, max: 10000}}
-            required
-            autoFocus
-            onChange={this.handleChange('kg')}
-          />
-          <TextField
-            id="weightIng"
-            label="g"
-            value={g}
-            type="number"
-            inputProps={{min: 0, step: 1, max: 999}}
-            required
-            onChange={this.handleChange('g')}
-          />
+          <Grid container spacing={16}>
+            <Grid item>
+              <TextField
+                id="weightInKg"
+                label="kg"
+                value={kg}
+                type="number"
+                inputProps={{min: 0, step: 1, max: 10000}}
+                required
+                autoFocus
+                onChange={this.handleChange('kg')}
+              />
+            </Grid>
+            <Grid item>
+              <TextField
+                id="weightIng"
+                label="g"
+                value={g}
+                type="number"
+                inputProps={{min: 0, step: 1, max: 999}}
+                required
+                onChange={this.handleChange('g')}
+              />
+            </Grid>
+          </Grid>
           <TextField
             id="units"
             label="Units"

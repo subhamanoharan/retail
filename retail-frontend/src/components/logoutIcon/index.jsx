@@ -1,6 +1,7 @@
 import React from 'react';
 import ExitIcon from "@material-ui/icons/ExitToApp";
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from "@material-ui/core/Tooltip";
 import {withSnackbar} from 'notistack';
 
 import usersService from './../../services/usersService';
@@ -21,9 +22,11 @@ class LogoutIcon extends React.Component {
 
   render(){
     return (
-      <IconButton color="inherit" aria-label="Menu"  onClick={this.onLogout}>
-        <ExitIcon/>
-      </IconButton>
+      <Tooltip title={"Logout"}>
+        <IconButton color="inherit" aria-label="Menu"  onClick={this.onLogout}>
+          <ExitIcon/>
+        </IconButton>
+      </Tooltip>
     );
   }
 }

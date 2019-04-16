@@ -8,11 +8,11 @@ describe('CartItemByWeight', () => {
   const cartItemWithDefaultQuantity = new CartItemByWeight(anotherData);
 
   it('should get number of units', () => {
-    expect(cartItemByWeight.getNoOfUnits()).toEqual('10 * 76');
+    expect(cartItemByWeight.getNoOfUnitsToDisplay()).toEqual('10 kg * 76');
   });
 
   it('should get default number of units', () => {
-    expect(cartItemWithDefaultQuantity.getNoOfUnits()).toEqual('1 * 1');
+    expect(cartItemWithDefaultQuantity.getNoOfUnitsToDisplay()).toEqual('1 kg * 1');
   });
 
   it('should get price', () => {

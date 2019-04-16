@@ -37,7 +37,7 @@ class BillDataTableService {
   generateData(items){
     return items
       .map(cartItemFactory)
-      .map((item, i) => [i+1, item.name, item.sp, item.getNoOfUnits(), item.price()]);
+      .map((item, i) => [i+1, item.name, item.sp, item.getNoOfUnitsToDisplay(), item.price()]);
   }
 }
 

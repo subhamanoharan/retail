@@ -34,7 +34,7 @@ describe('BillDataTableService', () => {
     expect(billDataTableService.generateData(items)).toEqual([
       [1, 'item1', 12, '2', 24],
       [2, 'item2', 10, '3', 30],
-      [3, 'item3', 10, '5 * 3', 150]
+      [3, 'item3', 10, '5 kg * 3', 150]
     ]);
   });
 

@@ -1,3 +1,5 @@
+import {prettyPrintWeight} from './stringUtility';
+
 export default class CartItemByWeight {
   constructor({name, barcode, quantity = 1, sp, id, weight}){
     this.name = name;
@@ -9,8 +11,8 @@ export default class CartItemByWeight {
     this.weight = weight;
   }
 
-  getNoOfUnits(){
-    return `${this.weight} * ${this.quantity}`
+  getNoOfUnitsToDisplay(){
+    return `${prettyPrintWeight(this.weight)} * ${this.quantity}`
   }
 
   price(){

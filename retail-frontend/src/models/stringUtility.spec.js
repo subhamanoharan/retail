@@ -1,4 +1,4 @@
-import {replaceFrom, splitByLength, prettyPrintNumber} from './stringUtility';
+import {replaceFrom, splitByLength, prettyPrintNumber, prettyPrintWeight} from './stringUtility';
 
 describe('replaceFrom', () => {
   it('should replace from start index in the beginning', () => {
@@ -62,4 +62,22 @@ describe('prettyPrintNumber', () => {
   it('should return number with 2 decimal places for decimals with more than 2 places rounded', () =>
     expect(prettyPrintNumber(123.2163)).toEqual('123.22')
   );
-})
+});
+
+describe('prettyPrintWeight', () => {
+  it('for whole number of kg', () =>
+    expect(prettyPrintWeight(123)).toEqual('123 kg')
+  );
+
+  it('for whole number of g', () =>
+    expect(prettyPrintWeight(0.01)).toEqual('10 g')
+  );
+
+  it('for kg and g with 2 decimals', () =>
+    expect(prettyPrintWeight(123.25)).toEqual('123.250 kg')
+  );
+
+  it('for kg and g with 3 decimals', () =>
+    expect(prettyPrintWeight(123.252)).toEqual('123.252 kg')
+  );
+});

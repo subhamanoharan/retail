@@ -72,7 +72,7 @@ export default class AddManualItemForm extends React.Component {
           />
           <TextField
             id="sp"
-            label="SP"
+            label="Price per unit"
             value={this.state.sp}
             fullWidth
             type="number"

@@ -7,7 +7,7 @@ export default class CartItemByUnit {
     this.id = id;
   }
 
-  getNoOfUnits(){
+  getNoOfUnitsToDisplay(){
     return `${this.quantity}`;
   }
 

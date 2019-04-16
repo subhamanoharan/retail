@@ -8,11 +8,11 @@ describe('CartItemByUnit', () => {
   const cartItemWithDefaultQuantity = new CartItemByUnit(anotherData);
 
   it('should get number of units', () => {
-    expect(cartItemByUnit.getNoOfUnits()).toEqual('76');
+    expect(cartItemByUnit.getNoOfUnitsToDisplay()).toEqual('76');
   });
 
   it('should get default number of units', () => {
-    expect(cartItemWithDefaultQuantity.getNoOfUnits()).toEqual('1');
+    expect(cartItemWithDefaultQuantity.getNoOfUnitsToDisplay()).toEqual('1');
   });
 
   it('should get price', () => {
