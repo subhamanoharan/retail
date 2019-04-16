@@ -1,13 +1,13 @@
 import PriceCalculationColumn from './priceCalculationColumn';
-import CartItem from './../../cartItem';
+import cartItemFactory from './../../cartItemFactory';
 
 describe('PriceCalculationColumn', () => {
-  const item1 = new CartItem({quantity: 2, sp: 123});
-  const item2 = new CartItem({quantity: 1, sp: 223.5});
-  const item3 = new CartItem({quantity: 1, sp: 223.75});
-  const item4 = new CartItem({quantity: 3, sp: 224.752});
-  const item5 = new CartItem({quantity: 3, sp: 10000});
-  const item6 = new CartItem({quantity: 33, sp: 223.75});
+  const item1 = cartItemFactory({quantity: 2, sp: 123});
+  const item2 = cartItemFactory({quantity: 1, sp: 223.5});
+  const item3 = cartItemFactory({quantity: 1, sp: 223.75});
+  const item4 = cartItemFactory({quantity: 3, sp: 224.752});
+  const item5 = cartItemFactory({quantity: 3, sp: 10000});
+  const item6 = cartItemFactory({quantity: 33, sp: 223.75});
 
   describe('single item', () => {
     it('should format line with whole number price', () => {

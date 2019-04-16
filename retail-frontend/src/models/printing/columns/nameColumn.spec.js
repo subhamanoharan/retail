@@ -1,9 +1,9 @@
 import NameColumn from './nameColumn';
-import CartItem from './../../cartItem';
+import cartItemFactory from './../../cartItemFactory';
 
 describe('NameColumn', () => {
-  const item1 = new CartItem({name: 'Marie'});
-  const item2 = new CartItem({name: 'Maries'});
+  const item1 = cartItemFactory({name: 'Marie'});
+  const item2 = cartItemFactory({name: 'Maries'});
 
   describe('when there is one item', () => {
     it('which fits', () => {

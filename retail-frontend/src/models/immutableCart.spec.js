@@ -1,6 +1,6 @@
 import deepFreeze from 'deep-freeze';
 import ImmutableCart from './immutableCart';
-import CartItem from './cartItem';
+import CartItemByUnit from './cartItemByUnit';
 
 describe('ImmutableCart', () => {
   const item1 = {name: 'a1', quantity: 15, barcode: '123', sp: 1};
@@ -75,6 +75,36 @@ describe('ImmutableCart', () => {
       expect(i3).toEqual(expectedItem3);
     });
 
+    it('should add a new item by weight', () => {
+      const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true};
+      const expectedItem3 = {...item3, quantity: 12.5};
+
+      const cartAfterAdding = immutableCart.addItem(item3, 12.5);
+      const items = cartAfterAdding.getItems();
+
+      expect(items).toHaveLength(3)
+      const [i1, i2, i3] = items;
+      expect(i1).toEqual(item1);
+      expect(i2).toEqual(item2);
+      expect(i3).toEqual(expectedItem3);
+    });
+
+
+    it('should add another item by weight', () => {
+      const item3 = {name: 'a3', barcode: '125', sp: 5, byWeight: true};
+      const expectedItem3 = {...item3, quantity: 12.5};
+      const expectedItem4 = {...item3, quantity: 15};
+      const cartAfterAdding = immutableCart.addItem(item3, 12.5).addItem(item3, 15);
+      const items = cartAfterAdding.getItems();
+
+      expect(items).toHaveLength(4)
+      const [i1, i2, i3, i4] = items;
+      expect(i1).toEqual(item1);
+      expect(i2).toEqual(item2);
+      expect(i3).toEqual(expectedItem3);
+      expect(i4).toEqual(expectedItem4);
+    });
+
     it('should update quantity of existing item by 1 by default', () => {
       const cartAfterAdding = immutableCart.addItem({barcode: item2.barcode});
       const items = cartAfterAdding.getItems();
@@ -109,11 +139,7 @@ describe('ImmutableCart', () => {
     expect(immutableCart.getTotalNoOfItems()).toEqual(20);
   });
 
-  it('getTotalNoOfTypeOfItems', () => {
-    expect(immutableCart.getTotalNoOfTypeOfItems()).toEqual(2);
-  });
-
   it('getCartItems', () => {
-    expect(immutableCart.getCartItems()).toEqual([expect.any(CartItem), expect.any(CartItem)]);
+    expect(immutableCart.getCartItems()).toEqual([expect.any(CartItemByUnit), expect.any(CartItemByUnit)]);
   });
 });

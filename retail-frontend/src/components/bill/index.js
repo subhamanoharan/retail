@@ -44,8 +44,8 @@ export class Bill extends Component {
     this.fetchItems();
   }
 
-  onAddItem({barcode, sp, name, id}, quantity){
-    this.service.add({barcode, sp, name, quantity, id});
+  onAddItem({barcode, sp, name, id, byWeight}, quantity){
+    this.service.add({barcode, sp, name, quantity, id, byWeight});
     this.fetchItems();
   }
 

@@ -1,10 +1,10 @@
 import lodash from 'lodash';
 
 import IdColumn from './idColumn';
-import CartItem from './../../cartItem';
+import cartItemFactory from './../../cartItemFactory';
 
 describe('IdColumn', () => {
-  const generateCartItems = (n) => lodash.times(n, (index) => new CartItem({name: 'blah', id: index}));
+  const generateCartItems = (n) => lodash.times(n, (index) => cartItemFactory({name: 'blah', id: index}));
 
   it('should format line when there is one item', () => {
     const cartItems = generateCartItems(1);

@@ -1,9 +1,9 @@
-import CartItem from './cartItem';
+import cartItemFactory from './cartItemFactory';
 import priceCalculator from '../services/priceCalculator';
 
 export default class ImmutableCart {
   constructor(items) {
-    this.items = items.map(item => new CartItem({...item}));
+    this.items = items.map(item => cartItemFactory({...item}));
   }
 
   clear(){
@@ -32,7 +32,7 @@ export default class ImmutableCart {
 
   addItem(item, quantity = 1) {
     const existingItem = this.findItemByCode(item.barcode);
-    if(existingItem)
+    if(existingItem && !existingItem.byWeight)
       return this._incrementItemQuantity(existingItem, quantity);
     else
       return new ImmutableCart([...this.items, {...item, quantity}]);
@@ -43,7 +43,7 @@ export default class ImmutableCart {
   }
 
   getCartItems(){
-    return this.getItems().map(i => new CartItem(i)); 
+    return this.getItems().map(i => cartItemFactory(i));
   }
 
   getTotal() {
@@ -51,10 +51,6 @@ export default class ImmutableCart {
   }
 
   getTotalNoOfItems() {
-    return this.items.reduce((acc, item) => acc + item.quantity, 0);
-  }
-
-  getTotalNoOfTypeOfItems() {
-    return this.items.length;
+    return this.items.reduce((acc, item) => acc + (item.byWeight ? 1 : item.quantity), 0);
   }
 }

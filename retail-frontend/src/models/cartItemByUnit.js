@@ -1,4 +1,4 @@
-export default class CartItem {
+export default class CartItemByUnit {
   constructor({name, barcode, quantity = 1, sp, id}){
     this.name = name;
     this.barcode = barcode;

@@ -9,8 +9,8 @@ export default class BillService {
     return this.cart.getItems();
   }
 
-  add({barcode, sp, name, quantity, id}){
-    this.cart =  this.cart.addItem({barcode, sp, name, id}, quantity)
+  add({barcode, sp, name, quantity, id, byWeight}){
+    this.cart =  this.cart.addItem({barcode, sp, name, id, byWeight}, quantity)
     return Promise.resolve();
   }
 

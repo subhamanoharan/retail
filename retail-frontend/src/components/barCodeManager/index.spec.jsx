@@ -9,7 +9,7 @@ describe('<BarCodeManager />', () => {
   let wrapper;
   let onItemScannedMock;
   const dummyMasterList = [{barcode: '1', name: 'item1'},
-    {barcode: '1', name: 'item2'}, {barcode: '1', name: 'item3'}]
+    {barcode: '2', name: 'item2'}, {barcode: 'AB', name: 'item3'}]
 
     const m = jest.fn();
     Object.defineProperty(window, 'alert', m);
@@ -30,6 +30,14 @@ describe('<BarCodeManager />', () => {
     onScanComplete('1');
 
     expect(onItemScannedMock).toHaveBeenCalledWith({barcode: '1', name: 'item1'})
+  });
+
+  it('should check code against masterlist being case insensititve', () => {
+    const {onScanComplete} = wrapper.find(BarCodeInputField).props();
+
+    onScanComplete('ab');
+
+    expect(onItemScannedMock).toHaveBeenCalledWith(dummyMasterList[2])
   });
 
   it.skip('should alert if code is not in masterList', () => {

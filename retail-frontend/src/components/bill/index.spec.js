@@ -95,6 +95,16 @@ describe('Bill', () => {
     ]);
   });
 
+  it('should add item by weight and refresh items', () => {
+    const {onItemScanned} = wrapper.find(BarCodeManager).props();
+
+    onItemScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12, byWeight: true}, 3.5);
+
+    expect(wrapper.state().items).toEqual([
+      {barcode: 'barcode', name: 'name', sp: 1, quantity: 3.5, id: 12, byWeight: true}
+    ]);
+  });
+
   it('should pass appropriate props to DataTable', () => {
     const {items, service, datatableService, addForm, fetchItems} = wrapper.find(DataTable).props();
 
