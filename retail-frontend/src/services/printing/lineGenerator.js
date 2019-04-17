@@ -3,7 +3,7 @@ import lodash from 'lodash';
 import IdColumn from '../../models/printing/columns/idColumn';
 import NameColumn from '../../models/printing/columns/nameColumn';
 import PriceColumn from '../../models/printing/columns/priceColumn';
-import PriceCalculationColumn from '../../models/printing/columns/priceCalculationColumn';
+import QuantityColumn from '../../models/printing/columns/quantityColumn';
 import {splitByLength, prettyPrintPrice} from '../../models/stringUtility';
 import constants from '../../constants';
 
@@ -14,12 +14,12 @@ export class LineGenerator {
     this.MAX_LIMIT = MAX_LIMIT;
   }
 
-  fill(index, idColumn, nameColumn, priceCalculationColumn, priceColumn){
+  fill(index, idColumn, nameColumn, quantityColumn, priceColumn){
     const line = this.getBlankLine();
     const lineWithId = idColumn.getFormattedLine(index, line);
     const lineWithPrice = priceColumn.getFormattedLine(index, lineWithId);
-    const lineWithPriceCalc = priceCalculationColumn.getFormattedLine(index, lineWithPrice);
-    const linesWithName = nameColumn.getFormattedLines(index, lineWithPriceCalc);
+    const lineWithQuantity= quantityColumn.getFormattedLine(index, lineWithPrice);
+    const linesWithName = nameColumn.getFormattedLines(index, lineWithQuantity);
     return [...linesWithName];
   }
 
@@ -47,17 +47,17 @@ export class LineGenerator {
     const cartItems = cart.getCartItems();
     const idColumn = new IdColumn(cartItems);
     const priceColumn = new PriceColumn(cartItems);
-    const priceCalculationColumn = new PriceCalculationColumn(cartItems);
+    const quantityColumn = new QuantityColumn(cartItems);
 
     const maxNameColumnLength = this.MAX_LIMIT - (idColumn.maxLength +
-      priceColumn.maxLength + priceCalculationColumn.maxLength + SPACE_BETWEEN_COLUMNS);
+      priceColumn.maxLength + quantityColumn.maxLength + SPACE_BETWEEN_COLUMNS);
     const nameColumn = new NameColumn(cartItems, maxNameColumnLength);
 
-    [idColumn, nameColumn, priceCalculationColumn, priceColumn]
+    [idColumn, nameColumn, quantityColumn, priceColumn]
       .forEach((c, i, array) => c.setStartIndex(array[i-1]))
     const defaultStartLines = this.getDefaultLines();
     const itemLines = cartItems.reduce((acc, ci, index) =>
-      [...acc, ...this.fill(index, idColumn, nameColumn, priceCalculationColumn, priceColumn)], []);
+      [...acc, ...this.fill(index, idColumn, nameColumn, quantityColumn, priceColumn)], []);
     const endLines = [this.getSeparatorLine(), this.getTotalLine(cart)]
     return [...defaultStartLines, ...itemLines, ...endLines]
   }

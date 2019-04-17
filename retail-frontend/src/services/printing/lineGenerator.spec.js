@@ -18,25 +18,33 @@ describe('CartItemLineGenerator', () => {
         '  124, Kamarajar Salai   ',
         '     Madurai-625009      ',
         '-------------------------',
-        '1 Marie    12.00*2  24.00',
-        '2 Sunfeas 12.50*11 137.50',
-        '  t                      ',
+        '1 Marie          2  24.00',
+        '2 Sunfeast      11 137.50',
         '-------------------------',
         '                   161.50'
       ]
     )
   });
 
-  it.skip('should give pretty lines with both wrapped', () => {
+  it('should give pretty lines with wrapped lines', () => {
     const cartItem1 = {name: 'Marie', sp: 12, quantity: 2};
     const cartItem2 = {name: 'Sunfeast', sp: 12.5, quantity: 11};
-    const cart = new Cart([cartItem1, cartItem2]);
-    const lineGenerator = new LineGenerator(10);
+    const cartItem3 = {name: 'Rice-variety Ponni', sp: 10.5, quantity: 10, byWeight: true, weight: 0.5};
+    const cart = new Cart([cartItem1, cartItem2, cartItem3]);
+    const lineGenerator = new LineGenerator(25);
     expect(lineGenerator.generate(cart)).toEqual(
       [
-        '1 Marie   24.00',
-        '2 Sunfea 137.50',
-        '  st           ',
+        '   M.S.Gurusamy Stores   ',
+        '  124, Kamarajar Salai   ',
+        '     Madurai-625009      ',
+        '-------------------------',
+        '1 Marie          2  24.00',
+        '2 Sunfeast      11 137.50',
+        '3 Rice-var 500g*10  52.50',
+        '  iety Pon               ',
+        '  ni                     ',
+        '-------------------------',
+        '                   214.00'
       ]
     )
   });
