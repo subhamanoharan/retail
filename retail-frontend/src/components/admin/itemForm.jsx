@@ -101,7 +101,7 @@ const withCategories = (categories) => class ItemForm extends React.Component {
           />
           <TextField
             id="sp"
-            label="SP"
+            label={this.state.byWeight ? "Price per kg" : "Price per unit"}
             value={this.state.sp}
             fullWidth
             type="number"

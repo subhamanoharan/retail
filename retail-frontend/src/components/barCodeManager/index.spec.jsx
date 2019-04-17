@@ -44,7 +44,8 @@ describe('<BarCodeManager />', () => {
     expect(wrapper.state()).toEqual({getWeight: true, matchingItem: itemByWeight})
     expect(barCodeInputFieldWrapper.props()).toEqual({
       onSubmit: expect.any(Function),
-      onCancel: expect.any(Function)
+      onCancel: expect.any(Function),
+      item: itemByWeight
     });
   });
 

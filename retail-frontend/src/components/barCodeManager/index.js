@@ -32,9 +32,9 @@ export default class BarCodeManager extends Component {
   }
 
   render() {
-    const {getWeight} = this.state;
+    const {getWeight, matchingItem} = this.state;
     return (getWeight ?
-      <WeightInputForm onSubmit={this.onWeightEntered} onCancel={this.hideWeightInput}/>
+      <WeightInputForm item={matchingItem} onSubmit={this.onWeightEntered} onCancel={this.hideWeightInput}/>
         : <BarCodeInputField onScanComplete={this.onBarCodeScanned}/>
     );
   }

@@ -11,7 +11,7 @@ import Grid from "@material-ui/core/Grid";
 export default class WeightInputForm extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {g: 0, kg: 0, units: 1};
+      this.state = {weight: 0, units: 1};
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.hideModal = this.hideModal.bind(this);
@@ -25,8 +25,8 @@ export default class WeightInputForm extends React.Component {
    }
 
   handleSubmit(event){
-    const {g, kg, units} = this.state;
-    const value = Number(kg) + (Number(g) / 1000);
+    const {weight, units} = this.state;
+    const value = Number(weight);
     event.preventDefault();
     if(value>0)
       this.props.onSubmit(value, Number(units))
@@ -40,7 +40,8 @@ export default class WeightInputForm extends React.Component {
   }
 
   render() {
-    const {error, g, kg, units} = this.state;
+    const {error, weight, units} = this.state;
+    const {item: {name, sp}} = this.props;
     return(
       <Dialog
         open
@@ -50,31 +51,18 @@ export default class WeightInputForm extends React.Component {
       {error && <Typography color="error" align="center">Please enter a weight</Typography>}
       <form onSubmit={this.handleSubmit}>
         <DialogContent>
-          <Grid container spacing={16}>
-            <Grid item>
-              <TextField
-                id="weightInKg"
-                label="kg"
-                value={kg}
-                type="number"
-                inputProps={{min: 0, step: 1, max: 10000}}
-                required
-                autoFocus
-                onChange={this.handleChange('kg')}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                id="weightIng"
-                label="g"
-                value={g}
-                type="number"
-                inputProps={{min: 0, step: 1, max: 999}}
-                required
-                onChange={this.handleChange('g')}
-              />
-            </Grid>
-          </Grid>
+          <Typography gutterBottom variant="h6">{name} - Rs.{sp}/kg</Typography>
+          <TextField
+            id="weight"
+            label="Weight(in kg)"
+            value={weight}
+            type="number"
+            inputProps={{min: 0, step: 0.001, max: 10000}}
+            required
+            autoFocus
+            fullWidth
+            onChange={this.handleChange('weight')}
+          />
           <TextField
             id="units"
             label="Units"
