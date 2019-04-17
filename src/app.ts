@@ -21,13 +21,13 @@ app.use(sessionMiddleware({ secret: config.SESSION_SECRET,
   }),
   cookie: {httpOnly: true, maxAge: 86400000} }));
 
-app.use(express.static(path.join(__dirname, '../retail-frontend/dist')));
-app.use(express.static(path.join(__dirname, '../retail-frontend/public')));
+app.use(express.static(path.join(__dirname, '/../retail-frontend/dist')));
+app.use(express.static(path.join(__dirname, '/../retail-frontend/public')));
 
 app.use('/api', ApiRouter);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname+'../retail-frontend/public/index.html'));
+  res.sendFile(path.join(__dirname + '/../retail-frontend/public/index.html'));
 });
 
 app.use(errorHandler);
