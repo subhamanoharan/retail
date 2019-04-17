@@ -5,16 +5,21 @@ import { shallow } from 'enzyme';
 import DataTable from '../dataTable';
 import itemsServiceMock from '../../services/itemsService';
 import itemsDataTableService from '../../services/itemsDataTableService';
-import ItemForm from './itemForm';
+import ItemFormMock from './itemForm';
 import AdminItems from './index';
 
 jest.mock('notistack', () => ({withSnackbar: jest.fn((a) => a)}));
+jest.mock('./itemForm');
 jest.mock('./../../services/itemsService', () => ({list: jest.fn()}));
 
 describe('<AdminItems/>', () => {
   let wrapper;
   const masterList = 'masterList';
+  const DummyItemForm = () => <p>Hey</p>;
+  const dummyCategories = ['Rice', 'Oil'];
+
   beforeEach(() => {
+    ItemFormMock.mockReturnValue(DummyItemForm);
     itemsServiceMock.list.mockResolvedValue(masterList);
     wrapper = shallow(<AdminItems />);
   });
@@ -35,8 +40,9 @@ describe('<AdminItems/>', () => {
     expect(items).toEqual(masterList);
     expect(service).toEqual(itemsServiceMock);
     expect(datatableService).toEqual(itemsDataTableService);
-    expect(editForm).toEqual(ItemForm);
-    expect(addForm).toEqual(ItemForm);
+    expect(editForm).toEqual(DummyItemForm);
+    expect(addForm).toEqual(DummyItemForm);
     expect(fetchItems).toEqual(expect.anything());
+    expect(ItemFormMock).toHaveBeenCalledWith(dummyCategories);
   });
 });

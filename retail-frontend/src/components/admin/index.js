@@ -9,7 +9,7 @@ import ItemForm from './itemForm';
 class Items extends React.Component {
   constructor(props){
     super(props);
-    this.state = {items: []};
+    this.state = {items: [], categories: ['Rice', 'Oil']};
     this.fetchItems = this.fetchItems.bind(this);
   }
 
@@ -27,13 +27,14 @@ class Items extends React.Component {
   }
 
   render() {
+    const {items, categories} = this.state;
     return (
       <DataTable
-        items={this.state.items}
+        items={items}
         service={itemsService}
         datatableService={itemsDataTableService}
-        editForm={ItemForm}
-        addForm={ItemForm}
+        editForm={ItemForm(categories)}
+        addForm={ItemForm(categories)}
         fetchItems={this.fetchItems}
       />);
   }

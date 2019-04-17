@@ -3,7 +3,7 @@ class ItemsDataTableService {
   generateOptions(selectionBar, toolbar){
     return {
       filterType: 'checkbox', pagination: false,
-      filter: false, viewColumns: false, print: false, download: false,
+      filter: true, viewColumns: false, print: true, download: true,
       search: true,
       customToolbar: toolbar,
       customToolbarSelect:selectionBar
@@ -22,11 +22,14 @@ class ItemsDataTableService {
       },{
         name: "Barcode",
         options: {filter: false, sort: false, searchable: true}
+      },{
+        name: "Category",
+        options: {filter: true, sort: false, searchable: true}
       }];
   }
 
   generateData(items){
-    return items.map((item) => [item.name, item.sp, item.barcode]);
+    return items.map((item) => [item.name, item.sp, item.barcode, item.category || '']);
   }
 }
 

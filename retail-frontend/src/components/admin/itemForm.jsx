@@ -7,15 +7,13 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormLabel from '@material-ui/core/FormLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import Grid from '@material-ui/core/Grid';
 import { withSnackbar } from 'notistack';
 
-class ItemForm extends React.Component {
+const withCategories = (categories) => class ItemForm extends React.Component {
   constructor(props) {
       super(props);
       const item = props.item;
@@ -23,15 +21,17 @@ class ItemForm extends React.Component {
       this.state = {...valuesToDisplay};
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.handleByWeightToggle = this.handleByWeightToggle.bind(this);
+      this.handleCategoryChange = this.handleCategoryChange.bind(this);
       this.hideModal = this.hideModal.bind(this);
    }
 
   getDefaultValues(){
-    return { name: '', sp: 0, barcode: '' };
+    return { name: '', sp: 0, barcode: '', byWeight: false, category: null };
   }
 
   getExistingValues(item){
-    return { name: item.name, sp: item.sp, barcode: item.barcode };
+    return { name: item.name, sp: item.sp, barcode: item.barcode, byWeight: item.byWeight, category: item.category };
   }
 
   handleChange(name) {
@@ -41,11 +41,24 @@ class ItemForm extends React.Component {
     };
   }
 
+  handleByWeightToggle(event) {
+    const checked = event.target.checked;
+    if(checked)
+      this.setState({byWeight: checked, category: categories[0]});
+    else
+      this.setState({byWeight: false, category: null});
+    event.stopPropagation();
+  }
+
+  handleCategoryChange(event){
+    this.setState({category: event.target.value});
+    event.stopPropagation();
+  }
+
   handleSubmit(event){
     event.preventDefault();
-    this.setState({error: ''});
-    const {name, sp, barcode} = this.state;
-    this.props.onSubmit({name, sp: Number(sp), barcode})
+    const {name, sp, barcode, byWeight, category} = this.state;
+    this.props.onSubmit({name, sp: Number(sp), barcode, byWeight, category})
       .then(this.props.onSuccess)
       .catch((errors) => {
         if(errors)
@@ -56,6 +69,15 @@ class ItemForm extends React.Component {
   hideModal(event){
     this.props.hideForm();
     event.stopPropagation();
+  }
+
+  generateCategorySelect(){
+    const menuItems = categories.map((c, i) => <MenuItem key={i} value={c}>{c}</MenuItem>)
+    return (
+      <FormControl fullWidth>
+        <FormLabel required>Category</FormLabel>
+        <Select value={this.state.category} onChange={this.handleCategoryChange}>{menuItems}</Select>
+      </FormControl>)
   }
 
   render() {
@@ -95,6 +117,15 @@ class ItemForm extends React.Component {
             required
             onChange={this.handleChange('barcode')}
           />
+          <Grid container alignItems="center">
+            <Grid item>
+              <FormLabel>Item sold by weight</FormLabel>
+            </Grid>
+            <Grid item>
+              <Switch checked={this.state.byWeight} onChange={this.handleByWeightToggle} />
+            </Grid>
+          </Grid>
+          { this.state.byWeight && this.generateCategorySelect() }
         </DialogContent>
         <DialogActions>
           <Button onClick={this.hideModal} color="primary">Cancel</Button>
@@ -105,4 +136,4 @@ class ItemForm extends React.Component {
    }
 }
 
-export default withSnackbar(ItemForm);
+export default (categories) => withSnackbar(withCategories(categories));
