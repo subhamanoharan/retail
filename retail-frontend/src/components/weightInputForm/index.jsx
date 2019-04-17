@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
+import {prettyPrintWeight} from '../../models/stringUtility';
 
 export default class WeightInputForm extends React.Component {
   constructor(props) {
@@ -14,12 +15,20 @@ export default class WeightInputForm extends React.Component {
       this.state = {weight: 0, units: 1};
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.handleWeightSelection = this.handleWeightSelection.bind(this);
       this.hideModal = this.hideModal.bind(this);
    }
 
    handleChange(name) {
      return (event) => {
        this.setState({[name]: event.target.value});
+       event.stopPropagation();
+     };
+   }
+
+   handleWeightSelection(wt){
+     return (event) => {
+       this.setState({weight: wt});
        event.stopPropagation();
      };
    }
@@ -42,6 +51,8 @@ export default class WeightInputForm extends React.Component {
   render() {
     const {error, weight, units} = this.state;
     const {item: {name, sp}} = this.props;
+    const selectedButtonProps = {variant: 'contained', color: 'primary'};
+    const unSelectedButtonProps = {variant: 'outlined'};
     return(
       <Dialog
         open
@@ -52,6 +63,18 @@ export default class WeightInputForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <DialogContent>
           <Typography gutterBottom variant="h6">{name} - Rs.{sp}/kg</Typography>
+          <Grid container spacing={8}>
+            {[0.050, 0.1, 0.25, 0.5, 1, 2].map((wt) =>
+              <Grid item>
+                <Button
+                  {...(wt==weight ? selectedButtonProps : unSelectedButtonProps)}
+                  onClick={this.handleWeightSelection(wt)}
+                >
+                  {prettyPrintWeight(wt)}
+                </Button>
+              </Grid>)
+            }
+          </Grid>
           <TextField
             id="weight"
             label="Weight(in kg)"
