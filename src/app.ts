@@ -7,13 +7,11 @@ import * as config from 'config';
 
 import ApiRouter from './routes/apiRoutes';
 import errorHandler from './services/errorHandler';
-import cors from './middlewares/cors';
 
 const app = express()
 const MemoryStore = memorystore(sessionMiddleware);
 
 app.use(bodyParser.json());
-app.use(cors);
 app.use(sessionMiddleware({ secret: config.SESSION_SECRET,
   resave: true, saveUninitialized: false,
   store: new MemoryStore({
@@ -32,4 +30,13 @@ app.get('*', (req, res) => {
 
 app.use(errorHandler);
 
+process.on('uncaughtException', function(error) {
+  console.error('uncaughtException', {error});
+  process.exit(1)
+});
+
+process.on('unhandledRejection', function(reason, p){
+   console.error('unhandledRejection', {reason, p});
+   process.exit(1)
+});
 export default app;
