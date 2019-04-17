@@ -1,9 +1,9 @@
 import lodash from 'lodash';
-import {replaceFrom, prettyPrintNumber} from '../../stringUtility';
+import {replaceFrom, prettyPrintPrice} from '../../stringUtility';
 
 export default class PriceColumn {
   constructor(cartItems){
-    this.prices = cartItems.map((ci) => prettyPrintNumber(ci.price()));
+    this.prices = cartItems.map((ci) => prettyPrintPrice(ci.price()));
     this.maxLength = lodash.max(this.prices.map((p) => String(p).length));
   }
 

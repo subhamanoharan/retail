@@ -10,6 +10,8 @@ export const splitByLength = (input, length) => {
     .map(s => s.padEnd(length));
 }
 
+export const prettyPrintPrice = (i) => `${Number(i).toFixed(2)}`;
+
 export const prettyPrintNumber = (i) =>
   Number.isInteger(i) ? `${i}` : `${Number(i).toFixed(2)}`;
 

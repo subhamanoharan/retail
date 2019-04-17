@@ -4,7 +4,7 @@ import IdColumn from '../../models/printing/columns/idColumn';
 import NameColumn from '../../models/printing/columns/nameColumn';
 import PriceColumn from '../../models/printing/columns/priceColumn';
 import PriceCalculationColumn from '../../models/printing/columns/priceCalculationColumn';
-import {splitByLength, prettyPrintNumber} from '../../models/stringUtility';
+import {splitByLength, prettyPrintPrice} from '../../models/stringUtility';
 import constants from '../../constants';
 
 const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT} = constants;
@@ -39,7 +39,7 @@ export class LineGenerator {
   }
 
   getTotalLine(cart){
-    return lodash.padStart(prettyPrintNumber(cart.getTotal()), this.MAX_LIMIT);
+    return lodash.padStart(prettyPrintPrice(cart.getTotal()), this.MAX_LIMIT);
   }
 
   generate(cart){

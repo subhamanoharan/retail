@@ -18,7 +18,7 @@ describe('CartItemLineGenerator', () => {
         '  124, Kamarajar Salai   ',
         '     Madurai-625009      ',
         '-------------------------',
-        '1 Marie       12*2     24',
+        '1 Marie    12.00*2  24.00',
         '2 Sunfeas 12.50*11 137.50',
         '  t                      ',
         '-------------------------',

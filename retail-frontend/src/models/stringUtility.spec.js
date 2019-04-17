@@ -1,4 +1,5 @@
-import {replaceFrom, splitByLength, prettyPrintNumber, prettyPrintWeight} from './stringUtility';
+import {replaceFrom, splitByLength,
+  prettyPrintPrice, prettyPrintNumber, prettyPrintWeight} from './stringUtility';
 
 describe('replaceFrom', () => {
   it('should replace from start index in the beginning', () => {
@@ -40,6 +41,28 @@ describe('splitByLength', () => {
 
     expect(splitByLength(input, length)).toEqual(['123', '456', '78 ']);
   });
+});
+
+describe('prettyPrintPrice', () => {
+  it('should return number as such for whole numbers', () =>
+    expect(prettyPrintPrice(123)).toEqual('123.00')
+  );
+
+  it('should return number with 2 decimal places for decimals with 2 places', () =>
+    expect(prettyPrintPrice(123.23)).toEqual('123.23')
+  );
+
+  it('should return number with 2 decimal places for decimals with less than 2 places', () =>
+    expect(prettyPrintPrice(123.2)).toEqual('123.20')
+  );
+
+  it('should return number with 2 decimal places for decimals with more than 2 places', () =>
+    expect(prettyPrintPrice(123.2123)).toEqual('123.21')
+  );
+
+  it('should return number with 2 decimal places for decimals with more than 2 places rounded', () =>
+    expect(prettyPrintPrice(123.2163)).toEqual('123.22')
+  );
 });
 
 describe('prettyPrintNumber', () => {

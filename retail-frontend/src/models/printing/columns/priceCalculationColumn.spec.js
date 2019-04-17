@@ -13,7 +13,7 @@ describe('PriceCalculationColumn', () => {
     it('should format line with whole number price', () => {
       const priceCalculationColumn = new PriceCalculationColumn([item1]);
 
-      expect(priceCalculationColumn.getFormattedLine(0, '')).toEqual('123*2');
+      expect(priceCalculationColumn.getFormattedLine(0, '')).toEqual('123.00*2');
     });
 
     it('should format line with decimal price with 1 decimal', () => {
@@ -39,14 +39,14 @@ describe('PriceCalculationColumn', () => {
     it('should format line with only whole numbers', () => {
       const priceCalculationColumn = new PriceCalculationColumn([item1, item5]);
 
-      expect(priceCalculationColumn.getFormattedLine(0, '')).toEqual('  123*2');
-      expect(priceCalculationColumn.getFormattedLine(1, '')).toEqual('10000*3');
+      expect(priceCalculationColumn.getFormattedLine(0, '')).toEqual('  123.00*2');
+      expect(priceCalculationColumn.getFormattedLine(1, '')).toEqual('10000.00*3');
     });
 
     it('should format line with whole and decimal numbers', () => {
       const priceCalculationColumn = new PriceCalculationColumn([item1, item2]);
 
-      expect(priceCalculationColumn.getFormattedLine(0, '')).toEqual('   123*2');
+      expect(priceCalculationColumn.getFormattedLine(0, '')).toEqual('123.00*2');
       expect(priceCalculationColumn.getFormattedLine(1, '')).toEqual('223.50*1');
     });
 
