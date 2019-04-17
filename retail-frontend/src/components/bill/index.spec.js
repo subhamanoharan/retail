@@ -18,9 +18,12 @@ jest.mock('./../../services/itemsService', () => ({list: jest.fn()}));
 describe('Bill', () => {
   let wrapper;
   const masterList = 'masterList';
+  let enqueueSnackbarMock;
+
   beforeEach(() => {
+    enqueueSnackbarMock = jest.fn();
     itemsServiceMock.list.mockResolvedValue(masterList);
-    wrapper = shallow(<Bill />);
+    wrapper = shallow(<Bill enqueueSnackbar={enqueueSnackbarMock}/>);
   });
 
   afterEach(() => {
@@ -94,6 +97,7 @@ describe('Bill', () => {
     expect(wrapper.state().items).toEqual([
       {barcode: 'barcode', name: 'name', sp: 1, quantity: 3, id: 12}
     ]);
+    expect(enqueueSnackbarMock).toHaveBeenCalledWith('Scanned name', {variant: 'success'});
   });
 
   it('should add item by weight and refresh items', () => {
@@ -104,6 +108,7 @@ describe('Bill', () => {
     expect(wrapper.state().items).toEqual([
       {barcode: 'barcode', name: 'name', sp: 1, quantity: 12, weight: 3.5, id: 12, byWeight: true}
     ]);
+    expect(enqueueSnackbarMock).toHaveBeenCalledWith('Scanned name', {variant: 'success'});
   });
 
   it('should pass appropriate props to DataTable', () => {

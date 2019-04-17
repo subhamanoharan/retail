@@ -45,14 +45,20 @@ export class Bill extends Component {
     this.fetchItems();
   }
 
+  showSuccessMsgOnScanSuccess(name){
+    this.props.enqueueSnackbar(`Scanned ${name}`, {variant: 'success'});
+  }
+
   onAddItem({barcode, sp, name, id}, quantity){
     this.service.add({barcode, sp, name, quantity, id});
     this.fetchItems();
+    this.showSuccessMsgOnScanSuccess(name);
   }
 
   onItemByWeightScanned({barcode, sp, name, id, byWeight}, weight, units){
     this.service.add({barcode, sp, name, id, byWeight, weight, quantity: units});
     this.fetchItems();
+    this.showSuccessMsgOnScanSuccess(name);
   }
 
   generatePrintLines(){
