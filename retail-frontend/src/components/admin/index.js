@@ -3,18 +3,29 @@ import { withSnackbar } from 'notistack';
 
 import DataTable from '../dataTable';
 import itemsService from '../../services/itemsService';
+import categoriesService from '../../services/categoriesService';
 import itemsDataTableService from '../../services/itemsDataTableService';
 import ItemForm from './itemForm';
 
 class Items extends React.Component {
   constructor(props){
     super(props);
-    this.state = {items: [], categories: ['Rice', 'Oil']};
+    this.state = {items: [], categories: []};
     this.fetchItems = this.fetchItems.bind(this);
   }
 
   componentDidMount(){
     this.fetchItems();
+    this.fetchCategories();
+  }
+
+  fetchCategories(){
+    return categoriesService.list()
+      .then((categories) => this.setState({categories: categories.map(({name}) => name)}))
+      .catch((errors) => {
+        if(errors)
+          errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))
+        });
   }
 
   fetchItems(){

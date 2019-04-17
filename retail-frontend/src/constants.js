@@ -10,6 +10,9 @@ export default {
       GET_ME: '/users/me',
       LOGIN: '/users/authenticate',
       LOGOUT: '/users/logout'
+    },
+    CATEGORIES: {
+      LIST: '/categories',
     }
   },
   ROLES: {
