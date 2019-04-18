@@ -24,3 +24,5 @@ export const prettyPrintWeight = (i) => {
 
   return `${Number(i).toFixed(3)} kg`;
 };
+
+export const stripSpaces = (i) => i.split(' ').join('');

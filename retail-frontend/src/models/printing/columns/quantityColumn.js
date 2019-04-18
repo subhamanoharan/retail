@@ -1,9 +1,14 @@
 import lodash from 'lodash';
-import {replaceFrom} from '../../stringUtility';
+import {replaceFrom, prettyPrintWeight, stripSpaces} from '../../stringUtility';
+import CartItemByWeight from '../../cartItemByWeight';
 
 export default class QuantityColumn {
   constructor(cartItems){
-    this.quantities = cartItems.map((ci) => ci.getNoOfUnitsToDisplay().split(' ').join(''));
+    this.quantities = cartItems.map((ci) => {
+      if(ci instanceof CartItemByWeight && ci.quantity === 1)
+        return stripSpaces(prettyPrintWeight(ci.weight));
+      return stripSpaces(ci.getNoOfUnitsToDisplay());
+    });
     this.maxLength = lodash.max(this.quantities.map((q) => q.length));
   }
 

@@ -1,5 +1,5 @@
 import {replaceFrom, splitByLength,
-  prettyPrintPrice, prettyPrintNumber, prettyPrintWeight} from './stringUtility';
+  prettyPrintPrice, prettyPrintNumber, prettyPrintWeight, stripSpaces} from './stringUtility';
 
 describe('replaceFrom', () => {
   it('should replace from start index in the beginning', () => {
@@ -103,4 +103,9 @@ describe('prettyPrintWeight', () => {
   it('for kg and g with 3 decimals', () =>
     expect(prettyPrintWeight(123.252)).toEqual('123.252 kg')
   );
+});
+
+describe('stripSpaces', () => {
+  it('should remove spaces that exist', () => expect(stripSpaces(' H12 13')).toEqual('H1213'));
+  it('should ignore if spaces dont exist', () => expect(stripSpaces('123abc')).toEqual('123abc'));
 });
