@@ -4,7 +4,7 @@ import MUIDataTable from 'mui-datatables';
 import CustomSelectionToolbar from './customSelectionToolbar';
 import CustomToolbar from './customToolbar';
 
-export default ({items, service, datatableService, addForm, editForm, fetchItems}) => {
+export default ({items, service, datatableService, addForm, editForm, fetchItems, additionalActions = []}) => {
   const selectionBar = (selectedRows) =>
     <CustomSelectionToolbar
       selectedRows={selectedRows}
@@ -18,6 +18,7 @@ export default ({items, service, datatableService, addForm, editForm, fetchItems
       refreshItems={fetchItems}
       service={service}
       addForm={addForm}
+      additionalActions={additionalActions}
     />
   return (
     <MUIDataTable

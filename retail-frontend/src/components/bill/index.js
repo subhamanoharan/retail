@@ -10,6 +10,7 @@ import itemsService from './../../services/itemsService';
 import BarCodeManager from '../barCodeManager';
 import Header from '../header';
 import SummaryCard from '../summaryCard';
+import AddItemByWeightAction from '../addItemByWeightIcon/icon';
 
 export class Bill extends Component {
   constructor(props){
@@ -66,17 +67,22 @@ export class Bill extends Component {
   }
 
   render() {
+    const {masterList, items} = this.state;
+
     return (
       <div>
         <Header clearItems={this.clearItems} generatePrintLines={this.generatePrintLines}/>
         <SummaryCard service={this.service}/>
         <BarCodeManager onItemScanned={this.onAddItem} onItemByWeightScanned={this.onItemByWeightScanned} masterList={this.state.masterList}/>
         <DataTable
-          items={this.state.items}
+          items={items}
           service={this.service}
           datatableService={billDataTableService}
           addForm={AddNewItem}
           fetchItems={this.fetchItems}
+          additionalActions={[
+            () => <AddItemByWeightAction masterList={masterList} onSuccess={this.onItemByWeightScanned}/>
+          ]}
         />
       </div>
     );
