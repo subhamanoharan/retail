@@ -11,6 +11,7 @@ import BarCodeManager from '../barCodeManager';
 import Header from '../header';
 import SummaryCard from '../summaryCard';
 import Bill from './index';
+import AddItemByWeightAction from '../addItemByWeightIcon/icon';
 
 jest.mock('notistack', () => ({withSnackbar: jest.fn((a) => a)}));
 jest.mock('./../../services/itemsService', () => ({list: jest.fn()}));
@@ -112,12 +113,28 @@ describe('Bill', () => {
   });
 
   it('should pass appropriate props to DataTable', () => {
-    const {items, service, datatableService, addForm, fetchItems} = wrapper.find(DataTable).props();
+    const {items, service, datatableService, addForm, fetchItems, additionalActions} = wrapper.find(DataTable).props();
 
     expect(items).toEqual([]);
     expect(service).toEqual(expect.any(BillService));
     expect(datatableService).toEqual(billDataTableService);
     expect(addForm).toEqual(AddNewItem);
     expect(fetchItems).toEqual(expect.anything());
+    expect(additionalActions).toHaveLength(1);
+  });
+
+  it('should pass appropriate props to AddItemByWeightAction', () => {
+    const {additionalActions: [Action]} = wrapper.find(DataTable).props();
+    const actionWrapper = shallow(<Action/>);
+
+    const {onSuccess, masterList: masterListProp} = actionWrapper.find(AddItemByWeightAction).props();
+
+    onSuccess({barcode: 'barcode', sp: 1, name: 'name', id: 12, byWeight: true}, 3.5, 12);
+
+    expect(masterListProp).toEqual(masterList);
+    expect(wrapper.state().items).toEqual([
+      {barcode: 'barcode', name: 'name', sp: 1, quantity: 12, weight: 3.5, id: 12, byWeight: true}
+    ]);
+    expect(enqueueSnackbarMock).toHaveBeenCalledWith('Scanned name', {variant: 'success'});
   });
 });

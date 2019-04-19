@@ -8,18 +8,18 @@ export default class Icon extends React.Component {
   constructor(props){
     super(props);
     this.state = {showForm: false};
-    this.onAction = this.onAction.bind(this);
+    this.onShowForm = this.onShowForm.bind(this);
     this.onSuccess = this.onSuccess.bind(this);
     this.hideForm = this.hideForm.bind(this);
-  }
-
-  onAction(){
-    this.setState({showForm: true});
   }
 
   onSuccess(item, weight, units){
     this.hideForm();
     this.props.onSuccess(item, weight, units);
+  }
+
+  onShowForm(){
+    this.setState({showForm: true});
   }
 
   hideForm(){
@@ -31,13 +31,13 @@ export default class Icon extends React.Component {
     const {masterList} = this.props;
     return (
       <Tooltip title={"Add item by weight"}>
-        <IconButton onClick={this.onAction}>
+        <IconButton onClick={this.onShowForm}>
           <AddItemByWeightIcon />
           {showForm &&
             <AddItemByWeightForm
               masterList={masterList}
-              hideForm={this.hideForm}
               onSuccess={this.onSuccess}
+              hideForm={this.hideForm}
             />}
         </IconButton>
       </Tooltip>
