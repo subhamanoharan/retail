@@ -1,5 +1,6 @@
 import React from "react";
 import {shallow} from 'enzyme';
+import { withStyles } from '@material-ui/core/styles';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -7,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ItemsByWeightList from './itemsByWeightList';
 
+jest.mock('@material-ui/core/styles',   () => ({withStyles: jest.fn((styles) => (a) => a)}))
 describe('ItemsByWeightList', () => {
   let wrapper;
   let handleItemSelectMock;
@@ -21,7 +23,10 @@ describe('ItemsByWeightList', () => {
     wrapper = shallow(< ItemsByWeightList
       items={items}
       handleItemSelect={handleItemSelectMock}
-      selectedItem={null}/>);
+      selectedItem={null}
+      classes={{}}
+    />);
+
   });
 
   it('should render ListItems', () => {
@@ -37,7 +42,7 @@ describe('ItemsByWeightList', () => {
     expect(listItem1.find(ListItem).props().selected).toEqual(true);
     expect(listItem2.find(ListItem).props().selected).toEqual(false);
   });
-  
+
   it('should call parent on item selected', () => {
     const listItem1 = wrapper.find(ListItem).at(0);
     const {onClick} = listItem1.find(ListItem).props();
