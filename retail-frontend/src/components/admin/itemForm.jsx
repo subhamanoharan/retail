@@ -27,7 +27,7 @@ const withCategories = (categories) => class ItemForm extends React.Component {
    }
 
   getDefaultValues(){
-    return { name: '', sp: 0, barcode: '', byWeight: false, category: null };
+    return { name: '', sp: '', barcode: '', byWeight: false, category: null };
   }
 
   getExistingValues(item){

@@ -18,7 +18,7 @@ export default class AddManualItemForm extends React.Component {
    }
 
   getDefaultValues(){
-    return { name: '', sp: 0, quantity: 0 };
+    return { name: '', sp: '', quantity: '' };
   }
 
   handleChange(name) {

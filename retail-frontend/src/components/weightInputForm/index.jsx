@@ -12,7 +12,7 @@ import {prettyPrintWeight} from '../../models/stringUtility';
 export default class WeightInputForm extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {weight: 0, units: 1};
+      this.state = {weight: '', units: 1};
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleWeightSelection = this.handleWeightSelection.bind(this);
@@ -65,7 +65,7 @@ export default class WeightInputForm extends React.Component {
           <Typography gutterBottom variant="h6">{name} - Rs.{sp}/kg</Typography>
           <Grid container spacing={8}>
             {[0.050, 0.1, 0.25, 0.5, 1, 2].map((wt) =>
-              <Grid item>
+              <Grid item key={wt}>
                 <Button
                   {...(wt==weight ? selectedButtonProps : unSelectedButtonProps)}
                   onClick={this.handleWeightSelection(wt)}
