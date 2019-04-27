@@ -14,6 +14,20 @@ export default class BillService {
     return Promise.resolve();
   }
 
+  incrementQuantity(index){
+    this.cart =  this.cart.incrementQuantity(index)
+    return Promise.resolve();
+  }
+
+  decrementQuantity(index){
+    this.cart =  this.cart.decrementQuantity(index)
+    return Promise.resolve();
+  }
+
+  getQuantity(index){
+    return this.cart.getQuantity(index);
+  }
+  
   delete({barcode, sp, name, quantity, id}){
     this.cart =  this.cart.deleteItem({barcode, sp, name, quantity, id})
     return Promise.resolve();

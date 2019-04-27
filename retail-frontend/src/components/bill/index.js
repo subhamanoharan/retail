@@ -5,23 +5,36 @@ import DataTable from '../dataTable';
 import AddNewItem from './addManualItemForm';
 import ImmutableCart from '../../models/immutableCart';
 import BillService from '../../services/billService';
-import billDataTableService from '../../services/billDataTableService';
+import BillDataTableService from '../../services/billDataTableService';
 import itemsService from './../../services/itemsService';
 import BarCodeManager from '../barCodeManager';
 import Header from '../header';
 import SummaryCard from '../summaryCard';
 import AddItemByWeightAction from '../addItemByWeightIcon/icon';
+import QuantityEditor from '../quantityEditor';
 
 export class Bill extends Component {
   constructor(props){
     super(props);
     this.state = {masterList: [], items: []};
     this.service = new BillService(new ImmutableCart([]));
+
     this.fetchItems = this.fetchItems.bind(this);
     this.clearItems = this.clearItems.bind(this);
     this.onAddItem = this.onAddItem.bind(this);
     this.onItemByWeightScanned = this.onItemByWeightScanned.bind(this);
     this.generatePrintLines = this.generatePrintLines.bind(this);
+    this.incrementQuantity = this.incrementQuantity.bind(this);
+    this.decrementQuantity = this.decrementQuantity.bind(this);
+    this.getQuantity = this.getQuantity.bind(this);
+    this.billDataTableService = new BillDataTableService((value, tableMeta) =>
+      <QuantityEditor
+        value={value}
+        tableMeta={tableMeta}
+        incrementQuantity={this.incrementQuantity}
+        decrementQuantity={this.decrementQuantity}
+        getQuantity={this.getQuantity}
+      />);
   }
 
   componentDidMount(){
@@ -66,6 +79,20 @@ export class Bill extends Component {
     return this.service.getLinesToPrint();
   }
 
+  incrementQuantity(index){
+    this.service.incrementQuantity(index)
+    this.fetchItems();
+  }
+
+  decrementQuantity(index){
+    this.service.decrementQuantity(index)
+    this.fetchItems();
+  }
+
+  getQuantity(index){
+    return this.service.getQuantity(index)
+  }
+
   render() {
     const {masterList, items} = this.state;
 
@@ -77,7 +104,7 @@ export class Bill extends Component {
         <DataTable
           items={items}
           service={this.service}
-          datatableService={billDataTableService}
+          datatableService={this.billDataTableService}
           addForm={AddNewItem}
           fetchItems={this.fetchItems}
           additionalActions={[

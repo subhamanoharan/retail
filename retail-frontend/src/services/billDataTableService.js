@@ -1,6 +1,12 @@
-import cartItemFactory from '../models/cartItemFactory';
+import React, { Component} from 'react';
 
-class BillDataTableService {
+import cartItemFactory from '../models/cartItemFactory';
+import {prettyPrintPrice} from '../models/stringUtility';
+
+export default class BillDataTableService {
+  constructor(quantityComponent){
+    this.quantityComponent = quantityComponent;
+  }
 
   generateOptions(selectionBar, toolbar){
     return {
@@ -27,7 +33,7 @@ class BillDataTableService {
         options: {filter: false, sort: false}
       },{
         name: "Quantity",
-        options: {filter: false, sort: false}
+        options: {filter: false, sort: false, customBodyRender: this.quantityComponent}
       },{
         name: "Total",
         options: {filter: false, sort: false}
@@ -37,8 +43,6 @@ class BillDataTableService {
   generateData(items){
     return items
       .map(cartItemFactory)
-      .map((item, i) => [i+1, item.name, item.sp, item.getNoOfUnitsToDisplay(), item.price()]);
+      .map((item, i) => [i+1, item.name, item.sp, item.getNoOfUnitsToDisplay(), prettyPrintPrice(item.price())]);
   }
 }
-
-export default new BillDataTableService();

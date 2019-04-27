@@ -5,22 +5,24 @@ import DataTable from '../dataTable';
 import AddNewItem from './addManualItemForm';
 import ImmutableCart from '../../models/immutableCart';
 import BillService from '../../services/billService';
-import billDataTableService from '../../services/billDataTableService';
+import MockBillDataTableService from '../../services/billDataTableService';
 import itemsServiceMock from './../../services/itemsService';
 import BarCodeManager from '../barCodeManager';
 import Header from '../header';
 import SummaryCard from '../summaryCard';
 import Bill from './index';
 import AddItemByWeightAction from '../addItemByWeightIcon/icon';
+import MockQuantityEditor from '../quantityEditor';
 
 jest.mock('notistack', () => ({withSnackbar: jest.fn((a) => a)}));
 jest.mock('./../../services/itemsService', () => ({list: jest.fn()}));
+jest.mock('./../../services/billDataTableService');
+jest.mock('../quantityEditor', () => (props) => <p {...props}>Hi</p>);
 
 describe('Bill', () => {
   let wrapper;
   const masterList = 'masterList';
   let enqueueSnackbarMock;
-
   beforeEach(() => {
     enqueueSnackbarMock = jest.fn();
     itemsServiceMock.list.mockResolvedValue(masterList);
@@ -117,10 +119,65 @@ describe('Bill', () => {
 
     expect(items).toEqual([]);
     expect(service).toEqual(expect.any(BillService));
-    expect(datatableService).toEqual(billDataTableService);
+    expect(datatableService).toEqual(expect.any(MockBillDataTableService));
+    expect(MockBillDataTableService).toHaveBeenCalled();
     expect(addForm).toEqual(AddNewItem);
     expect(fetchItems).toEqual(expect.anything());
     expect(additionalActions).toHaveLength(1);
+  });
+
+  describe('QuantityEditor', () => {
+    let quantityEditor;
+    const v = 1;
+    const rowIndex = 1;
+
+    beforeEach(() => {
+      const QuantityEditorComponent = MockBillDataTableService.mock.calls[0][0];
+      quantityEditor = shallow(QuantityEditorComponent(v, {rowIndex}));
+    });
+
+    it('should pass appropriate props to quantityEditor', () => {
+      const {value, tableMeta, incrementQuantity, decrementQuantity, getQuantity} = quantityEditor.props();
+      expect(value).toBe(v);
+      expect(tableMeta).toEqual({rowIndex});
+      expect(incrementQuantity).toBeDefined();
+      expect(decrementQuantity).toBeDefined();
+      expect(getQuantity).toBeDefined();
+    });
+
+    it('should increment and refresh items', () => {
+      const {onItemScanned} = wrapper.find(BarCodeManager).props();
+      onItemScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12}, 3);
+      const {incrementQuantity} = quantityEditor.props();
+
+      incrementQuantity(0);
+
+      expect(wrapper.state().items).toEqual([
+        {barcode: 'barcode', name: 'name', sp: 1, quantity: 4, id: 12}
+      ]);
+    })
+
+    it('should decrement and refresh items', () => {
+      const {onItemScanned} = wrapper.find(BarCodeManager).props();
+      onItemScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12}, 3);
+      const {decrementQuantity} = quantityEditor.props();
+
+      decrementQuantity(0);
+
+      expect(wrapper.state().items).toEqual([
+        {barcode: 'barcode', name: 'name', sp: 1, quantity: 2, id: 12}
+      ]);
+    })
+
+    it('should get quantity', () => {
+      const {onItemScanned} = wrapper.find(BarCodeManager).props();
+      onItemScanned({barcode: 'barcode', sp: 1, name: 'name', id: 12}, 3);
+      const {getQuantity} = quantityEditor.props();
+
+      getQuantity(0);
+
+      expect(getQuantity(0)).toEqual(3);
+    })
   });
 
   it('should pass appropriate props to AddItemByWeightAction', () => {

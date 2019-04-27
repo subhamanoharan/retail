@@ -5,6 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
+import {prettyPrintPrice} from '../../models/stringUtility';
+
 export default ({service}) => (
   <Card>
     <CardContent>
@@ -13,7 +15,7 @@ export default ({service}) => (
         <Typography variant="h5" component="h2">{`No.of items: ${service.getTotalNoOfItems()}`}</Typography>
       </Grid>
       <Grid item xs={6}>
-        <Typography variant="h5" component="h2">{`Total: Rs.${service.getTotal()}`}</Typography>
+        <Typography variant="h5" component="h2">{`Total: Rs.${prettyPrintPrice(service.getTotal())}`}</Typography>
       </Grid>
     </Grid>
     </CardContent>

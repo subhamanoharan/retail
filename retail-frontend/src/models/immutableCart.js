@@ -20,6 +20,25 @@ export default class ImmutableCart {
     return new ImmutableCart([...this.items, itemToAdd]);
   }
 
+  incrementQuantity(index) {
+    const itemToIncrement = this.items[index];
+    const updatedItems = this.items.map(i => i.matches(itemToIncrement) ?
+      {...i, quantity: i.quantity + 1} : i);
+    return new ImmutableCart(updatedItems);
+  }
+
+  decrementQuantity(index) {
+    const itemToIncrement = this.items[index];
+    const updatedItems = this.items.map(i => i.matches(itemToIncrement) ?
+      {...i, quantity: i.quantity - 1} : i);
+    return new ImmutableCart(updatedItems);
+  }
+
+  getQuantity(index){
+    const item = this.items[index];
+    return item.quantity;
+  }
+
   deleteItem(item) {
     const updatedItems = this.items.filter(i => i.barcode !== item.barcode);
     return new ImmutableCart(updatedItems);

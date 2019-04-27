@@ -1,6 +1,10 @@
-import billDataTableService from './billDataTableService';
+import React, { Component} from 'react';
+import BillDataTableService from './billDataTableService';
 
 describe('BillDataTableService', () => {
+  const quantityComponent = () => <p>Quantity</p>;
+
+  const  billDataTableService = new BillDataTableService(quantityComponent);
   it('generate columns', () => {
     expect(billDataTableService.getColumns()).toEqual(
       [
@@ -17,7 +21,7 @@ describe('BillDataTableService', () => {
           options: {filter: false, sort: false}
         },{
           name: "Quantity",
-          options: {filter: false, sort: false}
+          options: {filter: false, sort: false, customBodyRender: quantityComponent}
         },{
           name: "Total",
           options: {filter: false, sort: false}
@@ -32,9 +36,9 @@ describe('BillDataTableService', () => {
       {name: 'item3', sp: 10, quantity: 3, byWeight: true, weight: 5}
     ];
     expect(billDataTableService.generateData(items)).toEqual([
-      [1, 'item1', 12, '2', 24],
-      [2, 'item2', 10, '3', 30],
-      [3, 'item3', 10, '5 kg * 3', 150]
+      [1, 'item1', 12, '2', '24.00'],
+      [2, 'item2', 10, '3', '30.00'],
+      [3, 'item3', 10, '5 kg * 3', '150.00']
     ]);
   });
 
