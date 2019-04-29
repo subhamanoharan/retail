@@ -21,7 +21,7 @@ class ItemsDataTableService {
         options: {filter: false, sort: false, searchable: true}
       },{
         name: "Barcode",
-        options: {filter: false, sort: false, searchable: true}
+        options: {filter: false, sort: true, searchable: true}
       },{
         name: "Category",
         options: {filter: true, sort: false, searchable: true}

@@ -15,7 +15,7 @@ export class CustomDataTableSelectionToolbar extends React.Component {
 
   onDeleteItems() {
     const {items, refreshItems, selectedRows: {data}, service} = this.props;
-    const itemsToDelete = data.map(({index}) => items[index]);
+    const itemsToDelete = data.map(({dataIndex: index}) => items[index]);
     return P.map(itemsToDelete, (i) => service.delete(i))
       .then(refreshItems)
       .catch((errors) => {
@@ -31,7 +31,7 @@ export class CustomDataTableSelectionToolbar extends React.Component {
       <div>
         { isOneRowSelected && editForm &&
           <EditItemIcon
-            item={items[data[0].index]}
+            item={items[data[0].dataIndex]}
             refreshItems={refreshItems}
             service={service}
             editForm={editForm}

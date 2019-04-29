@@ -16,7 +16,7 @@ describe('<CustomSelectionToolbar />', () => {
   let serviceMock;
   let refreshItemsMock;
   let enqueueSnackbarMock;
-  const selectedRows = {data: [{index: 1}, {index: 3}]}
+  const selectedRows = {data: [{dataIndex: 1}, {dataIndex: 3}]}
   const items = ['item1', 'item2', 'item3', 'item4'];
 
   beforeEach(() => {
@@ -68,7 +68,7 @@ describe('<CustomSelectionToolbar />', () => {
 
     it('should pass appropriate props to edit icon', () => {
       const edit = () => <p>Edit</p>;
-      wrapper.setProps({editForm: edit, selectedRows: {data: [{index: 1}]}});
+      wrapper.setProps({editForm: edit, selectedRows: {data: [{dataIndex: 1}]}});
 
       const {item, refreshItems, service, editForm} = wrapper.find(EditItemIcon).props();
 
