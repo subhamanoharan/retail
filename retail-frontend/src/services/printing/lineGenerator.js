@@ -32,10 +32,14 @@ export class LineGenerator {
   }
 
   getDefaultLines(){
-    return [STORE_NAME, ...ADDRESS, this.getSeparatorLine()]
+    const startLines =  [STORE_NAME, ...ADDRESS]
       .reduce((acc, l) => [...acc, ...splitByLength(l, this.MAX_LIMIT)],[])
       .map(l => lodash.trim(l))
-      .map(l => lodash.pad(l, this.MAX_LIMIT))
+      .map(l => lodash.pad(l, this.MAX_LIMIT));
+    const date = new Date();
+    const formattedDate = [date.getDate(), date.getMonth()+1, date.getFullYear()].join('/');
+    const endLines = [lodash.padEnd(formattedDate, this.MAX_LIMIT), this.getSeparatorLine()]
+    return [...startLines, ...endLines];
   }
 
   getTotalLine(cart){
