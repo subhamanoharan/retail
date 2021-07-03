@@ -28,7 +28,13 @@ module.exports = {
     contentBase: path.join(__dirname, "public/"),
     port: 3001,
     publicPath: "http://localhost:3001/dist/",
-    hotOnly: true
+    hotOnly: true,
+    proxy: {
+      '/api': {
+          target: 'http://localhost:3000',
+          secure: 'false'
+      }
+    }
   },
   plugins: [new webpack.HotModuleReplacementPlugin()]
 };

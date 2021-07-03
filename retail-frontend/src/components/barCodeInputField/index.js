@@ -29,7 +29,7 @@ export default class BarCodeInputField extends Component {
       <Card>
         <CardContent>
           <form noValidate autoComplete="off" onSubmit={this.onScanComplete}>
-            <Grid container spacing={16}>
+            <Grid container spacing={4}>
               <Grid item xs={11}>
                 <TextField
                   id="barCodeInput"

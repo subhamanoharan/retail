@@ -6,7 +6,8 @@ class ItemsDataTableService {
       filter: true, viewColumns: false, print: true, download: true,
       search: true,
       customToolbar: toolbar,
-      customToolbarSelect:selectionBar
+      customToolbarSelect:selectionBar,
+      responsive: 'simple'
     };
   }
 
@@ -14,11 +15,11 @@ class ItemsDataTableService {
     return [
       {
         name: "Name",
-        options: {filter: false, sort: false, searchable: true}
+        options: {filter: false, sort: true, searchable: true}
       },
       {
         name: "Price",
-        options: {filter: false, sort: false, searchable: true}
+        options: {filter: false, sort: false, searchable: false}
       },{
         name: "Barcode",
         options: {filter: false, sort: true, searchable: true}
