@@ -13,7 +13,9 @@ export default class BarCodeManager extends Component {
   }
 
   onBarCodeScanned(code){
-    const matchingItem = this.props.masterList.find((i) => i.barcode.toLowerCase() === code.toLowerCase());
+    const matchingItemByBarcode = this.props.masterList.find((i) => i.barcode.toLowerCase() === code.toLowerCase());
+    const matchingItemByName = this.props.masterList.find((i) => i.name.toLowerCase() === code.toLowerCase());
+    const matchingItem = matchingItemByBarcode || matchingItemByName;
     if(matchingItem && matchingItem.byWeight)
       this.setState({getWeight: true, matchingItem});
     else if(matchingItem)
@@ -33,9 +35,11 @@ export default class BarCodeManager extends Component {
 
   render() {
     const {getWeight, matchingItem} = this.state;
-    return (getWeight ?
-      <WeightInputForm item={matchingItem} onSubmit={this.onWeightEntered} onCancel={this.hideWeightInput}/>
-        : <BarCodeInputField onScanComplete={this.onBarCodeScanned}/>
-    );
+    const byWeightMasterList = this.props.masterList.filter(({byWeight}) => byWeight);
+    return (
+      getWeight ?
+        <WeightInputForm item={matchingItem} onSubmit={this.onWeightEntered} onCancel={this.hideWeightInput}/>
+        : <BarCodeInputField onScanComplete={this.onBarCodeScanned} byWeightMasterList={byWeightMasterList}/>
+    )
   }
 }

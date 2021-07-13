@@ -51,6 +51,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "4.11",
+    "@material-ui/lab": "^4.0.0-alpha.58",
     "axios": "^0.18.0",
     "esc-pos-encoder": "^1.2.0",
     "mui-datatables": "^3.7.7",
