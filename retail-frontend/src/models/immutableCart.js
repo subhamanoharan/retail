@@ -17,7 +17,7 @@ export default class ImmutableCart {
         {...i, quantity: i.quantity + itemToAdd.quantity} : i);
       return new ImmutableCart(updatedItems);
     }
-    return new ImmutableCart([...this.items, itemToAdd]);
+    return new ImmutableCart([itemToAdd, ...this.items]);
   }
 
   incrementQuantity(index) {

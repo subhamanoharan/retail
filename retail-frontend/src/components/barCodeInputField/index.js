@@ -1,13 +1,22 @@
 import React, { Component} from 'react';
-
+import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
-export default class BarCodeInputField extends Component {
+const styles = theme => ({
+  option: {
+     '&[data-focus="true"]': {
+       backgroundColor: '#A9A9A9',
+       borderColor: 'transparent',
+     }
+   }
+ });
+
+class BarCodeInputField extends Component {
   constructor(props) {
     super(props);
     this.state = {code : ''}
@@ -27,7 +36,11 @@ export default class BarCodeInputField extends Component {
   }
 
   render() {
-    const { byWeightMasterList } = this.props;
+    const { byWeightMasterList, classes } = this.props;
+    const filterOptions = createFilterOptions({
+      matchFrom: 'start',
+      stringify: option => option.name,
+    });
     return (
       <Card>
         <CardContent>
@@ -43,12 +56,15 @@ export default class BarCodeInputField extends Component {
                   onChange={this.onScanInput}
                   value={this.state.code}
                   autoFocus
+                  filterOptions={filterOptions}
+                  classes={{ option: classes.option }}
                   renderInput={(params) =>
                     <TextField
                       {...params}
                       label="Enter barcode or name"
                       variant="outlined"
                       autoFocus
+                      inputRef={input => input && input.focus()}
                     />}
                 />
               </Grid>
@@ -62,3 +78,5 @@ export default class BarCodeInputField extends Component {
     );
   }
 }
+
+export default withStyles(styles)(BarCodeInputField);
