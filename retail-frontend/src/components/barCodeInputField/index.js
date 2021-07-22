@@ -36,7 +36,7 @@ class BarCodeInputField extends Component {
   }
 
   render() {
-    const { byWeightMasterList, classes } = this.props;
+    const { searchableMasterList, classes } = this.props;
     const filterOptions = createFilterOptions({
       matchFrom: 'start',
       stringify: option => option.name,
@@ -51,8 +51,9 @@ class BarCodeInputField extends Component {
                   freeSolo
                   id="combo-box-demo"
                   disableClearable
-                  options={byWeightMasterList}
-                  getOptionLabel={(option) => option ? `${option.name} - Rs.${option.sp}/kg` : ''}
+                  options={searchableMasterList}
+                  getOptionLabel={(option) =>
+                    option ? (`${option.name} - Rs.${option.sp}` + (option.byWeight ? '/kg' : '')) : ''}
                   onChange={this.onScanInput}
                   value={this.state.code}
                   autoFocus

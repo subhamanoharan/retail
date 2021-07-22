@@ -35,11 +35,11 @@ export default class BarCodeManager extends Component {
 
   render() {
     const {getWeight, matchingItem} = this.state;
-    const byWeightMasterList = this.props.masterList.filter(({byWeight}) => byWeight);
+    const searchableMasterList = this.props.masterList.filter(({byWeight, barcode}) => byWeight || barcode.length < 5);
     return (
       getWeight ?
         <WeightInputForm item={matchingItem} onSubmit={this.onWeightEntered} onCancel={this.hideWeightInput}/>
-        : <BarCodeInputField onScanComplete={this.onBarCodeScanned} byWeightMasterList={byWeightMasterList}/>
+        : <BarCodeInputField onScanComplete={this.onBarCodeScanned} searchableMasterList={searchableMasterList}/>
     )
   }
 }
