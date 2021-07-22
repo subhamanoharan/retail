@@ -16,7 +16,7 @@ const styles = theme => ({
    }
  });
 
-class BarCodeInputField extends Component {
+export class BarCodeInputField extends Component {
   constructor(props) {
     super(props);
     this.state = {code : ''}

@@ -10,9 +10,11 @@ describe('<BarCodeManager />', () => {
   let onItemScannedMock;
   let onItemByWeightScannedMock;
   const itemByWeight = {barcode: 'AC', name: 'item4', byWeight: true};
+  const standardCodeItem = {barcode: '4902430899413', name: 'sunrise' };
   const dummyMasterList = [{barcode: '1', name: 'item1'},
     {barcode: '2', name: 'item2'},
     {barcode: 'AB', name: 'item3'},
+    standardCodeItem,
     itemByWeight
   ];
 
@@ -32,7 +34,15 @@ describe('<BarCodeManager />', () => {
 
   it('renders barCodeInputField by default', () => {
     const barCodeInputFieldWrapper = wrapper.find(BarCodeInputField);
-    expect(barCodeInputFieldWrapper.props()).toEqual({onScanComplete: expect.any(Function)});
+    expect(barCodeInputFieldWrapper.props()).toEqual({
+      onScanComplete: expect.any(Function),
+      searchableMasterList: [
+        {barcode: '1', name: 'item1'},
+        {barcode: '2', name: 'item2'},
+        {barcode: 'AB', name: 'item3'},
+        itemByWeight
+      ]
+    });
   });
 
   it('renders WeightInputForm when item by weight is scanned', () => {
@@ -70,12 +80,20 @@ describe('<BarCodeManager />', () => {
     expect(wrapper.state()).toEqual({getWeight: false, matchingItem: null})
   });
 
-  it('should check code against masterlist', () => {
+  it('should check code against masterlist for non-weight item', () => {
     const {onScanComplete} = wrapper.find(BarCodeInputField).props();
 
     onScanComplete('1');
 
     expect(onItemScannedMock).toHaveBeenCalledWith({barcode: '1', name: 'item1'})
+  });
+
+  it('should check code against masterlist for weight item', () => {
+    const {onScanComplete} = wrapper.find(BarCodeInputField).props();
+
+    onScanComplete(itemByWeight.barcode);
+
+    expect(wrapper.state()).toEqual({getWeight: true, matchingItem: itemByWeight})
   });
 
   it('should check code against masterlist being case insensititve', () => {
@@ -84,6 +102,22 @@ describe('<BarCodeManager />', () => {
     onScanComplete('ab');
 
     expect(onItemScannedMock).toHaveBeenCalledWith(dummyMasterList[2])
+  });
+
+  it('should check name when barcode not match against masterlist for weight item', () => {
+    const {onScanComplete} = wrapper.find(BarCodeInputField).props();
+
+    onScanComplete(itemByWeight.name);
+
+    expect(wrapper.state()).toEqual({getWeight: true, matchingItem: itemByWeight})
+  });
+
+  it('should check name when barcode not match against masterlist for non-weight item', () => {
+    const {onScanComplete} = wrapper.find(BarCodeInputField).props();
+
+    onScanComplete('1');
+
+    expect(onItemScannedMock).toHaveBeenCalledWith({barcode: '1', name: 'item1'})
   });
 
   it.skip('should alert if code is not in masterList', () => {

@@ -38,9 +38,9 @@ describe('ImmutableCart', () => {
 
       expect(items).toHaveLength(3)
       const [i1, i2, i3] = items;
-      expect(i1).toEqual(item1);
-      expect(i2).toEqual(item2);
-      expect(i3).toEqual(expectedItem3);
+      expect(i1).toEqual(expectedItem3);
+      expect(i2).toEqual(item1);
+      expect(i3).toEqual(item2);
     });
 
     it('should update quantity of existing item by 1 by default', () => {
@@ -73,9 +73,9 @@ describe('ImmutableCart', () => {
 
         expect(items).toHaveLength(3)
         const [i1, i2, i3] = items;
-        expect(i1).toEqual(item1);
-        expect(i2).toEqual(item2);
-        expect(i3).toEqual(expectedItem3);
+        expect(i1).toEqual(expectedItem3);
+        expect(i2).toEqual(item1);
+        expect(i3).toEqual(item2);
       });
 
       it('should add another item by weight when weight differs', () => {
@@ -88,10 +88,10 @@ describe('ImmutableCart', () => {
 
         expect(items).toHaveLength(4)
         const [i1, i2, i3, i4] = items;
-        expect(i1).toEqual(item1);
-        expect(i2).toEqual(item2);
-        expect(i3).toEqual(expectedItem3);
-        expect(i4).toEqual(expectedItem4);
+        expect(i1).toEqual(expectedItem4);
+        expect(i2).toEqual(expectedItem3);
+        expect(i3).toEqual(item1);
+        expect(i4).toEqual(item2);
       });
 
       it('should add another item by weight when weight is same but barcode differs', () => {
@@ -104,10 +104,10 @@ describe('ImmutableCart', () => {
 
         expect(items).toHaveLength(4)
         const [i1, i2, i3, i4] = items;
-        expect(i1).toEqual(item1);
-        expect(i2).toEqual(item2);
-        expect(i3).toEqual(expectedItem3);
-        expect(i4).toEqual(expectedItem4);
+        expect(i1).toEqual(expectedItem4);
+        expect(i2).toEqual(expectedItem3);
+        expect(i3).toEqual(item1);
+        expect(i4).toEqual(item2);
       });
 
       it('should update quantity of  item by weight when weight is the same', () => {
@@ -119,9 +119,9 @@ describe('ImmutableCart', () => {
 
         expect(items).toHaveLength(3)
         const [i1, i2, i3] = items;
-        expect(i1).toEqual(item1);
-        expect(i2).toEqual(item2);
-        expect(i3).toEqual(expectedItem3);
+        expect(i1).toEqual(expectedItem3);
+        expect(i2).toEqual(item1);
+        expect(i3).toEqual(item2);
       });
     });
   });
