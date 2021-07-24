@@ -1,4 +1,5 @@
 module.exports = {
   SESSION_SECRET: 'SESSION_SECRET',
-  "PORT": process.env.PORT || 3000
+  "PORT": process.env.PORT || 3000,
+  "IP_FILTER": false
 }

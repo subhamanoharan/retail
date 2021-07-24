@@ -12,9 +12,9 @@ import errorHandler from './services/errorHandler';
 const app = express()
 const MemoryStore = memorystore(sessionMiddleware);
 
-if(NODE_ENV == 'production') {
+if(config.IP_FILTER) {
   console.log('-----ipfilter');
-  app.use(ipfilter([ '192.168.43.57']));
+  app.use(expressIpFilter.IpFilter([ '192.168.43.57']));
 }
 
 app.use(bodyParser.json());
