@@ -14,7 +14,20 @@ const MemoryStore = memorystore(sessionMiddleware);
 
 if(config.IP_FILTER) {
   console.log('-----ipfilter');
-  app.use(expressIpFilter.IpFilter([ '192.168.43.57']));
+  app.use(expressIpFilter.IpFilter([ '192.168.0.19'], { mode: 'allow' }));
+  app.use((err, req, res, _next) => {
+    console.log('Error handler', err)
+    if (err instanceof expressIpFilter.IpDeniedError) {
+      res.status(401)
+    } else {
+      res.status(err.status || 500)
+    }
+
+    res.render('error', {
+      message: 'You shall not pass',
+      error: err
+    })
+  })
 }
 
 app.use(bodyParser.json());
