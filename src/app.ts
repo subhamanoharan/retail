@@ -4,18 +4,12 @@ import * as path from 'path';
 import * as sessionMiddleware from 'express-session';
 import * as memorystore from 'memorystore';
 import * as config from 'config';
-import * as expressIpFilter from 'express-ipfilter';
 
 import ApiRouter from './routes/apiRoutes';
 import errorHandler from './services/errorHandler';
 
 const app = express()
 const MemoryStore = memorystore(sessionMiddleware);
-
-if(NODE_ENV == 'production') {
-  console.log('-----ipfilter');
-  app.use(ipfilter([ '192.168.43.57']));
-}
 
 app.use(bodyParser.json());
 app.use(sessionMiddleware({ secret: config.SESSION_SECRET,
