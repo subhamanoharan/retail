@@ -7,7 +7,7 @@ import QuantityColumn from '../../models/printing/columns/quantityColumn';
 import {splitByLength, prettyPrintPrice} from '../../models/stringUtility';
 import constants from '../../constants';
 
-const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT} = constants;
+const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT, QUOTATION} = constants;
 
 export class LineGenerator {
   constructor(MAX_LIMIT = PRINTING_MAX_LIMIT){
@@ -38,7 +38,8 @@ export class LineGenerator {
       .map(l => lodash.pad(l, this.MAX_LIMIT));
     const date = new Date();
     const formattedDate = [date.getDate(), date.getMonth()+1, date.getFullYear()].join('/');
-    const endLines = [lodash.padEnd(formattedDate, this.MAX_LIMIT), this.getSeparatorLine()]
+    const endLines = [lodash.padEnd(QUOTATION, this.MAX_LIMIT),
+      lodash.padEnd(formattedDate, this.MAX_LIMIT), this.getSeparatorLine()]
     return [...startLines, ...endLines];
   }
 

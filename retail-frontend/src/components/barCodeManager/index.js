@@ -13,9 +13,7 @@ export default class BarCodeManager extends Component {
   }
 
   onBarCodeScanned(code){
-    const matchingItemByBarcode = this.props.masterList.find((i) => i.barcode.toLowerCase() === code.toLowerCase());
-    const matchingItemByName = this.props.masterList.find((i) => i.name.toLowerCase() === code.toLowerCase());
-    const matchingItem = matchingItemByBarcode || matchingItemByName;
+    const matchingItem = this.props.masterList.find((i) => i.barcode.toLowerCase() === code.toLowerCase());
     if(matchingItem && matchingItem.byWeight)
       this.setState({getWeight: true, matchingItem});
     else if(matchingItem)

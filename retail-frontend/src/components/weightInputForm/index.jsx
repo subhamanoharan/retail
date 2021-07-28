@@ -57,14 +57,15 @@ export default class WeightInputForm extends React.Component {
       <Dialog
         open
         aria-labelledby="form-dialog-title"
+        onClose={this.hideModal}
       >
       <DialogTitle id="form-dialog-title">Weight</DialogTitle>
       {error && <Typography color="error" align="center">Please enter a weight</Typography>}
       <form onSubmit={this.handleSubmit}>
         <DialogContent>
           <Typography gutterBottom variant="h6">{name} - Rs.{sp}/kg</Typography>
-          <Grid container spacing={8}>
-            {[0.050, 0.1, 0.25, 0.5, 1, 2].map((wt) =>
+          {/* <Grid container spacing={8}>
+            { [0.050, 0.1, 0.25, 0.5, 1, 2].map((wt) =>
               <Grid item key={wt}>
                 <Button
                   {...(wt==weight ? selectedButtonProps : unSelectedButtonProps)}
@@ -75,12 +76,13 @@ export default class WeightInputForm extends React.Component {
               </Grid>)
             }
           </Grid>
+          */}
           <TextField
             id="weight"
             label="Weight(in kg)"
             value={weight}
             type="number"
-            inputProps={{min: 0, step: 0.001, max: 10000}}
+            inputProps={{min: 0, step: 0.100, max: 10000}}
             required
             autoFocus
             fullWidth
