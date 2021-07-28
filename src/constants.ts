@@ -12,6 +12,7 @@ export default {
     MISSING_AUTH: 'Missing Authorization Header',
     INVALID_AUTH_ERROR: 'Invalid Authentication Credentials',
     UNAUTHORISED: 'You need to login to continue!',
+    UNAUTHORISED_DEVICE: 'Device not identified!',
     USER_NOT_FOUND: 'This user does not exist!',
     FORBIDDEN: 'You do not have the required permissions!'
   },

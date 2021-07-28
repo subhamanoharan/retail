@@ -7,11 +7,13 @@ import * as config from 'config';
 
 import ApiRouter from './routes/apiRoutes';
 import errorHandler from './services/errorHandler';
+import customSecretChecker from './middlewares/customSecretChecker';
 
 const app = express()
 const MemoryStore = memorystore(sessionMiddleware);
 
 app.use(bodyParser.json());
+app.use(customSecretChecker);
 app.use(sessionMiddleware({ secret: config.SESSION_SECRET,
   resave: true, saveUninitialized: false,
   store: new MemoryStore({
