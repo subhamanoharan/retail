@@ -104,15 +104,7 @@ describe('<BarCodeManager />', () => {
     expect(onItemScannedMock).toHaveBeenCalledWith(dummyMasterList[2])
   });
 
-  it('should check name when barcode not match against masterlist for weight item', () => {
-    const {onScanComplete} = wrapper.find(BarCodeInputField).props();
-
-    onScanComplete(itemByWeight.name);
-
-    expect(wrapper.state()).toEqual({getWeight: true, matchingItem: itemByWeight})
-  });
-
-  it('should check name when barcode not match against masterlist for non-weight item', () => {
+  it('should check  barcode  against masterlist for non-weight item', () => {
     const {onScanComplete} = wrapper.find(BarCodeInputField).props();
 
     onScanComplete('1');
