@@ -82,7 +82,7 @@ export default class WeightInputForm extends React.Component {
             label="Weight(in kg)"
             value={weight}
             type="number"
-            inputProps={{min: 0, step: 0.100, max: 10000}}
+            inputProps={{min: 0, step: 0.001, max: 10000}}
             required
             autoFocus
             fullWidth
