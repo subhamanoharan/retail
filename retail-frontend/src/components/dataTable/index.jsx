@@ -17,9 +17,11 @@ export default ({items, service, datatableService, addForm, editForm, fetchItems
     }
   });
 
-  const selectionBar = (selectedRows) =>
+  const selectionBar = (selectedRows, displayData, setSelectedRows) =>
     <CustomSelectionToolbar
       selectedRows={selectedRows}
+      displayData={displayData}
+      setSelectedRows={setSelectedRows}
       items={items}
       refreshItems={fetchItems}
       service={service}

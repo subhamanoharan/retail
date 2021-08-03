@@ -14,10 +14,15 @@ export class CustomDataTableSelectionToolbar extends React.Component {
   }
 
   onDeleteItems() {
-    const {items, refreshItems, selectedRows: {data}, service} = this.props;
+    const {items, refreshItems, selectedRows: {data}, service, setSelectedRows} = this.props;
     const itemsToDelete = data.map(({dataIndex: index}) => items[index]);
     return P.map(itemsToDelete, (i) => service.delete(i))
       .then(refreshItems)
+      .then(() => setSelectedRows([]))
+      .then(() =>
+        this.props.enqueueSnackbar(itemsToDelete.length === 1 ? `Deleted ${itemsToDelete[0].name}` :
+          `Deleted ${itemsToDelete.length} items`, {variant: 'error'})
+      )
       .catch((errors) => {
         if(errors)
           errors.map(e => this.props.enqueueSnackbar(e, {variant: 'error'}))

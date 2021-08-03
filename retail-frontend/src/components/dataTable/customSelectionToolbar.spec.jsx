@@ -16,6 +16,7 @@ describe('<CustomSelectionToolbar />', () => {
   let serviceMock;
   let refreshItemsMock;
   let enqueueSnackbarMock;
+  let setSelectedRowsMock;
   const selectedRows = {data: [{dataIndex: 1}, {dataIndex: 3}]}
   const items = ['item1', 'item2', 'item3', 'item4'];
 
@@ -23,9 +24,11 @@ describe('<CustomSelectionToolbar />', () => {
     serviceMock = {delete: jest.fn()};
     refreshItemsMock = jest.fn();
     enqueueSnackbarMock = jest.fn();
+    setSelectedRowsMock = jest.fn();
     wrapper = shallow(<CustomSelectionToolbar
         items={items}
         selectedRows={selectedRows}
+        setSelectedRows={setSelectedRowsMock}
         service={serviceMock}
         refreshItems={refreshItemsMock}
         enqueueSnackbar={enqueueSnackbarMock}
@@ -46,6 +49,7 @@ describe('<CustomSelectionToolbar />', () => {
       expect(serviceMock.delete).toHaveBeenCalledWith('item2');
       expect(serviceMock.delete).toHaveBeenCalledWith('item4');
       expect(refreshItemsMock).toHaveBeenCalled();
+      expect(setSelectedRowsMock).toHaveBeenCalled();
     });
 
     it('should not refresh items on error', async () =>{
@@ -57,6 +61,7 @@ describe('<CustomSelectionToolbar />', () => {
       expect(serviceMock.delete).toHaveBeenCalledTimes(2);
       expect(enqueueSnackbarMock).toHaveBeenCalledWith('error', {variant: 'error'});
       expect(refreshItemsMock).not.toHaveBeenCalled();
+      expect(setSelectedRowsMock).not.toHaveBeenCalled();
     });
   });
 
