@@ -16,7 +16,7 @@ jest.mock('./../../services/categoriesService', () => ({list: jest.fn()}));
 
 describe('<AdminItems/>', () => {
   let wrapper;
-  const masterList = 'masterList';
+  const masterList = [{name: 'Rice', barcode: '12'}, {name: 'Oil', barcode: '1a'}];
   const DummyItemForm = () => <p>Hey</p>;
   const categories = [{name: 'Rice'}, {name: 'Oil'}];
 
@@ -35,7 +35,7 @@ describe('<AdminItems/>', () => {
     wrapper.update();
     expect(itemsServiceMock.list).toHaveBeenCalled();
     expect(categoriesServiceMock.list).toHaveBeenCalled();
-    expect(wrapper.state().items).toEqual('masterList');
+    expect(wrapper.state().items).toEqual(masterList);
     expect(wrapper.state().categories).toEqual(['Rice', 'Oil']);
   });
 

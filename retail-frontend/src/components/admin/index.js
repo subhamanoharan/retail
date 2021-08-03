@@ -1,5 +1,6 @@
 import React from 'react';
 import { withSnackbar } from 'notistack';
+import lodash from 'lodash';
 
 import DataTable from '../dataTable';
 import itemsService from '../../services/itemsService';
@@ -30,6 +31,8 @@ class Items extends React.Component {
 
   fetchItems(){
     return itemsService.list()
+      .then((items) => lodash.sortBy(items, (o) =>
+          (lodash.isNaN(Number(o.barcode)) ? o.barcode : Number(o.barcode))))
       .then((items) => this.setState({items}))
       .catch((errors) => {
         if(errors)

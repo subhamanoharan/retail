@@ -1,5 +1,3 @@
-import lodash from 'lodash';
-
 class ItemsDataTableService {
 
   generateOptions(selectionBar, toolbar){
@@ -32,8 +30,7 @@ class ItemsDataTableService {
   }
 
   generateData(items){
-    return _.sortBy(items, (o) =>
-        (lodash.isNaN(Number(o.barcode)) ? o.barcode : Number(o.barcode)))
+    return items
       .map((item) => [item.name, item.sp, item.barcode, item.category || '']);
   }
 }
