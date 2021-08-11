@@ -65,7 +65,7 @@ export class BarCodeInputField extends Component {
                       label="Enter barcode or name"
                       variant="outlined"
                       autoFocus
-                      inputRef={input => input && input.focus()}
+                      inputRef={input => input && input.focus({ preventScroll: true })}
                     />}
                 />
               </Grid>
