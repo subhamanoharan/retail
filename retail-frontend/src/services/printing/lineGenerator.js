@@ -14,6 +14,11 @@ export class LineGenerator {
     this.MAX_LIMIT = MAX_LIMIT;
   }
 
+  setMaxLimit(noOfCharacters) {
+    console.log('Setting max limit as', noOfCharacters)
+    this.MAX_LIMIT = noOfCharacters;
+  }
+
   fill(index, idColumn, nameColumn, quantityColumn, priceColumn){
     const line = this.getBlankLine();
     const lineWithId = idColumn.getFormattedLine(index, line);

@@ -21,6 +21,17 @@ class PrinterService {
     }
   }
 
+  async unpair() {
+    try{
+      const devices = await navigator.usb.getDevices()
+      const deviceToPair = devices[0];
+      await deviceToPair.close();
+      this.device = null;
+    } catch(e){
+      console.log('Failed to unpair with device', e)
+    }
+  }
+
   print(lines){
     return sendText(this.device, lines)
       .then((r) => { console.log('Printing over', r); })

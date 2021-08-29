@@ -10,6 +10,7 @@ export const sendText = (device, lines) => {
     .newline()
     .newline()
     .newline()
+    .cut('full')
     .encode();
   return device.transferOut(3, result);
 }
