@@ -11,7 +11,7 @@ export const sendText = (device, lines) => {
     .newline()
     .newline()
 
-    .raw([0x1D, 0x21, 0x20])
+    .raw([0x1B, 0x21, 0x11])
     .line("demo")
 
     // command for full cut
