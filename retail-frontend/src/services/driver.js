@@ -10,7 +10,7 @@ export const sendText = (device, lines) => {
     .newline()
     .newline()
     .newline()
-    .cut('partial')
+    .raw([0x1B6D])
     .encode();
   return device.transferOut(3, result);
 }
