@@ -11,11 +11,11 @@ export const sendText = (device, lines) => {
     .newline()
     .newline()
     // .raw([0x1D5600])
-    .raw([0x1D, 0x56, 0x00])
+    // .raw([0x1D, 0x56, 0x00])
     // .raw([0x1D5601])
     // .raw([0x1D, 0x56, 0x01])
     // .cut('partial')
-    // .cut('full')
+    .cut('full')
     .encode();
   return device.transferOut(3, result);
 }
