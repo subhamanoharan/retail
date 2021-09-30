@@ -22,5 +22,9 @@ export default {
   STORE_NAME: 'M.S.Gurusamy Stores',
   ADDRESS: ['124, Kamarajar Salai', 'Madurai-625009'],
   QUOTATION: 'Quotation',
-  PRINTING_MAX_LIMIT: 32
+  PRINTING_MAX_LIMIT: 32,
+  PRINTING_OPTIONS: [
+    {text: '2 inch', noOfCharacters: 32},
+    {text: '3 inch', noOfCharacters: 48}
+  ]
 }

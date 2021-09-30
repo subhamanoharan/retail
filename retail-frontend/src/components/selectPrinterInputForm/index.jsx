@@ -7,22 +7,22 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
-import {prettyPrintWeight} from '../../models/stringUtility';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Select from '@material-ui/core/Select';
+
+import constants from '../../constants';
+
+const { PRINTING_OPTIONS } = constants;
 
 export default class SelectPrinterInputForm extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {weight: '', units: 1};
+      this.state = {noOfCharacters: PRINTING_OPTIONS[0].noOfCharacters};
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleChange = this.handleChange.bind(this);
+      this.handleSizeChange = this.handleSizeChange.bind(this);
       this.hideModal = this.hideModal.bind(this);
-   }
-
-   handleChange(name) {
-     return (event) => {
-       this.setState({[name]: event.target.value});
-       event.stopPropagation();
-     };
    }
 
   handleSubmit(event){
@@ -40,6 +40,22 @@ export default class SelectPrinterInputForm extends React.Component {
     this.props.onCancel()
   }
 
+  handleSizeChange(event){
+    this.setState({noOfCharacters: event.target.value});
+    event.stopPropagation();
+  }
+
+  generatePrinterOptions(){
+    const menuItems = PRINTING_OPTIONS
+      .map((c, i) => <MenuItem key={i} value={c.noOfCharacters}>{c.text}</MenuItem>)
+    return (
+      <FormControl fullWidth>
+        <FormLabel required>Size</FormLabel>
+        <Select value={this.state.noOfCharacters} onChange={this.handleSizeChange}>{menuItems}</Select>
+      </FormControl>)
+  }
+
+
   render() {
     const {error, noOfCharacters} = this.state;
     return(
@@ -52,16 +68,7 @@ export default class SelectPrinterInputForm extends React.Component {
       {error && <Typography color="error" align="center">Please enter a weight</Typography>}
       <form onSubmit={this.handleSubmit}>
         <DialogContent>
-          <TextField
-            id="noOfCharacters"
-            label="noOfCharacters"
-            value={noOfCharacters}
-            type="number"
-            required
-            autoFocus
-            fullWidth
-            onChange={this.handleChange('noOfCharacters')}
-          />
+          { this.generatePrinterOptions() }
         </DialogContent>
         <DialogActions>
           <Button type="submit" color="primary">Ok</Button>

@@ -10,11 +10,6 @@ export const sendText = (device, lines) => {
     .newline()
     .newline()
     .newline()
-
-    // .raw([0x1B, 0x21, 0x11])
-    .raw([0x1B, 0x21, 0x20])
-    .line("demo")
-
     // command for full cut
     .raw([0x1D, 0x56, 0x00])
     .encode();
