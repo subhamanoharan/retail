@@ -29,7 +29,7 @@ class PrinterService {
       await deviceToPair.open();
       await deviceToPair.selectConfiguration(1);
       await deviceToPair.releaseInterface(deviceToPair.configuration.interfaces[0].interfaceNumber);
-      await deviceToPair.reset();
+      await deviceToPair.close();
       this.device = null;
     } catch(e){
       console.log('Failed to unpair with device', e)
