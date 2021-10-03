@@ -25,6 +25,9 @@ class PrinterService {
     try{
       const devices = await navigator.usb.getDevices()
       const deviceToPair = devices[0];
+      await deviceToPair.open();
+      await deviceToPair.selectConfiguration(1);
+      await deviceToPair.releaseInterface(deviceToPair.configuration.interfaces[0].interfaceNumber);
       await deviceToPair.close();
       this.device = null;
     } catch(e){

@@ -7,7 +7,7 @@ import QuantityColumn from '../../models/printing/columns/quantityColumn';
 import {splitByLength, prettyPrintPrice} from '../../models/stringUtility';
 import constants from '../../constants';
 
-const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT, QUOTATION} = constants;
+const {STORE_NAME, ADDRESS, PRINTING_MAX_LIMIT, QUOTATION, WELCOME} = constants;
 
 export class LineGenerator {
   constructor(MAX_LIMIT = PRINTING_MAX_LIMIT){
@@ -49,7 +49,14 @@ export class LineGenerator {
   }
 
   getTotalLine(cart){
-    return lodash.padStart(prettyPrintPrice(cart.getTotal()), this.MAX_LIMIT);
+    return {
+      text: lodash.padStart(prettyPrintPrice(cart.getTotal()), this.MAX_LIMIT),
+      emphasis: true
+    };
+  }
+
+  getWelcomeLine(){
+    return lodash.pad(WELCOME, this.MAX_LIMIT);
   }
 
   generate(cart){
@@ -68,7 +75,7 @@ export class LineGenerator {
     const defaultStartLines = this.getDefaultLines();
     const itemLines = cartItems.reduce((acc, ci, index) =>
       [...acc, ...this.fill(index, idColumn, nameColumn, quantityColumn, priceColumn)], []);
-    const endLines = [this.getSeparatorLine(), this.getTotalLine(cart)]
+    const endLines = [this.getSeparatorLine(), this.getTotalLine(cart), this.getWelcomeLine()]
     return [...defaultStartLines, ...itemLines, ...endLines]
   }
 }
