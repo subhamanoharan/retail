@@ -3,7 +3,7 @@ import Cart from '../../models/immutableCart';
 import PriceColumn from '../../models/printing/columns/priceColumn';
 import constants from '../../constants';
 
-const {STORE_NAME, ADDRESS} = constants;
+const {STORE_NAME, ADDRESS, WELCOME} = constants;
 
 describe('CartItemLineGenerator', () => {
 
@@ -23,7 +23,8 @@ describe('CartItemLineGenerator', () => {
         '1 Marie          2  24.00',
         '2 Sunfeast      11 137.50',
         '-------------------------',
-        '                   161.50'
+        {emphasis: true, text: '                   161.50'},
+        WELCOME
       ]
     )
   });
@@ -48,7 +49,8 @@ describe('CartItemLineGenerator', () => {
         '  iety Pon               ',
         '  ni                     ',
         '-------------------------',
-        '                   214.00'
+        {emphasis: true, text: '                   214.00'},
+        WELCOME
       ]
     )
   });
