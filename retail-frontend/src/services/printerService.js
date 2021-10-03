@@ -24,7 +24,6 @@ class PrinterService {
   async unpair() {
     try{
       const devices = await navigator.usb.getDevices()
-      console.log("devices", devices)
       const deviceToPair = devices[0];
       await deviceToPair.open();
       await deviceToPair.selectConfiguration(1);

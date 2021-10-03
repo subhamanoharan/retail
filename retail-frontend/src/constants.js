@@ -25,7 +25,7 @@ export default {
   QUOTATION: 'Quotation',
   PRINTING_MAX_LIMIT: 32,
   PRINTING_OPTIONS: [
-    {text: '2 inch', noOfCharacters: 32},
+    {text: '2 inch', noOfCharacters: 30},
     {text: '3 inch', noOfCharacters: 32}
   ]
 }
