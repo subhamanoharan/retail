@@ -49,7 +49,10 @@ export class LineGenerator {
   }
 
   getTotalLine(cart){
-    return lodash.padStart(prettyPrintPrice(cart.getTotal()), this.MAX_LIMIT);
+    return {
+      text: lodash.padStart(prettyPrintPrice(cart.getTotal()), this.MAX_LIMIT),
+      emphasis: true
+    };
   }
 
   generate(cart){
