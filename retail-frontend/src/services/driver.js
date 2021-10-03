@@ -8,6 +8,7 @@ export const sendText = (device, lines) => {
   printerEncoder.raw([0x1B, 0x21, 0x21])
 
   lines.forEach(l => {
+    console.log(l)
     if(l.emphasis){
       printerEncoder.raw([0x1B, 0x21, 0x22]).line(l.text)
     }
