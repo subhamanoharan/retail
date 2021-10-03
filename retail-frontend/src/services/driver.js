@@ -6,11 +6,9 @@ export const sendText = (device, lines) => {
 
   const printerEncoder = encoder.initialize();
   printerEncoder.raw([0x1B, 0x4D, 0])
-  printerEncoder.line('Font A abcdefghijkl')
-  printerEncoder.raw([0x1B, 0x4D, 1])
-  printerEncoder.line('Font B abcdefghijkl')
-  printerEncoder.raw([0x1B, 0x55])
-  printerEncoder.line('Font C abcdefghijkl')
+  // printerEncoder.line('Font A abcdefghijkl')
+  // printerEncoder.raw([0x1B, 0x4D, 1])
+  // printerEncoder.line('Font B abcdefghijkl')
 
   lines.forEach(l => {
     if(l.emphasis){
