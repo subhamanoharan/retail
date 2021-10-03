@@ -30,7 +30,7 @@ class PrintButton extends Component {
 
   async switchPrinter(){
     await PrinterService.unpair();
-    await this.pair();
+    this.showSelectPrinterForm();
   }
 
   showSelectPrinterForm() {
