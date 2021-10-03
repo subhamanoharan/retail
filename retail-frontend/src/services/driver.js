@@ -10,8 +10,6 @@ export const sendText = (device, lines) => {
   lines.forEach(l => printerEncoder.line(l))
   const result = printerEncoder.newline()
     .newline()
-    .newline()
-    .newline()
     // command for full cut
     .raw([0x1D, 0x56, 0x00])
     .encode();
