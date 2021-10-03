@@ -5,7 +5,12 @@ export const sendText = (device, lines) => {
   const encoder = new EscPosEncoder();
 
   const printerEncoder = encoder.initialize();
-  printerEncoder.raw([0x1B, 0x21, 0x21])
+  printerEncoder.raw([0x1B, 0x50])
+  printerEncoder.line('Font A abcdefghijkl')
+  printerEncoder.raw([0x1B, 0x54])
+  printerEncoder.line('Font B abcdefghijkl')
+  printerEncoder.raw([0x1B, 0x55])
+  printerEncoder.line('Font C abcdefghijkl')
 
   lines.forEach(l => {
     if(l.emphasis){
