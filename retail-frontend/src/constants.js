@@ -25,6 +25,6 @@ export default {
   PRINTING_MAX_LIMIT: 32,
   PRINTING_OPTIONS: [
     {text: '2 inch', noOfCharacters: 32},
-    {text: '3 inch', noOfCharacters: 48}
+    {text: '3 inch', noOfCharacters: 32}
   ]
 }
