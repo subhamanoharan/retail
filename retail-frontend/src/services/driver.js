@@ -9,13 +9,14 @@ export const sendText = (device, lines) => {
 
   lines.forEach(l => {
     if(l.emphasis){
-      printerEncoder.raw([0x1B, 0x21, 0x22])
-      printerEncoder.line(l.text)
+      printerEncoder.raw([0x1B, 0x21, 0x22]).line(l.text)
     }
     else
       printerEncoder.line(l)
   })
   const result = printerEncoder.newline()
+    .newline()
+    .newline()
     .newline()
     .newline()
     // command for full cut
