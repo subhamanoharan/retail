@@ -5,6 +5,7 @@ export const sendText = (device, lines) => {
   const encoder = new EscPosEncoder();
 
   const printerEncoder = encoder.initialize();
+  printerEncoder.raw([0x1D, 0x21, 0x66]);
   lines.forEach(l => printerEncoder.line(l))
   const result = printerEncoder.newline()
     .newline()
