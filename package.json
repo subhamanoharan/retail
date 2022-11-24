@@ -6,7 +6,7 @@
   "scripts": {
     "heroku-postbuild": "npm run install:fe && npm run build",
     "install:fe": "npm install --prefix retail-frontend && npm install --prefix retail-frontend --only=dev --no-shrinkwrap",
-    "build": "npm run build:fe && npm run build:be",
+    "build": "npm run install:fe && npm run build:fe && npm run build:be",
     "build:be": "tsc --version && tsc -p tsconfig.json",
     "build:fe": "cd retail-frontend && npm run build:prod",
     "start:dev": "npm run migrate up && npm run start:be",
