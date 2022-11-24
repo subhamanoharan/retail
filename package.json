@@ -47,6 +47,6 @@
     "tslint": "^5.10.0"
   },
   "engines": {
-    "node": "10.x"
+    "node": "18.x"
   }
 }
