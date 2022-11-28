@@ -8,7 +8,7 @@ class ItemsDataTableService {
       customToolbar: toolbar,
       customToolbarSelect:selectionBar,
       responsive: 'simple',
-      count: 10
+      count: 30
     };
   }
 
