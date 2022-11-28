@@ -7,7 +7,8 @@ class ItemsDataTableService {
       search: true,
       customToolbar: toolbar,
       customToolbarSelect:selectionBar,
-      responsive: 'simple'
+      responsive: 'simple',
+      count: 10
     };
   }
 
