@@ -14,5 +14,5 @@ if(process.env.NODE_ENV == 'production') {
       ca: fs.readFileSync('/etc/letsencrypt/live/msg-billing.in/chain.pem')
   };
   const httpsServer = https.createServer(options, app)
-  httpsServer.listen(443, () => console.log('App listening on port-443'))
+  httpsServer.listen(config.HTTPS_PORT, () => console.log('App listening on port-443'))
 }
