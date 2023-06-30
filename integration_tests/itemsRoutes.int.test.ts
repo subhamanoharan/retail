@@ -45,7 +45,7 @@ describe('Items routes', () => {
         .expect(200)
         .then(r => r.body.id);
       const createdItem = await itemsRepo.findById(createdItemId);
-      expect(createdItem).toEqual({id: createdItemId, ...item, by_weight: null, category_id: null});
+      expect(createdItem).toEqual({id: createdItemId, ...item, by_weight: null, category_id: null, tax_percent: null});
     });
 
     it('should return 400 on duplicate barcode', () => {
@@ -91,7 +91,7 @@ describe('Items routes', () => {
         const createdItem = await itemsRepo.findById(createdItemId);
         expect(createdItem).toEqual({id: createdItemId,
           name: 'some item', barcode: 'barcode-by-weight', sp: 123,
-          by_weight: true, category_id: categoryId});
+          by_weight: true, category_id: categoryId, tax_percent: null});
       });
 
       it('should return 400 on invalid category', () => {
@@ -133,7 +133,7 @@ describe('Items routes', () => {
         .expect(200);
       const updatedItem = await itemsRepo.findById(itemId);
       expect(updatedItem).toEqual({id: itemId, ...newItemData,
-        barcode: newItemData.barcode.toLowerCase(), by_weight: null, category_id: null});
+        barcode: newItemData.barcode.toLowerCase(), by_weight: null, category_id: null, tax_percent: null});
     });
 
     it('should update existing item to item by weight', async () => {
@@ -145,7 +145,7 @@ describe('Items routes', () => {
         .expect(200);
       const updatedItem = await itemsRepo.findById(itemId);
       expect(updatedItem).toEqual({id: itemId,name: itemToUpdate.name, sp: 23.5,
-        barcode: itemToUpdate.barcode.toLowerCase(), by_weight: true, category_id: categoryId});
+        barcode: itemToUpdate.barcode.toLowerCase(), by_weight: true, category_id: categoryId, tax_percent: null});
     });
 
     it('should return 400 on invalid name', async () => {
@@ -178,7 +178,7 @@ describe('Items routes', () => {
         const updatedItem = await itemsRepo.findById(itemId);
         expect(updatedItem).toEqual({
           id: itemId, name: itemToUpdate.name, sp: 15,
-          barcode: itemToUpdate.barcode.toLowerCase(), by_weight: true, category_id: categoryId});
+          barcode: itemToUpdate.barcode.toLowerCase(), by_weight: true, category_id: categoryId, tax_percent: null});
       })
 
       it('should update item to not sold by weight', async () => {
@@ -193,7 +193,7 @@ describe('Items routes', () => {
         const updatedItem = await itemsRepo.findById(itemId);
         expect(updatedItem).toEqual({
           id: itemId, name: itemToUpdate.name, sp: itemToUpdate.sp,
-          barcode: itemToUpdate.barcode.toLowerCase(), by_weight: false, category_id: null});
+          barcode: itemToUpdate.barcode.toLowerCase(), by_weight: false, category_id: null, tax_percent: null});
       })
     });
   });
@@ -203,9 +203,9 @@ describe('Items routes', () => {
     beforeEach(() => tearDownItems());
 
     it('should list all items', async () => {
-      const item1 = {name: 'item1', barcode: 'AB', sp: 125};
-      const item2 = {name: 'item2', barcode: 'AC', sp: 123};
-      const item3 = {name: 'item3', barcode: 'AD', sp: 124, byWeight: true, category: category.name};
+      const item1 = {name: 'item1', barcode: 'AB', sp: 125, tax_percent: null};
+      const item2 = {name: 'item2', barcode: 'AC', sp: 123, tax_percent: null};
+      const item3 = {name: 'item3', barcode: 'AD', sp: 124, byWeight: true, category: category.name, tax_percent: null};
       const [id1, id2, id3] = await setUpItems([item1, item2, item3]);
 
       await userAgent

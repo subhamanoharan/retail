@@ -2,23 +2,23 @@ import {query} from './pg-client';
 import {IItem} from '../interfaces';
 
 const insert = async (item: IItem): Promise<number> => {
-  const insertQuery = `INSERT INTO items(name, barcode, sp, by_weight, category_id)
-   values($1, $2, $3, $4, (select id from categories where name=$5)) RETURNING id;`
-  const values = [item.name, item.barcode, item.sp, item.byWeight, item.category];
+  const insertQuery = `INSERT INTO items(name, barcode, sp, by_weight, category_id, tax_percent)
+   values($1, $2, $3, $4, (select id from categories where name=$5), $6) RETURNING id;`
+  const values = [item.name, item.barcode, item.sp, item.byWeight, item.category, item.tax_percent];
   const {rows: [{id}]} = await query(insertQuery, values);
   return id;
 };
 
 const update = async (itemId, item: IItem): Promise<void> => {
   const updateQuery = `UPDATE items set name=$1, barcode=$2, sp=$3,
-   by_weight=$4, category_id=(select id from categories where name=$5) where id=$6;`
-  const values = [item.name, item.barcode, item.sp, item.byWeight, item.category, itemId];
+   by_weight=$4, category_id=(select id from categories where name=$5), tax_percent=$6 where id=$7;`
+  const values = [item.name, item.barcode, item.sp, item.byWeight, item.category, item.tax_percent, itemId];
   await query(updateQuery, values);
   return Promise.resolve();
 };
 
 const all = async () => {
-  const getAllQuery = `SELECT i.id, i.name, i.barcode, i.sp, i.by_weight, c.name as category
+  const getAllQuery = `SELECT i.id, i.name, i.barcode, i.sp, i.by_weight, c.name as category, i.tax_percent
    from items i left join categories c on i.category_id=c.id;`
   const {rows} = await query(getAllQuery);
   return rows;
