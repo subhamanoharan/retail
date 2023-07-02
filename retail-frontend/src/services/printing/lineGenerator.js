@@ -79,8 +79,8 @@ export class LineGenerator {
         const taxableAmt = (totalTax * 100)/tax
         return [
           ...acc,
-          lodash.padEnd(`CGST ${taxLine(tax/2, taxableAmt/2, totalTax/2)}`, this.MAX_LIMIT),
-          lodash.padEnd(`SGST ${taxLine(tax/2, taxableAmt/2, totalTax/2)}`, this.MAX_LIMIT)
+          lodash.padEnd(`CGST ${taxLine(tax/2, taxableAmt, totalTax/2)}`, this.MAX_LIMIT),
+          lodash.padEnd(`SGST ${taxLine(tax/2, taxableAmt, totalTax/2)}`, this.MAX_LIMIT)
         ]
       }, [])
   }
@@ -94,7 +94,7 @@ export class LineGenerator {
           gstId: [...(acc.gstId || []), 'CGST', 'SGST'],
           tax: [...(acc.tax || []), `${tax/2}%`, `${tax/2}%`],
           totalTax: [...(acc.totalTax || []), totalTax/2, totalTax/2],
-          taxableAmt: [...(acc.taxableAmt || []), taxableAmt/2, taxableAmt/2]
+          taxableAmt: [...(acc.taxableAmt || []), taxableAmt, taxableAmt]
         }
       }, {})
 
