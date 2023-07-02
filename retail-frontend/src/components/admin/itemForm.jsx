@@ -27,11 +27,18 @@ const withCategories = (categories) => class ItemForm extends React.Component {
    }
 
   getDefaultValues(){
-    return { name: '', sp: '', barcode: '', byWeight: false, category: null };
+    return { name: '', sp: '', barcode: '', byWeight: false, category: null, tax_percent: null };
   }
 
   getExistingValues(item){
-    return { name: item.name, sp: item.sp, barcode: item.barcode, byWeight: item.byWeight, category: item.category };
+    return {
+      name: item.name,
+      sp: item.sp,
+      barcode: item.barcode,
+      byWeight: item.byWeight,
+      category: item.category,
+      tax_percent: item.tax_percent
+    };
   }
 
   handleChange(name) {
@@ -57,8 +64,8 @@ const withCategories = (categories) => class ItemForm extends React.Component {
 
   handleSubmit(event){
     event.preventDefault();
-    const {name, sp, barcode, byWeight, category} = this.state;
-    this.props.onSubmit({name, sp: Number(sp), barcode, byWeight, category})
+    const {name, sp, barcode, byWeight, category, tax_percent} = this.state;
+    this.props.onSubmit({name, sp: Number(sp), barcode, byWeight, category, tax_percent})
       .then(this.props.onSuccess)
       .catch((errors) => {
         if(errors)
@@ -116,6 +123,15 @@ const withCategories = (categories) => class ItemForm extends React.Component {
             fullWidth
             required
             onChange={this.handleChange('barcode')}
+          />
+          <TextField
+            id="tax_percent"
+            type="number"
+            label="Tax Percent"
+            value={this.state.tax_percent}
+            fullWidth
+            inputProps={{min: 0, step: 0.01, max: 100}}
+            onChange={this.handleChange('tax_percent')}
           />
           <Grid container alignItems="center">
             <Grid item>

@@ -18,8 +18,7 @@ const update = async (itemId, item: IItem): Promise<void> => {
 };
 
 const all = async () => {
-  const getAllQuery = `SELECT i.id, i.name, i.barcode, i.sp, i.by_weight, c.name as category, i.tax_percent
-   from items i left join categories c on i.category_id=c.id;`
+  const getAllQuery = `SELECT i.id, i.name, i.barcode, i.sp, i.by_weight, i.tax_percent, c.name as category from items i left join categories c on i.category_id=c.id;`
   const {rows} = await query(getAllQuery);
   return rows;
 }

@@ -1,7 +1,7 @@
 import {prettyPrintWeight} from './stringUtility';
 
 export default class CartItemByWeight {
-  constructor({name, barcode, quantity = 1, sp, id, weight}){
+  constructor({name, barcode, quantity = 1, sp, id, weight, tax_percent}){
     this.name = name;
     this.barcode = barcode;
     this.quantity = quantity;
@@ -9,6 +9,7 @@ export default class CartItemByWeight {
     this.id = id;
     this.byWeight = true;
     this.weight = weight;
+    this.tax_percent = tax_percent;
   }
 
   getNoOfUnitsToDisplay(){
@@ -21,5 +22,15 @@ export default class CartItemByWeight {
 
   matches(item){
     return item.byWeight && this.barcode === item.barcode && this.weight === item.weight;
+  }
+
+  tax(){
+    const priceWithTax = this.price()
+    const priceWithoutTax = (priceWithTax * 100) /(this.tax_percent + 100)
+    return priceWithTax - priceWithoutTax;
+  }
+
+  hasTax(){
+    return Boolean(this.tax_percent)
   }
 }

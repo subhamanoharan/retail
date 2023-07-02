@@ -27,12 +27,15 @@ class ItemsDataTableService {
       },{
         name: "Category",
         options: {filter: true, sort: false, searchable: true}
+      }, {
+        name: "Tax Percent",
+        options: {filter: true, sort: false, searchable: true}
       }];
   }
 
   generateData(items){
     return items
-      .map((item) => [item.name, item.sp, item.barcode, item.category || '']);
+      .map((item) => [item.name, item.sp, item.barcode, item.category || '', item.tax_percent]);
   }
 }
 

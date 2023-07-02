@@ -27,8 +27,10 @@ export default class BillDataTableService {
       {
         name: "Item",
         options: {filter: false, sort: false}
-      },
-      {
+      },{
+        name: "Tax%",
+        options: {filter: false, sort: false}
+      },{
         name: "Price",
         options: {filter: false, sort: false}
       },{
@@ -43,6 +45,6 @@ export default class BillDataTableService {
   generateData(items){
     return items
       .map(cartItemFactory)
-      .map((item, i) => [i+1, item.name, item.sp, item.getNoOfUnitsToDisplay(), prettyPrintPrice(item.price())]);
+      .map((item, i) => [i+1, item.name, item.tax_percent, item.sp, item.getNoOfUnitsToDisplay(), prettyPrintPrice(item.price())]);
   }
 }

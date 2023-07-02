@@ -9,8 +9,8 @@ export default class BillService {
     return this.cart.getItems();
   }
 
-  add({barcode, sp, name, quantity, id, byWeight, weight}){
-    this.cart =  this.cart.addItem({barcode, sp, name, id, byWeight, weight}, quantity)
+  add({barcode, sp, name, quantity, id, byWeight, weight, tax_percent}){
+    this.cart =  this.cart.addItem({barcode, sp, name, id, byWeight, weight, tax_percent}, quantity)
     return Promise.resolve();
   }
 
@@ -27,7 +27,7 @@ export default class BillService {
   getQuantity(index){
     return this.cart.getQuantity(index);
   }
-  
+
   delete({barcode, sp, name, quantity, id}){
     this.cart =  this.cart.deleteItem({barcode, sp, name, quantity, id})
     return Promise.resolve();
