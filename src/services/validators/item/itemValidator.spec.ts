@@ -12,6 +12,7 @@ jest.mock('./itemByWeightValidator');
 describe('Item Validator', () => {
   const item = {name: 'some', sp: 23, barcode: 'AV'};
   const itemSoldByWeight = {name: 'some', sp: 23, barcode: 'AV', byWeight: true, category: 'Rice'};
+  const itemWithTax = {name: 'some', sp: 23, barcode: 'AV', byWeight: true, category: 'Rice', tax_percent: 5.5};
   const itemId = 12;
   const dummyErr = new Error('dummy');
 
@@ -42,6 +43,20 @@ describe('Item Validator', () => {
     expect(priceValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
     expect(itemByWeightValidatorMock).toHaveBeenCalledWith(itemSoldByWeight);
     expect(barcodeValidatorMock).toHaveBeenCalledWith(itemSoldByWeight, undefined);
+  })
+
+  it('should validate name, sp, barcode, category for item with tax', async () => {
+    nameValidatorMock.mockResolvedValue(true);
+    priceValidatorMock.mockResolvedValue(true);
+    itemByWeightValidatorMock.mockResolvedValue(true);
+    barcodeValidatorMock.mockResolvedValue(true);
+
+    await itemValidator.validate(itemWithTax);
+
+    expect(nameValidatorMock).toHaveBeenCalledWith(itemWithTax);
+    expect(priceValidatorMock).toHaveBeenCalledWith(itemWithTax);
+    expect(itemByWeightValidatorMock).toHaveBeenCalledWith(itemWithTax);
+    expect(barcodeValidatorMock).toHaveBeenCalledWith(itemWithTax, undefined);
   })
 
   it('should accept itemId optionally', async () => {

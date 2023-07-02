@@ -87,9 +87,12 @@ describe('Bill', () => {
       expect.any(String),
       expect.any(String),
       expect.any(String),
+      expect.any(String),
       '1 name                    3 3.00',
       expect.any(String),
-      '                            3.00'
+       {"emphasis": true, "text":'                            3.00'},
+      expect.any(String),
+      expect.any(String),
     ]);
   });
 

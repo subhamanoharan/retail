@@ -4,6 +4,7 @@ import IdColumn from '../../models/printing/columns/idColumn';
 import NameColumn from '../../models/printing/columns/nameColumn';
 import PriceColumn from '../../models/printing/columns/priceColumn';
 import QuantityColumn from '../../models/printing/columns/quantityColumn';
+import ValueColumn from '../../models/printing/columns/valueColumn';
 import {splitByLength, prettyPrintPrice} from '../../models/stringUtility';
 import constants from '../../constants';
 
@@ -28,6 +29,21 @@ export class LineGenerator {
     return [...linesWithName];
   }
 
+  fillTaxColumns(details) {
+    const gstColumn = new ValueColumn(details.gstId)
+    const taxPercentColumn = new ValueColumn(details.tax)
+    const taxableAmtColumn = new ValueColumn(details.taxableAmt)
+    const totalTaxColumn = new ValueColumn(details.totalTax)
+    gstColumn.setStartIndex()
+    taxPercentColumn.setStartIndex(gstColumn)
+    taxableAmtColumn.setStartIndex(taxPercentColumn)
+    totalTaxColumn.setStartIndex(taxableAmtColumn)
+
+    return details.tax.map((t, index) =>
+      [gstColumn, taxPercentColumn, taxableAmtColumn, totalTaxColumn]
+        .reduce((accLine, col) => col.getFormattedLine(index, accLine), this.getBlankLine())
+      )
+  }
   getBlankLine(){
     return new Array(this.MAX_LIMIT + 1).join(' ');
   }
@@ -55,6 +71,37 @@ export class LineGenerator {
     };
   }
 
+  getTaxLines(cart){
+    const taxLine = (tax, taxableAmt, totalTax) =>
+      `${tax}% on ${prettyPrintPrice(taxableAmt)}:Rs.${prettyPrintPrice(totalTax)}`
+    return Object.entries(cart.getTaxDetails())
+      .reduce((acc, [tax, totalTax]) => {
+        const taxableAmt = (totalTax * 100)/tax
+        return [
+          ...acc,
+          lodash.padEnd(`CGST ${taxLine(tax/2, taxableAmt, totalTax/2)}`, this.MAX_LIMIT),
+          lodash.padEnd(`SGST ${taxLine(tax/2, taxableAmt, totalTax/2)}`, this.MAX_LIMIT)
+        ]
+      }, [])
+  }
+
+  getTaxLines1(cart){
+    const details = Object.entries(cart.getTaxDetails())
+      .reduce((acc, [tax, totalTax]) => {
+        const taxableAmt = (totalTax * 100)/tax
+        const line = this.getBlankLine()
+        return {...acc,
+          gstId: [...(acc.gstId || []), 'CGST', 'SGST'],
+          tax: [...(acc.tax || []), `${tax/2}%`, `${tax/2}%`],
+          totalTax: [...(acc.totalTax || []), totalTax/2, totalTax/2],
+          taxableAmt: [...(acc.taxableAmt || []), taxableAmt, taxableAmt]
+        }
+      }, {})
+
+      if(!details.tax) return []
+      return this.fillTaxColumns(details)
+  }
+
   getWelcomeLine(){
     return lodash.pad(WELCOME, this.MAX_LIMIT);
   }
@@ -75,8 +122,14 @@ export class LineGenerator {
     const defaultStartLines = this.getDefaultLines();
     const itemLines = cartItems.reduce((acc, ci, index) =>
       [...acc, ...this.fill(index, idColumn, nameColumn, quantityColumn, priceColumn)], []);
-    const endLines = [this.getSeparatorLine(), this.getTotalLine(cart), this.getWelcomeLine()]
-    return [...defaultStartLines, ...itemLines, ...endLines]
+    const endLines = [this.getSeparatorLine(), this.getTotalLine(cart), this.getSeparatorLine()]
+    return [
+      ...defaultStartLines,
+      ...itemLines,
+      ...endLines,
+      ...this.getTaxLines1(cart),
+      this.getWelcomeLine()
+    ]
   }
 }
 

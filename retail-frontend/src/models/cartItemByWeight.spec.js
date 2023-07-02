@@ -2,6 +2,7 @@ import CartItemByWeight from './cartItemByWeight';
 
 describe('CartItemByWeight', () => {
   const data = {name: 'some', barcode: 'abcd', quantity: 76, sp: 10, id: 1, weight: 10};
+  const dataWithTax = {name: 'some', barcode: 'abcd', quantity: 76, sp: 10, id: 1, weight: 10, tax_percent: 5};
   const anotherData = {name: 'where', barcode: 'asd', sp: 10, id: 2, weight: 1};
 
   const cartItemByWeight = new CartItemByWeight(data);
@@ -17,6 +18,12 @@ describe('CartItemByWeight', () => {
 
   it('should get price', () => {
     expect(cartItemByWeight.price()).toEqual(7600);
+  });
+
+  it('should get tax', () => {
+    const taxItem = new CartItemByWeight(dataWithTax)
+    expect(taxItem.tax()).toEqual(361.9047619047615);
+    expect(taxItem.hasTax()).toEqual(true);
   });
 
   describe('matches', () => {

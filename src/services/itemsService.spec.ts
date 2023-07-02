@@ -12,6 +12,7 @@ const {ERRORS} = constants;
 describe('ItemsService', () => {
   const item = {name: 'name', barcode: 'ABCD', sp: 5};
   const itemSoldByWt = {name: 'name', barcode: 'ABCD', sp: 5, byWeight: true, category: 'Rice'};
+  const itemWithTax = {name: 'name', barcode: 'ABCD', sp: 5, byWeight: true, category: 'Rice', tax_percent: 10};
   const dummyErr = new Error('dummy');
 
   beforeEach(() => jest.resetAllMocks())
@@ -35,6 +36,16 @@ describe('ItemsService', () => {
 
       expect(createdId).toEqual('newId');
       expect(itemsRepoMock.insert).toHaveBeenCalledWith({...itemSoldByWt, barcode: 'abcd'});
+    });
+
+    it('should insert item with tax_percent', async() => {
+      (itemsRepoMock.insert as any).mockResolvedValue(Promise.resolve('newId'));
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
+
+      const createdId = await itemsService.create(itemWithTax);
+
+      expect(createdId).toEqual('newId');
+      expect(itemsRepoMock.insert).toHaveBeenCalledWith({...itemWithTax, barcode: 'abcd'});
     });
 
     it('should reject with item validation error', async () => {
@@ -80,6 +91,16 @@ describe('ItemsService', () => {
       expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, {...itemSoldByWt, barcode: 'abcd'});
     });
 
+    it('should update item with tax', async() => {
+      (itemsRepoMock.update as any).mockResolvedValue();
+      (itemValidatorMock.validate as any).mockResolvedValue(true);
+
+      await itemsService.update(itemId, itemWithTax);
+
+      expect(itemValidatorMock.validate).toHaveBeenCalledWith({...itemWithTax, barcode: 'abcd'}, itemId);
+      expect(itemsRepoMock.update).toHaveBeenCalledWith(itemId, {...itemWithTax, barcode: 'abcd'});
+    });
+
     it('should reject with item validation error', async () => {
       (itemValidatorMock.validate as any).mockRejectedValue(dummyErr);
 
@@ -108,14 +129,16 @@ describe('ItemsService', () => {
       const item1 = {id:1, name: 'name1', barcode: 'ABCD1', sp: 5, by_weight: null, category: null};
       const item2 = {id:2, name: 'name2', barcode: 'ABCD2', sp: 5, by_weight: null, category: null};
       const item3 = {id:2, name: 'name2', barcode: 'ABCD3', sp: 5, by_weight: true, category: 'Rice'};
-      (itemsRepoMock.all as any).mockResolvedValue(Promise.resolve([item1, item2, item3]));
+      const item4 = {id:4, name: 'name4', barcode: 'ABCD4', sp: 5, by_weight: true, category: 'Rice', tax_percent: 5.4};
+      (itemsRepoMock.all as any).mockResolvedValue(Promise.resolve([item1, item2, item3, item4]));
 
       const itemsFound = await itemsService.all();
 
       const expectedItem1 = {id:1, name: 'name1', barcode: 'ABCD1', sp: 5};
       const expectedItem2 = {id:2, name: 'name2', barcode: 'ABCD2', sp: 5};
       const expectedItem3 = {id:2, name: 'name2', barcode: 'ABCD3', sp: 5, byWeight: true, category: 'Rice'};
-      expect(itemsFound).toEqual([expectedItem1, expectedItem2, expectedItem3]);
+      const expectedItem4 = {id:4, name: 'name4', barcode: 'ABCD4', sp: 5, byWeight: true, category: 'Rice', tax_percent: 5.4};
+      expect(itemsFound).toEqual([expectedItem1, expectedItem2, expectedItem3, expectedItem4]);
       expect(itemsRepoMock.all).toHaveBeenCalled();
     });
   });

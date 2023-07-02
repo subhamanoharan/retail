@@ -60,6 +60,15 @@ export default class ImmutableCart {
     return this.items.reduce((acc, item) => acc + item.price(), 0);
   }
 
+  getTaxDetails() {
+    return this.items
+      .reduce((acc, i) => (i.hasTax() ? ({
+          ...acc,
+          [i.tax_percent]: (acc[i.tax_percent] || 0) + i.tax()
+        })
+        : acc) , {});
+  }
+
   getTotalNoOfItems() {
     return this.items.reduce((acc, item) => acc + item.quantity, 0);
   }

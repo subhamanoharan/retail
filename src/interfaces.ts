@@ -4,6 +4,7 @@ export interface IItem {
   barcode: string;
   category?: string;
   byWeight?: boolean;
+  tax_percent?: number;
 }
 
 export interface IUserCreds {

@@ -63,14 +63,14 @@ export class Bill extends Component {
     this.props.enqueueSnackbar(`Scanned ${name}`, {variant: 'success'});
   }
 
-  onAddItem({barcode, sp, name, id}, quantity){
-    this.service.add({barcode, sp, name, quantity, id});
+  onAddItem({barcode, sp, name, id, tax_percent}, quantity){
+    this.service.add({barcode, sp, name, quantity, id, tax_percent});
     this.fetchItems();
     this.showSuccessMsgOnScanSuccess(name);
   }
 
-  onItemByWeightScanned({barcode, sp, name, id, byWeight}, weight, units){
-    this.service.add({barcode, sp, name, id, byWeight, weight, quantity: units});
+  onItemByWeightScanned({barcode, sp, name, id, byWeight, tax_percent}, weight, units){
+    this.service.add({barcode, sp, name, id, byWeight, weight, tax_percent, quantity: units});
     this.fetchItems();
     this.showSuccessMsgOnScanSuccess(name);
   }

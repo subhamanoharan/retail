@@ -45,7 +45,7 @@ class PrintButton extends Component {
     console.log('noOfCharacters:', noOfCharacters)
     this.onHidePrinterSelectionForm()
     lineGeneratorService.setMaxLimit(noOfCharacters);
-    this.pair();
+    return this.pair();
   }
 
   render(){

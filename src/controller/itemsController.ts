@@ -1,8 +1,8 @@
 import itemsService from './../services/itemsService';
 
 const create = (req, res, next) => {
-  const {name, barcode, sp, byWeight, category} = req.body;
-  return itemsService.create({name, barcode, sp, byWeight, category})
+  const {name, barcode, sp, byWeight, category, tax_percent} = req.body;
+  return itemsService.create({name, barcode, sp, byWeight, category, tax_percent})
     .then(id => res.json({id}))
     .catch(e => next(e));
 };
@@ -16,9 +16,9 @@ const remove = (req, res) => {
 }
 
 const update = (req, res, next) => {
-  const {name, barcode, sp, byWeight, category} = req.body;
+  const {name, barcode, sp, byWeight, category, tax_percent} = req.body;
   const { itemId } = req.params;
-  return itemsService.update(itemId, {name, barcode, sp, byWeight, category})
+  return itemsService.update(itemId, {name, barcode, sp, byWeight, category, tax_percent})
     .then(() => res.send())
     .catch(error => next(error));
 };
