@@ -3,7 +3,7 @@ import {replaceFrom, prettyPrintPrice} from '../../stringUtility';
 
 export default class ValueColumn {
   constructor(values){
-    this.values = values.map((v) => Number.isInteger(v) ? prettyPrintPrice(v) : v);
+    this.values = values.map((v) => lodash.isNumber(v) ? prettyPrintPrice(v) : v);
     this.maxLength = lodash.max(this.values.map((p) => String(p).length));
   }
 
