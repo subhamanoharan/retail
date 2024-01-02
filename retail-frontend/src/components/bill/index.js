@@ -4,6 +4,7 @@ import { withSnackbar } from 'notistack';
 import DataTable from '../dataTable';
 import AddNewItem from './addManualItemForm';
 import ImmutableCart from '../../models/immutableCart';
+import BillMemoryManager from '../../services/billMemoryManager';
 import BillService from '../../services/billService';
 import BillDataTableService from '../../services/billDataTableService';
 import itemsService from './../../services/itemsService';
@@ -18,6 +19,7 @@ export class Bill extends Component {
     super(props);
     this.state = {masterList: [], items: []};
     this.service = new BillService(new ImmutableCart([]));
+    this.billMemoryManager = new BillMemoryManager();
 
     this.fetchItems = this.fetchItems.bind(this);
     this.clearItems = this.clearItems.bind(this);
@@ -27,6 +29,7 @@ export class Bill extends Component {
     this.incrementQuantity = this.incrementQuantity.bind(this);
     this.decrementQuantity = this.decrementQuantity.bind(this);
     this.getQuantity = this.getQuantity.bind(this);
+    this.onLoadOldBill = this.onLoadOldBill.bind(this);
     this.billDataTableService = new BillDataTableService((value, tableMeta) =>
       <QuantityEditor
         value={value}
@@ -55,6 +58,8 @@ export class Bill extends Component {
   }
 
   clearItems(){
+    console.log('CLEARING ITEMS')
+    this.billMemoryManager.add(new ImmutableCart(this.service.list()))
     this.service.clear();
     this.fetchItems();
   }
@@ -79,6 +84,14 @@ export class Bill extends Component {
     return this.service.getLinesToPrint();
   }
 
+  onLoadOldBill(bill) {
+    if(this.service.getTotal() > 0)
+      this.billMemoryManager.add(this.service.cart)
+    this.billMemoryManager.remove(bill)
+    this.service.resetCartItems(bill.cart)
+    this.setState({items: this.service.list()})
+  }
+
   incrementQuantity(index){
     this.service.incrementQuantity(index)
     this.fetchItems();
@@ -95,10 +108,14 @@ export class Bill extends Component {
 
   render() {
     const {masterList, items} = this.state;
-
     return (
       <div>
-        <Header clearItems={this.clearItems} generatePrintLines={this.generatePrintLines}/>
+        <Header
+          clearItems={this.clearItems}
+          generatePrintLines={this.generatePrintLines}
+          onLoadOldBill={this.onLoadOldBill}
+          billHistory={this.billMemoryManager.getBills()}
+        />
         <SummaryCard service={this.service}/>
         <BarCodeManager onItemScanned={this.onAddItem} onItemByWeightScanned={this.onItemByWeightScanned} masterList={this.state.masterList}/>
         <DataTable

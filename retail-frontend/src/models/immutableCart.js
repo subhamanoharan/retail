@@ -72,4 +72,8 @@ export default class ImmutableCart {
   getTotalNoOfItems() {
     return this.items.reduce((acc, item) => acc + item.quantity, 0);
   }
+
+  getItemsCount() {
+    return this.items.length;
+  }
 }

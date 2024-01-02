@@ -1,12 +1,18 @@
 import lineGeneratorService from './printing/lineGenerator';
+import ImmutableCart from '../models/immutableCart';
 
 export default class BillService {
-  constructor(cart){
+
+  constructor(cart) {
     this.cart = cart;
   }
 
   list(){
     return this.cart.getItems();
+  }
+
+  resetCartItems(newCart){
+    this.cart = new ImmutableCart(newCart.getItems())
   }
 
   add({barcode, sp, name, quantity, id, byWeight, weight, tax_percent}){

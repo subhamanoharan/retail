@@ -64,7 +64,7 @@ class PrintButton extends Component {
               <Button onClick={this.switchPrinter} color="primary" variant="contained">Switch printer</Button>
             </Grid>
           </Grid>)
-          : <Button onClick={this.showSelectPrinterForm} color="primary" variant="contained">Pair with Printer</Button>
+          : <Button onClick={this.showSelectPrinterForm} color="primary" variant="contained">Pair334 with Printer</Button>
         }
         {showSelectPrinterForm && <SelectPrinterInputForm onSubmit={this.onPrinterSelection} onCancel={this.onHidePrinterSelectionForm}/>}
       </div>
