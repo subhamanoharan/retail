@@ -1,3 +1,4 @@
+import * as config from 'config';
 import {query} from './pg-client';
 import {IUserCreds, IUser, IUserSession} from '../interfaces';
 
@@ -22,9 +23,12 @@ const remove = (id) => {
 };
 
 const find = async ({name, password}: IUserCreds): Promise<IUserSession> => {
-  const findQuery = `SELECT u.id, u.name from users u where u.name='${name}'
+  const findPGQuery = `SELECT u.id, u.name from users u where u.name='${name}'
    and u.password = crypt('${password}', u.password);`
-  const {rows: [user]} = await query(findQuery);
+  const findMySQLQuery = `
+    select * from users where name='${name}' and password=aes_encrypt('${name}','random');
+  `
+  const {rows: [user]} = await query(config.IS_POSTGRES ? findPGQuery : findMySQLQuery);
   return user;
 }
 
