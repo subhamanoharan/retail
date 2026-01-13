@@ -13,5 +13,13 @@
     "host": "localhost",
     "database": "retail_test"
   },
-  "production": {"ENV": "DATABASE_URL"}
+  "production": {
+    "driver": "mysql",
+    "host": { "ENV": "DB_HOST" },
+    "port": 3306,
+    "database": { "ENV": "DB_NAME" },
+    "user": { "ENV": "DB_USER" },
+    "password": { "ENV": "DB_PASSWORD" },
+    "multipleStatements": true
+  }
 }

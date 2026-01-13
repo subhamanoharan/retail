@@ -23,12 +23,13 @@ console.log('DB CONFIG', config)
 //   await client.end();
 //   return result;
 // };
-
+const {host, user, password, db_name} = config.DATABASE
 const getMysqlConn = () => mysql.createConnection({
-  host: '103.93.16.46',
-  user: 'msgbilli_admin',
-  password: 'Subha@54321',
-  database: 'msgbilli_retail',
+  host:  host,
+  port: 3306,
+  user: user,
+  password: password,
+  database: db_name,
   ssl: { rejectUnauthorized: false }
 })
 
