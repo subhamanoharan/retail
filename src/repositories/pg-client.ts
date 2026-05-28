@@ -23,13 +23,13 @@ console.log('DB CONFIG', config)
 //   await client.end();
 //   return result;
 // };
-const {host, user, password, db_name} = config.DATABASE
+const {host, user, password, database } = config.DATABASE
 const getMysqlConn = () => mysql.createConnection({
   host:  host,
   port: 3306,
   user: user,
   password: password,
-  database: db_name,
+  database ,
   ssl: { rejectUnauthorized: false }
 })
 
@@ -47,10 +47,10 @@ const query = async (query, values?): Promise<any> => {
     ).replace('RETURNING id', '')
   const result = await new Promise(function (resolve, reject){
     conn.query(preparedQuery, function(err, results, fields) {
-      console.log(results.insertId)
       if(err) {
         reject(err)
       } else {
+        console.log(results.insertId)
         resolve(results.insertId ? [{id: results.insertId}] : results)
       }
     })
